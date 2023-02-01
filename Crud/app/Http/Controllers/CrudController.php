@@ -34,7 +34,40 @@ class CrudController extends Controller
         $crud->address = $request->address;
         $crud->save();
 
-        Session::flash('msg','Data Added Successfully');
+        Session::flash('status','Data Added Successfully');
+        // return redirect()->back();
         return redirect('/');
+
     }
+
+    public function editData($id){
+
+        $user = Crud::find($id);
+        return view('edit_data', compact('user'));
+        return view('edit_data');
+    }
+
+    public function updateData(Request $request, $id){
+
+        $user = Crud::find($id);
+        $user->name =  $request->name;
+        $user->phone =  $request->phone;
+        $user->address =  $request->address;
+
+        $user->update();
+        // return redirect()->back()->with('status','User Updated Successfully');
+        // return view('show_data');
+        Session::flash('status','Data Updated Successfully');
+        return view('edit_data', compact('user'));
+    }
+
+    public function deleteData($id){
+
+        $user = Crud::find($id);
+        $user->delete();
+        return redirect()->back()->with('status','User Deleted Successfully');
+        return view('show_data');
+    }
+
+
 }
