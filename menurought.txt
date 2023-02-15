@@ -1,0 +1,25 @@
+Menu -> id, name, parent_id, controller_name, function, slug
+
+
+ 
+
+
+
+
+
+
+
+//insert query
+INSERT INTO `menus` (`id`, `menu_title`, `parent_id`, `sort_order`, `controller_name`, `function_name`, `slug`, `created_at`, `updated_at`) VALUES
+(1, 'Home', 0, '0', 'MenuController2', 'home', '/', '2020-09-26 01:10:58', '2020-09-26 01:10:58'),
+(2, 'Pages', 0, '1', 'MenuController2', 'pages', '/pages', '2020-09-26 01:10:58', '2020-09-26 01:10:58'),
+(3, 'Our Services', 2, '2', 'MenuController2', 'services', '/our-services', '2020-09-26 01:10:58', '2020-09-26 01:10:58'),
+(4, 'About', 2, '3', 'MenuController2', 'about', '/about', '2020-09-26 01:10:58', '2020-09-26 01:10:58'),
+(5, 'About Team', 4, '3', 'MenuController2', 'about-team', '/about-team', '2020-09-26 01:10:58', '2020-09-26 01:10:58'),
+(6, 'About Clients', 4, '3', 'MenuController2', 'about-client', '/about-clients', '2020-09-26 01:10:58', '2020-09-26 01:10:58'),
+(7, 'Contact Team', 5, '3', 'MenuController2', 'contact-team', '/contact-team', '2020-09-26 01:10:58', '2020-09-26 01:10:58'),
+(8, 'Contact Clients', 6, '3', 'MenuController2', 'contact-clients', '/contact-clients', '2020-09-26 01:10:58', '2020-09-26 01:10:58'),
+(9, 'Contact', 2, '4', 'MenuController2', 'contact', '/contact',   '2020-09-26 01:10:58', '2020-09-26 01:10:58'),
+(10, 'Portfolio', 2, '4', 'MenuController2', 'portfolio', '/portfolio', '2020-09-26 01:10:58', '2020-09-26 01:10:58'),
+(11, 'Gallery', 2, '4', 'MenuController2', 'gallery', '/gallery',  '2020-09-26 01:10:58', '2020-09-26 01:10:58');
+
