@@ -11,7 +11,7 @@ class Menu extends Model
     protected $table = 'menus';
 
     protected $fillable = [
-        'menu_title', 'parent_id', 'sort_order', 'controller_name', 'function_name', 'slug', 'created_at', 'updated_at'
+        'menu_title', 'parent_id', 'sort_order', 'controller_id', 'function_id' ,'slug',  'created_at', 'updated_at'
     ];
 
     public function parent()
