@@ -19,15 +19,23 @@
         </ul>
     </nav>
 
+
+
     <!-- sidebar menu -->
-<div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
-    <div class="menu_section ">
-        <h3>{{ ucwords(lang('main menu', $translation)) }}</h3>
-        <ul class="nav side-menu navbar-nav mr-auto">
-            @each('menu.submenu', $menulist, 'menu', 'empty')
-        </ul>
+    <div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
+        <div class="menu_section ">
+            <h3>{{ ucwords(lang('main menu', $translation)) }}</h3>
+            <ul class="nav side-menu navbar-nav mr-auto">
+                @each('menu.submenu', $menulist, 'menu', 'empty')
+            </ul>
+        </div>
     </div>
-</div>
+
+    <div class="container">
+        <a href="{{route('admin.addcontroller')  }}">
+            <span>Add Controller</span>
+        </a>
+    </div>
 
 
     <script src="https://code.jquery.com/jquery-3.5.1.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
