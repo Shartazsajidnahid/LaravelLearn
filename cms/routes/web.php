@@ -203,6 +203,8 @@ Route::group([
         Route::get('/showmenu', 'MenuController@getMenu')->name('admin.showmenu');
         Route::get('/addmenu', 'MenuController@list')->name('admin.addmenu');
         Route::post('/createmenu', 'MenuController@do_create')->name('admin.createmenu');
+        Route::get('/addcontroller', 'MenuController@add_controller')->name('admin.addcontroller');
+        Route::post('/createcontroller', 'MenuController@create_controller')->name('admin.createcontroller');
 
         // BANNER
         Route::group(['prefix' => 'banner'], function () {
