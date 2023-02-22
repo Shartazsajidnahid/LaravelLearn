@@ -22,6 +22,6 @@ class SysGroup extends Model
      * @var array
      */
     protected $fillable = [
-        'name', 'type', 'status', 'created_at', 'updated_at', 'deleted_at'
+        'name', 'status', 'created_at', 'updated_at', 'deleted_at'
     ];
 }

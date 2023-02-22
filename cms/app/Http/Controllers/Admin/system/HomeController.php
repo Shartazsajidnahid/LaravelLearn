@@ -10,8 +10,4 @@ class HomeController extends Controller
     {
         return view('admin.system.dashboard');
     }
-    public function index2()
-    {
-        return view('admin.system.demo');
-    }
 }
