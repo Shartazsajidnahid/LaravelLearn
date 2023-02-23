@@ -10,4 +10,28 @@ class HomeController extends Controller
     {
         return view('admin.system.dashboard');
     }
+    public function general_home()
+    {
+        return view('general_user.home');
+    }
+
+    public function general_team()
+    {
+        return view('general_user.team');
+    }
+
+    public function general_aboutus()
+    {
+        return view('general_user.about-us');
+    }
+
+    public function general_allbrance()
+    {
+        return view('general_user.allbrance');
+    }
+
+    public function general_alldivision()
+    {
+        return view('general_user.alldivision');
+    }
 }

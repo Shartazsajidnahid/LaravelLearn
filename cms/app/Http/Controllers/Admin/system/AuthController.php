@@ -15,6 +15,7 @@ use App\Models\system\SysLog;
 use App\Models\system\SysUser;
 use App\Models\system\SysGroupRule;
 use App\Models\system\SysGroupBranch;
+use App\Models\system\SysGroup;
 
 class AuthController extends Controller
 {
@@ -65,7 +66,8 @@ class AuthController extends Controller
             'sys_users.force_logout',
             'sys_users.status',
             'sys_groups.id as group_id',
-            'sys_groups.name as group_name'
+            'sys_groups.name as group_name',
+            'sys_groups.type as group_type'
         )
             ->leftJoin('sys_user_group', 'sys_users.id', '=', 'sys_user_group.user')
             ->leftJoin('sys_groups', 'sys_user_group.group', '=', 'sys_groups.id')
@@ -95,6 +97,7 @@ class AuthController extends Controller
             $log->subject = $admin->id;
             $log->action = 1;
             $log->save();
+
 
             // GET USER'S ACCESS
             $access = [];
@@ -156,6 +159,10 @@ class AuthController extends Controller
             if (Session::has('redirect_uri')) {
                 $redirect_uri = Session::get('redirect_uri');
             }
+
+            // if($admin->group_type != 'admin'){
+            //     $redirect_uri = route('admin.demo');
+            // }
 
             return redirect($redirect_uri)
                 ->with(Session::put('admin', $admin))
