@@ -75,8 +75,8 @@ class BranchController extends Controller
             });
         }
         $divisions = $divisions->get();
-
-        return view('admin.system.branch.form', compact('divisions'));
+        $branches = SysBranch::all();
+        return view('admin.system.branch.form', compact('divisions', 'branches'));
     }
 
     public function do_create(Request $request)
@@ -138,12 +138,18 @@ class BranchController extends Controller
             $ordinal = $last->ordinal + 1;
         }
 
+
+
+        $parent_branch_id = (int) $request->parent_branch_id;
+
         // SAVE THE DATA
         $data = new SysBranch();
         $data->division_id = $division_id;
+        $data->parent_id = $parent_branch_id;
         $data->name = $name;
         $data->location = $location;
         $data->phone = $phone;
+        $data->cbs_branch_code = $request->cbs_branch_code;
         $data->gmaps = $gmaps;
         $data->ordinal = $ordinal;
         $data->status = $status;

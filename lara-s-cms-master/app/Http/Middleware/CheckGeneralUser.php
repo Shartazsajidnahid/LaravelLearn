@@ -4,8 +4,7 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Session;
-
-class CheckAdmin
+class CheckGeneralUser
 {
     /**
      * Handle an incoming request.
@@ -20,12 +19,24 @@ class CheckAdmin
 
             $admin = Session::get('admin');
 
-            if($admin->group_type == 'admin'){
+            if($admin->group_type == 'general'){
                 return $next($request);
             }
             else{
-                // return response(view('admin.system.demo'));
-                return redirect('general');
+                $actual_link = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+
+                if (strpos($actual_link, '/get-data') !== false) {
+                    // FOUND
+                    $actual_link = route('admin.home');
+                }
+
+                Session::put('redirect_uri', $actual_link);
+
+                if ($actual_link == route('admin.home')) {
+                    return redirect()->route('admin.login');
+                }
+
+                return redirect()->route('admin.login')->with('error', lang('You must login first!'));
             }
         }
         else {
