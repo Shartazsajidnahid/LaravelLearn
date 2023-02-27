@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateArticleTopicTable extends Migration
+class CreateDynControllersTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,11 @@ class CreateArticleTopicTable extends Migration
      */
     public function up()
     {
-        Schema::create('article_topic', function (Blueprint $table) {
-            $table->bigInteger('article_id')->index('FK_articles');
-            $table->bigInteger('topic_id')->index('FK_topics');
+        Schema::create('dyn_controllers', function (Blueprint $table) {
+            $table->id();
+            $table->string('controller_name', 255);
+            $table->timestamps();
         });
-
-        $seeder = new ArticleTopicSeederInitial();
-        $seeder->run();
     }
 
     /**
@@ -29,6 +27,6 @@ class CreateArticleTopicTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('article_topic');
+        Schema::dropIfExists('dyn_controllers');
     }
 }

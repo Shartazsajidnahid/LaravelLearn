@@ -1,10 +1,10 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
-class CreateSysBranchesTable extends Migration
+class CreateSysUnitsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,24 +13,17 @@ class CreateSysBranchesTable extends Migration
      */
     public function up()
     {
-        Schema::create('sys_branches', function (Blueprint $table) {
+        Schema::create('sys_units', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->bigInteger('division_id')->index('FK_sys_divisions');
+            $table->bigInteger('department_id')->index('FK_sys_departments');
             $table->string('name');
             $table->string('location')->nullable();
-            $table->string('gmaps')->nullable();
             $table->string('phone')->nullable();
-            $table->string('cbs_branch_code')->nullable();
             $table->boolean('status')->default(1);
             $table->unsignedInteger('ordinal')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });
-
-
-
-        $seeder = new SysBranchSeederInitial();
-        $seeder->run();
     }
 
     /**
@@ -40,6 +33,6 @@ class CreateSysBranchesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('sys_branches');
+        Schema::dropIfExists('sys_units');
     }
 }
