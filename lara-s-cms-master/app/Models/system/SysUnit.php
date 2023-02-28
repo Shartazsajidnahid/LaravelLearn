@@ -15,7 +15,7 @@ class SysUnit extends Model
      *
      * @var string
      */
-    protected $table = 'sys_branches';
+    protected $table = 'sys_units';
 
     /**
      * The attributes that are mass assignable.

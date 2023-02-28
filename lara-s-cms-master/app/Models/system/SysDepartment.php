@@ -16,7 +16,7 @@ class SysDepartment extends Model
      *
      * @var string
      */
-    protected $table = 'sys_branches';
+    protected $table = 'sys_departments';
 
     /**
      * The attributes that are mass assignable.

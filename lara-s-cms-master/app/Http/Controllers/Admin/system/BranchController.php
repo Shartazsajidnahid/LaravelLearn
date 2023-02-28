@@ -231,8 +231,10 @@ class BranchController extends Controller
             });
         }
         $divisions = $divisions->get();
+        $branches = SysBranch::all();
 
-        return view('admin.system.branch.form', compact('data', 'divisions'));
+
+        return view('admin.system.branch.form', compact('data', 'divisions', 'data', 'branches'));
     }
 
     public function do_edit($id, Request $request)
