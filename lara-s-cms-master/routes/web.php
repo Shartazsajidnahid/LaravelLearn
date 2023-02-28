@@ -11,6 +11,27 @@
 |
 */
 
+use App\Http\Controllers\Admin\system\HomeController;
+use App\Http\Controllers\Admin\system\AuthController;
+use App\Http\Middleware\CheckGeneralUser;
+
+
+// GENERAL USER
+// Route::group(['middleware' => 'check.generaluser'], function () {
+
+// });
+
+Route::middleware([CheckGeneralUser::class])->group(function(){
+    Route::get('/general', [HomeController::class, 'general_home']);
+    Route::get('/logout', [AuthController::class, 'logout'])->name('general.logout');
+    // Route::get('/logout', 'Admin\system\AuthController@logout')->name('general.logout');
+    Route::get('/team', [HomeController::class, 'general_team']);
+    Route::get('/aboutus', [HomeController::class, 'general_aboutus']);
+    Route::get('/allbrance', [HomeController::class, 'general_allbrance']);
+    Route::get('/alldivision', [HomeController::class, 'general_alldivision']);
+
+});
+
 // WEBSITE
 Route::group(['namespace' => 'Web'], function () {
     /**
@@ -53,7 +74,7 @@ Route::group(['namespace' => 'Web'], function () {
 
 // ADMIN
 Route::group([
-    'prefix' => env('ADMIN_DIR'),
+    'prefix' => env('ADMIN_DIR') ,
     'namespace' => 'Admin'
 ], function () {
     /**
@@ -120,6 +141,20 @@ Route::group([
                     Route::post('/sorting', 'BranchController@sorting')->name('admin.branch.sorting');
                 });
 
+                // Department
+                Route::group(['prefix' => 'department'], function () {
+                    Route::get('/', 'SysDepartmentController@list')->name('admin.department.list');
+                    Route::get('/get-data', 'SysDepartmentController@get_data')->name('admin.department.get_data');
+                    Route::get('/create', 'SysDepartmentController@create')->name('admin.department.create');
+                    Route::post('/do-create', 'SysDepartmentController@do_create')->name('admin.department.do_create');
+                    Route::get('/edit/{id}', 'SysDepartmentController@edit')->name('admin.department.edit');
+                    Route::post('/do-edit/{id}', 'SysDepartmentController@do_edit')->name('admin.department.do_edit');
+                    Route::post('/delete', 'SysDepartmentController@delete')->name('admin.department.delete');
+                    Route::get('/deleted', 'SysDepartmentController@list_deleted')->name('admin.department.deleted');
+                    Route::get('/get-data-deleted', 'SysDepartmentController@get_data_deleted')->name('admin.department.get_data_deleted');
+                    Route::post('/restore', 'SysDepartmentController@restore')->name('admin.department.restore');
+                    Route::post('/sorting', 'SysDepartmentController@sorting')->name('admin.department.sorting');
+                });
                 // RULE
                 Route::group(['prefix' => 'rule'], function () {
                     Route::get('/', 'RuleController@list')->name('admin.rule.list');
@@ -191,6 +226,15 @@ Route::group([
 
         // HOME
         Route::get('/', 'system\HomeController@index')->name('admin.home');
+        // Route::get('/general', 'system\HomeController@index2')->name('admin.demo');
+
+
+        //Menu
+        Route::get('/showmenu', 'MenuController@getMenu')->name('admin.showmenu');
+        Route::get('/addmenu', 'MenuController@list')->name('admin.addmenu');
+        Route::post('/createmenu', 'MenuController@do_create')->name('admin.createmenu');
+        Route::get('/addcontroller', 'MenuController@add_controller')->name('admin.addcontroller');
+        Route::post('/createcontroller', 'MenuController@create_controller')->name('admin.createcontroller');
 
         // BANNER
         Route::group(['prefix' => 'banner'], function () {
