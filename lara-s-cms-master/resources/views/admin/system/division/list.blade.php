@@ -37,7 +37,7 @@
               <i class="fa fa-plus-circle"></i>&nbsp; {{ ucwords(lang('add new', $translation)) }}
             </a>
           </div>
-        </div>  
+        </div>
       @else
         <div class="title_right">
           <div class="col-md-5 col-sm-5 col-xs-12 form-group pull-right">

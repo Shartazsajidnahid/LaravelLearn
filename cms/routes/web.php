@@ -12,9 +12,25 @@
 */
 
 use App\Http\Controllers\Admin\system\HomeController;
+use App\Http\Controllers\Admin\system\AuthController;
+use App\Http\Middleware\CheckGeneralUser;
 
 
-Route::get('/general', [HomeController::class, 'index2']);
+// GENERAL USER
+// Route::group(['middleware' => 'check.generaluser'], function () {
+
+// });
+
+Route::middleware([CheckGeneralUser::class])->group(function(){
+    Route::get('/general', [HomeController::class, 'general_home']);
+    Route::get('/logout', [AuthController::class, 'logout'])->name('general.logout');
+    // Route::get('/logout', 'Admin\system\AuthController@logout')->name('general.logout');
+    Route::get('/team', [HomeController::class, 'general_team']);
+    Route::get('/aboutus', [HomeController::class, 'general_aboutus']);
+    Route::get('/allbrance', [HomeController::class, 'general_allbrance']);
+    Route::get('/alldivision', [HomeController::class, 'general_alldivision']);
+
+});
 
 // WEBSITE
 Route::group(['namespace' => 'Web'], function () {
@@ -58,7 +74,7 @@ Route::group(['namespace' => 'Web'], function () {
 
 // ADMIN
 Route::group([
-    'prefix' => env('ADMIN_DIR'),
+    'prefix' => env('ADMIN_DIR') ,
     'namespace' => 'Admin'
 ], function () {
     /**
@@ -200,8 +216,11 @@ Route::group([
 
 
         //Menu
-        Route::get('/showmenu', 'MenuController@getMenu');
-
+        Route::get('/showmenu', 'MenuController@getMenu')->name('admin.showmenu');
+        Route::get('/addmenu', 'MenuController@list')->name('admin.addmenu');
+        Route::post('/createmenu', 'MenuController@do_create')->name('admin.createmenu');
+        Route::get('/addcontroller', 'MenuController@add_controller')->name('admin.addcontroller');
+        Route::post('/createcontroller', 'MenuController@create_controller')->name('admin.createcontroller');
 
         // BANNER
         Route::group(['prefix' => 'banner'], function () {

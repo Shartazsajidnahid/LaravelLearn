@@ -16,6 +16,7 @@ class CreateSysGroupsTable extends Migration
         Schema::create('sys_groups', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('name');
+            $table->string('type');
             $table->boolean('status')->default(1);
             $table->timestamps();
             $table->softDeletes();

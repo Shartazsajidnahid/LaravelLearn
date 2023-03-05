@@ -1,0 +1,18 @@
+@if ($menu->parent_id >= 0)
+    <li class="nav-item dropdown">
+        <a href="{{ url($menu->slug) }}" class="nav-link dropdown-toggle" role="button" data-toggle="dropdown">
+            {{ $menu->menu_title }}
+            @if (count($menu->children) > 0)
+                <i class="fa fa-caret-right"></i>
+            @endif
+        </a>
+
+@endif
+    @if (count($menu->children) > 0)
+        <ul class="@if ($menu->parent_id !== 0 && count($menu->children) > 0) submenu @endif dropdown-menu" aria-labelledby="dropdownBtn">
+            @foreach ($menu->children as $menu)
+                @include('menu.submenu', $menu)
+            @endforeach
+        </ul>
+    @endif
+    </li>

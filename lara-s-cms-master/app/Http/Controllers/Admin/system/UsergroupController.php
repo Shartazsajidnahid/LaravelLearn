@@ -208,6 +208,7 @@ class UsergroupController extends Controller
         $data = new SysGroup();
         $data->name = $name;
         $data->status = $status;
+        $data->type = $request->group_type;
 
         if ($data->save()) {
             /* set usergroup's access */

@@ -1,7 +1,7 @@
 @extends('_template_adm.master')
 
 @php
-    $pagetitle = ucwords(lang('admin group', $translation)); 
+    $pagetitle = ucwords(lang('admin group', $translation));
     if(isset($data)){
         $pagetitle .= ' ('.ucwords(lang('edit', $translation)).')';
         $link = route('admin.usergroup.do_edit', $data->id);
@@ -13,10 +13,10 @@
 
     // if add new, declare empty variables
     if(!isset($access)){
-        $access = []; 
+        $access = [];
     }
     if(!isset($division_allowed)){
-        $division_allowed = []; 
+        $division_allowed = [];
     }
 @endphp
 
@@ -56,12 +56,30 @@
                                 echo set_input_form2('switch', 'status', ucwords(lang('status', $translation)), $data, $errors, false, $config);
                             @endphp
 
+
+                            <div class="form-group">
+                                <div class="col-lg-6" style="float:none;margin:auto;">
+                                    <label for="inputState">Select Group Type</label>
+
+                                <select class="form-control" name="group_type">
+                                    <option value="admin">
+                                        ADMIN
+                                    </option>
+                                    <option value="general">
+                                        GENERAL
+                                    </option>
+
+
+                                </select>
+                                 </div>
+
+                            </div>
                             {{-- Division --}}
                             <div class="form-group">
                                 <label class="control-label col-md-3 col-sm-3 col-xs-12" for="division">{{ ucwords(lang('division', $translation)) }} <span class="required">*</span></label>
                                 <div class="col-md-6 col-sm-6 col-xs-12">
                                     @if ($divisions)
-                                        @php 
+                                        @php
                                             $no = 1;
                                             $add_script_division = []; // sbg wadah simpan script utk centang check all per module
                                         @endphp
@@ -90,7 +108,7 @@
                                                         </label>
                                                     </div>
                                                     @foreach ($value as $item)
-                                                        @php 
+                                                        @php
                                                             $access_ids[] = $item->id;
                                                             $stat = '';
                                                             if(count($division_allowed) > 0){
@@ -126,13 +144,13 @@
                                     @endif
                                 </div>
                             </div>
-                        
+
                             {{-- Access --}}
                             <div class="form-group">
                                 <label class="control-label col-md-3 col-sm-3 col-xs-12" for="access">{{ ucwords(lang('access', $translation)) }} <span class="required">*</span></label>
                                 <div class="col-md-6 col-sm-6 col-xs-12">
                                     @if ($rules)
-                                        @php 
+                                        @php
                                             $no = 1;
                                             $add_script = []; // sbg wadah simpan script utk centang check all per module
                                         @endphp
@@ -161,7 +179,7 @@
                                                         </label>
                                                     </div>
                                                     @foreach ($value as $item)
-                                                        @php 
+                                                        @php
                                                             $access_ids[] = $item->id;
                                                             $stat = '';
                                                             if(count($access) > 0){
@@ -200,19 +218,19 @@
                                     @endif
                                 </div>
                             </div>
-                            
+
                             <div class="ln_solid"></div>
 
                             <div class="form-group">
                                 <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
-                                    <button type="submit" class="btn btn-success"><i class="fa fa-save"></i>&nbsp; 
+                                    <button type="submit" class="btn btn-success"><i class="fa fa-save"></i>&nbsp;
                                         @if (isset($data))
                                             {{ ucwords(lang('save', $translation)) }}
                                         @else
                                             {{ ucwords(lang('submit', $translation)) }}
                                         @endif
                                     </button>
-                                    <a href="{{ route('admin.usergroup.list') }}" class="btn btn-danger"><i class="fa fa-times"></i>&nbsp; 
+                                    <a href="{{ route('admin.usergroup.list') }}" class="btn btn-danger"><i class="fa fa-times"></i>&nbsp;
                                         @if (isset($data))
                                             {{ ucwords(lang('close', $translation)) }}
                                         @else
@@ -238,7 +256,7 @@
 @section('script')
     <!-- Switchery -->
     @include('_form_element.switchery.script')
-    
+
     @php
         // utk centang "check_all" per division
         if (isset($add_script_division) && count($add_script_division) > 0){

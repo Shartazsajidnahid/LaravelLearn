@@ -18,6 +18,8 @@ class CreateMenusTable extends Migration
             $table->string('menu_title', 255)->default(NULL);
             $table->integer('parent_id')->default(0);
             $table->string('sort_order')->default(0);
+            $table->string('controller_name')->default(0);
+            $table->string('function_name')->default(0);
             $table->string('slug', 255)->default(NULL);
             $table->timestamps();
         });

@@ -208,7 +208,7 @@ class UsergroupController extends Controller
         $data = new SysGroup();
         $data->name = $name;
         $data->status = $status;
-        $data->type = 'general';
+        $data->type = $request->group_type;
 
         if ($data->save()) {
             /* set usergroup's access */
@@ -247,7 +247,8 @@ class UsergroupController extends Controller
         return back()
             ->withInput()
             ->with('error', lang('Oops, failed to add a new #item. Please try again.', $this->translation, ['#item' => $this->item]));
-    }
+
+        }
 
     public function edit($id)
     {
