@@ -143,7 +143,7 @@ Route::group([
 
                 // Department
                 Route::group(['prefix' => 'department'], function () {
-                    Route::get('/get-branches/{id}', 'SysDepartmentController@list')->name('admin.department.get_branches');
+                    Route::post('/get-branches', 'SysDepartmentController@get_branches')->name('admin.department.get_branches');
                     Route::get('/', 'SysDepartmentController@list')->name('admin.department.list');
                     Route::get('/get-data', 'SysDepartmentController@get_data')->name('admin.department.get_data');
                     Route::get('/create', 'SysDepartmentController@create')->name('admin.department.create');
@@ -159,6 +159,8 @@ Route::group([
 
                  // Unit
                  Route::group(['prefix' => 'unit'], function () {
+                    Route::post('/get-depts', 'SysUnitController@get_depts')->name('admin.unit.get_depts');
+
                     Route::get('/', 'SysUnitController@list')->name('admin.unit.list');
                     Route::get('/get-data', 'SysUnitController@get_data')->name('admin.unit.get_data');
                     Route::get('/create', 'SysUnitController@create')->name('admin.unit.create');
