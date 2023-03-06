@@ -14,6 +14,8 @@ use App\Libraries\Helper;
 // MODELS
 use App\Models\system\SysLog;
 use App\Models\system\SysUnit;
+use App\Models\system\SysDivision;
+
 use App\Models\system\SysDepartment;
 
 class SysUnitController extends Controller
@@ -57,8 +59,8 @@ class SysUnitController extends Controller
 
     public function create()
     {
-        $dept = SysDepartment::where('status', 1)->get();
-        return view('admin.system.unit.form', compact( 'dept'));
+        $divisions = SysDivision::where('status', 1)->get();
+        return view('admin.system.unit.form', compact( 'divisions'));
     }
 
     public function do_create(Request $request)
@@ -165,6 +167,7 @@ class SysUnitController extends Controller
            // GET THE DATA BASED ON ID
            $unit = SysUnit::find($id);
            $dept = SysDepartment::all();
+           $divisions = SysDivision::where('status', 1)->get();
 
            // CHECK IS DATA FOUND
            if (!$unit) {
@@ -177,7 +180,7 @@ class SysUnitController extends Controller
            $data = $this->oneRecordwith_deptName($unit);
         //    dd($data);
 
-           return view('admin.system.unit.editform', compact('data', 'dept'));
+           return view('admin.system.unit.editform', compact('data', 'dept', 'divisions'));
     }
 
     public function do_edit($id, Request $request)
@@ -612,5 +615,24 @@ class SysUnitController extends Controller
             'data' => $data
         ];
         return response()->json($response, 200);
+    }
+
+    public function get_depts(Request $request){
+
+        $sid=$request->post('sid');
+
+        echo $sid;
+		// $state=DB::table('sysBranch')->where('division_id',$div_id)->orderBy('state','asc')->get();
+        $depts = SysDepartment::where('branch_id', $sid)->orderBy('name', 'asc')->get();
+		// $html='<option value="">Select Branch</option>';
+        $html = '';
+		foreach($depts as $list){
+			$html.='<option value="'.$list->id.'">'.$list->name.'</option>';
+		}
+		echo $html;
+
+
+        // $branches = SysBranch::where('division_id', $id)->orderBy('name', 'asc')->get();
+        // return response()->json(['branches'=>$branches]);
     }
 }
