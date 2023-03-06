@@ -2,8 +2,8 @@
 
 @php
     $pagetitle = ucwords(lang('department', $translation));
-
-    $pagetitle .= ' ('.ucwords(lang('edit', $translation)).')';
+    $link_get_data = route('admin.department.get_branches');
+    $pagetitle .= ' (' . ucwords(lang('edit', $translation)) . ')';
     $link = route('admin.department.do_edit', $data['id']);
 
 @endphp
@@ -33,73 +33,89 @@
                         <form class="form-horizontal form-label-left" action="{{ $link }}" method="POST">
                             {{ csrf_field() }}
 
-                        {{-- branches --}}
-                        <div class="form-group vinput_main_branch" >
-                            <label for="parent branch" class="control-label col-md-3 col-sm-3 col-xs-12">
-                                Main Branch
-                            </label>
-                            <div class="col-md-6 col-sm-6 col-xs-12">
-                                <select class="form-control" name="branch_id">
-                                    @foreach ($branches as $cntrl)
-                                        <option value="{{ $cntrl->id }}">
-                                            {{ $cntrl->name }}
-                                        </option>
-                                    @endforeach
-                                </select>
-                            </div>
-                        </div>
-
-                        <div class="form-group vinput_main_branch" >
-                            <label  class="control-label col-md-3 col-sm-3 col-xs-12">
-                                Name
-                            </label>
-                            <div class="col-md-6 col-sm-6 col-xs-12">
-                                <input type="text" class="form-control" id="title" name="name" value="{{ $data['name'] }}">
-                            </div>
-                        </div>
-
-                        <div class="form-group vinput_main_branch" >
-                            <label  class="control-label col-md-3 col-sm-3 col-xs-12">
-                                Phone
-                            </label>
-                            <div class="col-md-6 col-sm-6 col-xs-12">
-                                <input type="text" class="form-control" id="phone" name="phone" value="{{ $data['phone'] }}">
-                            </div>
-                        </div>
-
-                        <div class="form-group vinput_main_branch" >
-                            <label  class="control-label col-md-3 col-sm-3 col-xs-12">
-                                Location
-                            </label>
-                            <div class="col-md-6 col-sm-6 col-xs-12">
-                                <input type="text" class="form-control" id="location" name="location" value="{{ $data['location'] }}">
-                            </div>
-                        </div>
-
-                        <div class="form-group vinput_main_branch" >
-                            <label  class="control-label col-md-3 col-sm-3 col-xs-12">
-                                Status
-                            </label>
-                            <div class="col-md-6 col-sm-6 col-xs-12">
-                                <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked" checked>
+                            <div class="form-group vinput_main_branch">
+                                <label for="parent branch" class="control-label col-md-3 col-sm-3 col-xs-12">
+                                    Division
+                                </label>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                    <select class="form-control" name="parent_branch_id" id="divisions">
+                                        <option>Select Division</option>
+                                        @foreach ($divisions as $cntrl)
+                                            <option value="{{ $cntrl->id }}" onclick="javascript:choosebranch();">
+                                                {{ $cntrl->name }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </div>
                             </div>
 
-                        </div>
-
-                        <div class="form-group vinput_main_branch" >
-                            <label  class="control-label col-md-3 col-sm-3 col-xs-12">
-
-                            </label>
-                            <div class="col-md-6 col-sm-6 col-xs-12">
-                                <button type="submit" class="btn btn-primary">Submit</button>
+                            {{-- branches --}}
+                            <div class="form-group vinput_main_branch">
+                                <label for="parent branch" class="control-label col-md-3 col-sm-3 col-xs-12">
+                                    Branch
+                                </label>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                    <select class="form-control" name="branch_id" id="branches">
+                                        <option value="{{ $data['branch_id'] }}">{{ $data['branch_name'] }}</option>
+                                    </select>
+                                </div>
                             </div>
-                        </div>
-                    </form>
+
+                            <div class="form-group vinput_main_branch">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12">
+                                    Name
+                                </label>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                    <input type="text" class="form-control" id="title" name="name"
+                                        value="{{ $data['name'] }}">
+                                </div>
+                            </div>
+
+                            <div class="form-group vinput_main_branch">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12">
+                                    Phone
+                                </label>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                    <input type="text" class="form-control" id="phone" name="phone"
+                                        value="{{ $data['phone'] }}">
+                                </div>
+                            </div>
+
+                            <div class="form-group vinput_main_branch">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12">
+                                    Location
+                                </label>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                    <input type="text" class="form-control" id="location" name="location"
+                                        value="{{ $data['location'] }}">
+                                </div>
+                            </div>
+
+                            <div class="form-group vinput_main_branch">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12">
+                                    Status
+                                </label>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                    <input class="form-check-input" type="checkbox" role="switch"
+                                        id="flexSwitchCheckChecked" checked>
+                                </div>
+
+                            </div>
+
+                            <div class="form-group vinput_main_branch">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12">
+
+                                </label>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                    <button type="submit" class="btn btn-primary">Submit</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
 @endsection
 
 @section('css')
@@ -110,7 +126,31 @@
 @section('script')
     <!-- Switchery -->
     @include('_form_element.switchery.script')
+
+
+    {{-- <script src="https://code.jquery.com/jquery-3.6.3.min.js" integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous"></script> --}}
+
+      <script>
+		jQuery(document).ready(function(){
+			jQuery('#divisions').change(function(){
+				let div_id=jQuery(this).val();
+                // alert(div_id);
+
+                // jQuery('#depts').html('');
+                jQuery('#branches').html('');
+
+				jQuery.ajax({
+					url: '{{ $link_get_data }}',
+					type:'post',
+					data:'div_id='+div_id+'&_token={{csrf_token()}}',
+					success:function(result){
+						jQuery('#branches').html(result)
+					}
+				});
+			});
+
+
+		});
+
+		</script>
 @endsection
-
-
-

@@ -77,49 +77,6 @@
                 <li><a href="{{ route('admin.logs') }}"><i class="fa fa-exchange"></i> {{ ucwords(lang('logs', $translation)) }}</a></li>
             @endif
 
-            @if (Helper::authorizing('Language', 'View List')['status'] == 'true')
-                <li><a id="menu-language"><i class="fa fa-language"></i> {{ ucwords(lang('language', $translation)) }} <span class="fa fa-chevron-down"></span></a>
-                    <ul class="nav child_menu">
-                        @if (Helper::authorizing('Dictionary', 'View List')['status'] == 'true')
-                            @php
-                                $priv_admin++;
-                                $menu_active = '';
-                                if(Helper::is_menu_active('/system/dictionary/')){
-                                    $menu_active = 'current-page';
-                                }
-                            @endphp
-                            <li class="{{ $menu_active }}">
-                                <a href="{{ route('admin.langmaster.list') }}">
-                                    {{ ucwords(lang('dictionary', $translation)) }}
-                                </a>
-                            </li>
-                        @endif
-
-                        @if (Helper::authorizing('Language', 'View List')['status'] == 'true')
-                            @php
-                                $priv_admin++;
-                                $menu_active = '';
-                                if(Helper::is_menu_active('/system/language/')){
-                                    $menu_active = 'current-page';
-                                }
-                            @endphp
-                            <li class="{{ $menu_active }}">
-                                <a href="{{ route('admin.language.list') }}">
-                                    {{ ucwords(lang('language', $translation)) }}
-                                </a>
-                            </li>
-                        @endif
-                    </ul>
-                </li>
-                @if(Helper::is_menu_active('/system/dictionary/') || Helper::is_menu_active('/system/language/'))
-                    <script>
-                        setTimeout(function(){
-                            document.getElementById('menu-language').click();
-                        }, 1000);
-                    </script>
-                @endif
-            @endif
-
             @if (Helper::authorizing('User', 'View List')['status'] == 'true')
                 @php
                     $priv_admin++;
@@ -241,6 +198,51 @@
                     </a>
                 </li>
             @endif
+
+            @if (Helper::authorizing('Language', 'View List')['status'] == 'true')
+                <li><a id="menu-language"><i class="fa fa-language"></i> {{ ucwords(lang('language', $translation)) }} <span class="fa fa-chevron-down"></span></a>
+                    <ul class="nav child_menu">
+                        @if (Helper::authorizing('Dictionary', 'View List')['status'] == 'true')
+                            @php
+                                $priv_admin++;
+                                $menu_active = '';
+                                if(Helper::is_menu_active('/system/dictionary/')){
+                                    $menu_active = 'current-page';
+                                }
+                            @endphp
+                            <li class="{{ $menu_active }}">
+                                <a href="{{ route('admin.langmaster.list') }}">
+                                    {{ ucwords(lang('dictionary', $translation)) }}
+                                </a>
+                            </li>
+                        @endif
+
+                        @if (Helper::authorizing('Language', 'View List')['status'] == 'true')
+                            @php
+                                $priv_admin++;
+                                $menu_active = '';
+                                if(Helper::is_menu_active('/system/language/')){
+                                    $menu_active = 'current-page';
+                                }
+                            @endphp
+                            <li class="{{ $menu_active }}">
+                                <a href="{{ route('admin.language.list') }}">
+                                    {{ ucwords(lang('language', $translation)) }}
+                                </a>
+                            </li>
+                        @endif
+                    </ul>
+                </li>
+                @if(Helper::is_menu_active('/system/dictionary/') || Helper::is_menu_active('/system/language/'))
+                    <script>
+                        setTimeout(function(){
+                            document.getElementById('menu-language').click();
+                        }, 1000);
+                    </script>
+                @endif
+            @endif
+
+
 
             {{-- @if (Helper::authorizing('Branch', 'View List')['status'] == 'true')
                 @php

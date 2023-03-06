@@ -2,7 +2,7 @@
 
 @php
     $pagetitle = ucwords(lang('department', $translation));
-    $link_get_data = route('admin.department.get_data');
+    $link_get_data = route('admin.department.get_branches');
     if (isset($data)) {
         $pagetitle .= ' (' . ucwords(lang('edit', $translation)) . ')';
         $link = route('admin.department.do_edit', $data->id);
@@ -11,7 +11,8 @@
         $link = route('admin.department.do_create');
         $data = null;
     }
-    $link_get_data = route('admin.branch.get_data');
+    // $link_get_data = route('admin.branch.get_data');
+    $function_get_data = 'refresh_data();';
     $chosenbranches = $branches;
     $x = 'haha';
 @endphp
@@ -40,12 +41,13 @@
                         <br />
                         <form class="form-horizontal form-label-left" action="{{ $link }}" method="POST">
                             {{ csrf_field() }}
-                            {{-- <div class="form-group vinput_main_branch">
+                            <div class="form-group vinput_main_branch">
                                 <label for="parent branch" class="control-label col-md-3 col-sm-3 col-xs-12">
                                     Division
                                 </label>
                                 <div class="col-md-6 col-sm-6 col-xs-12">
                                     <select class="form-control" name="parent_branch_id" id="divisions">
+                                        <option>Select Division</option>
                                         @foreach ($divisions as $cntrl)
                                             <option value="{{ $cntrl->id }}" onclick="javascript:choosebranch();">
                                                 {{ $cntrl->name }}
@@ -53,51 +55,16 @@
                                         @endforeach
                                     </select>
                                 </div>
-                            </div> --}}
-
-                            <div class="col-md-3 col-sm-12 col-xs-12">
-                                <div class="control-group">
-                                  <div class="controls">
-                                    <div class="input-prepend input-group">
-
-                                      <select style="width: 200px" id="filterlist-division" class="form-control select2">
-                                        @if (isset($divisions))
-                                          @foreach ($divisions as $item)
-                                            <option value="{{ $item->id }}">{{ $item->name }}</option>
-                                          @endforeach
-                                          <option value="all">- {{ ucwords(lang('choose all', $translation)) }} -</option>
-                                        @else
-                                          <option value="no_data" disabled>*NO DATA</option>
-                                        @endif
-                                      </select>
-                                    </div>
-                                  </div>
-                                </div>
                             </div>
-
 
                             <div class="form-group vinput_main_branch">
                                 <label for="parent branch" class="control-label col-md-3 col-sm-3 col-xs-12">
                                     Branch
                                 </label>
                                 <div class="col-md-6 col-sm-6 col-xs-12">
-                                    <select class="form-control" name="parent_branch_id" id="branches">
-                                        {{-- @foreach ($chosenbranches as $cntrl)
-                                            <option value="{{ $cntrl->id }}" >
-                                                {{ $cntrl->name }}
-                                            </option>
-                                        @endforeach --}}
-                                        <option>Select branch</option>
-                                    </select>
-                                </div>
-                            </div>
+                                    <select class="form-control" name="branch_id" id="branches">
 
-                            <div class="form-group vinput_main_branch">
-                                <label class="control-label col-md-3 col-sm-3 col-xs-12">
-                                    check
-                                </label>
-                                <div class="col-md-6 col-sm-6 col-xs-12">
-                                    <input type="text" class="form-control" id="check" name="name">
+                                    </select>
                                 </div>
                             </div>
 
@@ -161,119 +128,37 @@
     <!-- Select2 -->
     @include('_form_element.select2.script')
 
-    <script>
-        var AjaxSortingURL = '{{ route("admin.branch.sorting") }}';
+    {{-- <script src="https://code.jquery.com/jquery-3.6.3.min.js" integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous"></script> --}}
 
-        $(document).ready(function() {
-          {{ $function_get_data }}
+      <script>
+		jQuery(document).ready(function(){
+			jQuery('#divisions').change(function(){
+				let div_id=jQuery(this).val();
+                // alert(div_id);
 
-          $('#filterlist-division').on('change', function() {
-            {{ $function_get_data }}
-            $(this).blur();
-          })
-        });
+				jQuery.ajax({
+					url: '{{ $link_get_data }}',
+					type:'post',
+					data:'div_id='+div_id+'&_token={{csrf_token()}}',
+					success:function(result){
+						jQuery('#branches').html(result)
+					}
+				});
+			});
 
-        function refresh_data() {
-          $('#datatables').show();
+			// jQuery('#branches').change(function(){
+			// 	let sid=jQuery(this).val();
+			// 	jQuery.ajax({
+			// 		url:'/getCity',
+			// 		type:'post',
+			// 		data:'sid='+sid+'&_token={{csrf_token()}}',
+			// 		success:function(result){
+			// 			jQuery('#city').html(result)
+			// 		}
+			// 	});
+			// });
 
-          var division = $('#filterlist-division').val();
-          if (typeof division == 'undefined') {
-            var division = 'all';
-          }
+		});
 
-          $.ajax({
-            type: 'GET',
-            url: '{{ $link_get_data }}',
-            data: {
-              division: division,
-            },
-            success: function(response){
-              // console.log(response);
-              if (typeof response.status != 'undefined') {
-                if (response.status == 'true') {
-                  var html = '';
-                  if (response.status == 'true') {
-                  var html = '';
-                  if (response.data == '') {
-                    html += '<option value="">Select Branches</option>';
-                  } else {
-                    $.each(response.data, function (index, value) {
-                      html += '<option>';
-                        // html += '<td>'+value.division_name+'</td>';
-                        html += value.name;
-                      html += '</option>';
-                    });
-                  }
-                  $('#branches').html(html);
-                }  else {
-                  alert(response.message);
-                }
-              } else {
-                alert ('Server not respond, please refresh your page');
-              }
-            },
-            error: function (data, textStatus, errorThrown) {
-              console.log(data);
-              console.log(textStatus);
-              console.log(errorThrown);
-            }
-          });
-        }
-
-        function refresh_data_deleted() {
-          $('#datatables-deleted').show();
-
-          var division = $('#filterlist-division').val();
-          if (typeof division == 'undefined') {
-            var division = 'all';
-          }
-
-          $.ajax({
-            type: 'GET',
-            url: '{{ $link_get_data }}',
-            data: {
-              division: division,
-            },
-            success: function(response){
-              // console.log(response);
-              if (typeof response.status != 'undefined') {
-                if (response.status == 'true') {
-                  var html = '';
-                  if (response.data == '') {
-                    html += '<tr><td colspan="6"><h2 class="text-center">{{ strtoupper(lang("no data available", $translation)) }}</h2></td></tr>';
-                  } else {
-                    $.each(response.data, function (index, value) {
-                      html += '<tr>';
-                        html += '<td>'+value.division_name+'</td>';
-                        html += '<td>'+value.name+'</td>';
-
-                        var status_item = '<span class="label label-danger"><i>{{ ucwords(lang("disabled", $translation)) }}</i></span>';
-                        if (value.status == 1) {
-                          status_item = '<span class="label label-success">{{ ucwords(lang("enabled", $translation)) }}</span>';
-                        }
-                        html += '<td>'+status_item+'</td>';
-                        html += '<td>'+value.created_at_edited+'</td>';
-                        html += '<td>'+value.deleted_at_edited+'</td>';
-
-                        action_restore = '<form action="{{ route("admin.branch.restore") }}" method="POST" onsubmit="return confirm(\'{{ lang("Are you sure to restore this #item?", $translation, ["#item"=>$this_object]) }}\');" style="display: inline">{{ csrf_field() }}<input type="hidden" name="id" value="'+value.id+'"><button type="submit" class="btn btn-xs btn-primary" title="{{ ucwords(lang("restore", $translation)) }}"><i class="fa fa-check"></i>&nbsp; {{ ucwords(lang("restore", $translation)) }}</button></form>';
-                        html += '<td>'+action_restore+'</td>';
-                      html += '</tr>';
-                    });
-                  }
-                  $('#sortable-data-deleted').html(html);
-                } else {
-                  alert(response.message);
-                }
-              } else {
-                alert ('Server not respond, please refresh your page');
-              }
-            },
-            error: function (data, textStatus, errorThrown) {
-              console.log(data);
-              console.log(textStatus);
-              console.log(errorThrown);
-            }
-          });
-        }
-      </script>
+		</script>
 @endsection
