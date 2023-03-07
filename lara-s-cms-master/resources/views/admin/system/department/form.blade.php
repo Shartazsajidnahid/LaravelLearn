@@ -2,14 +2,19 @@
 
 @php
     $pagetitle = ucwords(lang('department', $translation));
-    if(isset($data)){
-        $pagetitle .= ' ('.ucwords(lang('edit', $translation)).')';
+    $link_get_data = route('admin.department.get_branches');
+    if (isset($data)) {
+        $pagetitle .= ' (' . ucwords(lang('edit', $translation)) . ')';
         $link = route('admin.department.do_edit', $data->id);
-    }else {
-        $pagetitle .= ' ('.ucwords(lang('new', $translation)).')';
+    } else {
+        $pagetitle .= ' (' . ucwords(lang('new', $translation)) . ')';
         $link = route('admin.department.do_create');
         $data = null;
     }
+    // $link_get_data = route('admin.branch.get_data');
+    $function_get_data = 'refresh_data();';
+    $chosenbranches = $branches;
+    $x = 'haha';
 @endphp
 
 @section('title', $pagetitle)
@@ -36,16 +41,34 @@
                         <br />
                         <form class="form-horizontal form-label-left" action="{{ $link }}" method="POST">
                             {{ csrf_field() }}
+                            <div class="form-group vinput_main_branch">
+                                <label for="parent branch" class="control-label col-md-3 col-sm-3 col-xs-12">
+                                    Division
+                                </label>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                    <select class="form-control select2" name="parent_branch_id" id="divisions">
+                                        <option>Select Division</option>
+                                        @foreach ($divisions as $cntrl)
+                                            <option value="{{ $cntrl->id }}" onclick="javascript:choosebranch();">
+                                                {{ $cntrl->name }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="form-group vinput_main_branch">
+                                <label for="parent branch" class="control-label col-md-3 col-sm-3 col-xs-12">
+                                    Branch
+                                </label>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                    <select class="form-control select2" name="branch_id" id="branches">
+
+                                    </select>
+                                </div>
+                            </div>
 
                             @php
-
-                                $config = new \stdClass();
-                                $config->placeholder = ucwords(lang('please choose one', $translation));
-                                $config->defined_data = $branches;
-                                $config->field_value = 'id';
-                                $config->field_text = 'name';
-                                echo set_input_form2('select2', 'branch_id', ucwords(lang('parent branch', $translation)), $data, $errors, true, $config);
-
                                 $config = new \stdClass();
                                 $config->attributes = 'autocomplete="off"';
                                 echo set_input_form2('text', 'name', ucwords(lang('name', $translation)), $data, $errors, true, $config);
@@ -73,7 +96,8 @@
                                             {{ ucwords(lang('submit', $translation)) }}
                                         @endif
                                     </button>
-                                    <a href="{{ route('admin.branch.list') }}" class="btn btn-danger"><i class="fa fa-times"></i>&nbsp;
+                                    <a href="{{ route('admin.department.list') }}" class="btn btn-danger"><i
+                                            class="fa fa-times"></i>&nbsp;
                                         @if (isset($data))
                                             {{ ucwords(lang('close', $translation)) }}
                                         @else
@@ -104,8 +128,40 @@
     <!-- Select2 -->
     @include('_form_element.select2.script')
 
+    {{-- <script src="https://code.jquery.com/jquery-3.6.3.min.js" integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous"></script> --}}
     <script>
         // Initialize Select2
         $('.select2').select2();
     </script>
+    <script>
+		jQuery(document).ready(function(){
+			jQuery('#divisions').change(function(){
+				let div_id=jQuery(this).val();
+                // alert(div_id);
+
+				jQuery.ajax({
+					url: '{{ $link_get_data }}',
+					type:'post',
+					data:'div_id='+div_id+'&_token={{csrf_token()}}',
+					success:function(result){
+						jQuery('#branches').html(result)
+					}
+				});
+			});
+
+			// jQuery('#branches').change(function(){
+			// 	let sid=jQuery(this).val();
+			// 	jQuery.ajax({
+			// 		url:'/getCity',
+			// 		type:'post',
+			// 		data:'sid='+sid+'&_token={{csrf_token()}}',
+			// 		success:function(result){
+			// 			jQuery('#city').html(result)
+			// 		}
+			// 	});
+			// });
+
+		});
+
+		</script>
 @endsection

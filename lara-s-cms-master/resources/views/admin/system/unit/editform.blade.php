@@ -1,12 +1,15 @@
 @extends('_template_adm.master')
 
 @php
-    $pagetitle = ucwords(lang('department', $translation));
+    $pagetitle = ucwords(lang('unit', $translation));
     $link_get_data = route('admin.department.get_branches');
+    $link_get_data_dept = route('admin.unit.get_depts');
     $pagetitle .= ' (' . ucwords(lang('edit', $translation)) . ')';
-    $link = route('admin.department.do_edit', $data['id']);
+    $link = route('admin.unit.do_edit', $data['id']);
 
 @endphp
+
+@section('title', $pagetitle)
 
 @section('title', $pagetitle)
 
@@ -33,12 +36,12 @@
                         <form class="form-horizontal form-label-left" action="{{ $link }}" method="POST">
                             {{ csrf_field() }}
 
-                            <div class="form-group vinput_main_branch">
-                                <label for="parent branch" class="control-label col-md-3 col-sm-3 col-xs-12">
+                            <div class="form-group ">
+                                <label  class="control-label col-md-3 col-sm-3 col-xs-12">
                                     Division
                                 </label>
                                 <div class="col-md-6 col-sm-6 col-xs-12">
-                                    <select class="form-control select2" name="parent_branch_id" id="divisions">
+                                    <select class="form-control select2" id="divisions">
                                         <option>Select Division</option>
                                         @foreach ($divisions as $cntrl)
                                             <option value="{{ $cntrl->id }}" onclick="javascript:choosebranch();">
@@ -49,14 +52,25 @@
                                 </div>
                             </div>
 
-                            {{-- branches --}}
-                            <div class="form-group vinput_main_branch">
-                                <label for="parent branch " class="control-label col-md-3 col-sm-3 col-xs-12">
+
+
+                            <div class="form-group ">
+                                <label  class="control-label col-md-3 col-sm-3 col-xs-12">
                                     Branch
                                 </label>
                                 <div class="col-md-6 col-sm-6 col-xs-12">
-                                    <select class="form-control select2" name="branch_id" id="branches">
-                                        <option value="{{ $data['branch_id'] }}">{{ $data['branch_name'] }}</option>
+                                    <select class="form-control select2" id="branches">
+
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group ">
+                                <label  class="control-label col-md-3 col-sm-3 col-xs-12">
+                                    Department
+                                </label>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                    <select class="form-control select2" name="department_id" id ="depts">
+                                        <option value="{{ $data['department_id'] }}">{{ $data['department_name'] }}</option>
                                     </select>
                                 </div>
                             </div>
@@ -110,6 +124,8 @@
                                     <button type="submit" class="btn btn-primary">Submit</button>
                                 </div>
                             </div>
+
+
                         </form>
                     </div>
                 </div>
@@ -128,10 +144,14 @@
 @section('script')
     <!-- Switchery -->
     @include('_form_element.switchery.script')
- <!-- Select2 -->
- @include('_form_element.select2.script')
+    <!-- Select2 -->
+    @include('_form_element.select2.script')
 
     {{-- <script src="https://code.jquery.com/jquery-3.6.3.min.js" integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous"></script> --}}
+    <script>
+        // Initialize Select2
+        $('.select2').select2();
+    </script>
 
     <script>
         jQuery(document).ready(function() {
@@ -139,7 +159,7 @@
                 let div_id = jQuery(this).val();
                 // alert(div_id);
 
-                // jQuery('#depts').html('');
+                jQuery('#depts').html('');
                 jQuery('#branches').html('');
 
                 jQuery.ajax({
@@ -152,12 +172,19 @@
                 });
             });
 
-
+            jQuery('#branches').change(function() {
+                let sid = jQuery(this).val();
+                jQuery.ajax({
+                    url: '{{ $link_get_data_dept }}',
+                    type: 'post',
+                    data: 'sid=' + sid + '&_token={{ csrf_token() }}',
+                    success: function(result) {
+                        jQuery('#depts').html(result)
+                    }
+                });
+            });
         });
     </script>
 
-    <script>
-        // Initialize Select2
-        $('.select2').select2();
-    </script>
+
 @endsection

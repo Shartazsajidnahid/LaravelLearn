@@ -4,7 +4,7 @@
   // USE LIBRARIES
   use App\Libraries\Helper;
 
-  $this_object = ucwords(lang('division', $translation));
+  $this_object = ucwords(lang('designation', $translation));
 
   if(isset($data)){
     $pagetitle = $this_object;
@@ -28,12 +28,12 @@
       @if (isset($data))
         <div class="title_right">
           <div class="col-md-5 col-sm-5 col-xs-12 form-group pull-right">
-            @if (Helper::authorizing('Division', 'Restore')['status'] == 'true')
-              <a href="{{ route('admin.division.deleted') }}" class="btn btn-round btn-danger" style="float: right; margin-bottom: 5px;" data-toggle="tooltip" title="{{ ucwords(lang('view deleted items', $translation)) }}">
+            {{-- @if (Helper::authorizing('designation', 'Restore')['status'] == 'true') --}}
+              <a href="{{ route('admin.designation.deleted') }}" class="btn btn-round btn-danger" style="float: right; margin-bottom: 5px;" data-toggle="tooltip" title="{{ ucwords(lang('view deleted items', $translation)) }}">
                 <i class="fa fa-trash"></i>
               </a>
-            @endif
-            <a href="{{ route('admin.division.create') }}" class="btn btn-round btn-success" style="float: right;">
+            {{-- @endif --}}
+            <a href="{{ route('admin.designation.create') }}" class="btn btn-round btn-success" style="float: right;">
               <i class="fa fa-plus-circle"></i>&nbsp; {{ ucwords(lang('add new', $translation)) }}
             </a>
           </div>
@@ -41,7 +41,7 @@
       @else
         <div class="title_right">
           <div class="col-md-5 col-sm-5 col-xs-12 form-group pull-right">
-            <a href="{{ route('admin.division.list') }}" class="btn btn-round btn-primary" style="float: right;">
+            <a href="{{ route('admin.designation.list') }}" class="btn btn-round btn-primary" style="float: right;">
               <i class="fa fa-check-circle"></i>&nbsp; {{ ucwords(lang('active items', $translation)) }}
             </a>
           </div>
@@ -63,9 +63,10 @@
               <table class="table table-striped table-bordered">
                 <thead>
                   <tr>
-                    <th>{{ ucwords(lang('name', $translation)) }}</th>
-                    <th>{{ ucwords(lang('status', $translation)) }}</th>
-                    <th>{{ ucwords(lang('created', $translation)) }}</th>
+                    <th>{{ ucwords(lang('designation id', $translation)) }}</th>
+                    <th>{{ ucwords(lang('designation', $translation)) }}</th>
+                    <th>{{ ucwords(lang('shortcode', $translation)) }}</th>
+                    <th>{{ ucwords(lang('Seniority_order', $translation)) }}</th>
                     @if (isset($deleted))
                       <th>{{ ucwords(lang('deleted at', $translation)) }}</th>
                     @else
@@ -78,21 +79,18 @@
                   <tbody class="sorted_table">
                     @foreach ($data as $item)
                       <tr role="row" id="row-{{ $item->id }}" title="{{ ucfirst(lang("Drag & drop to sorting", $translation)) }}" data-toggle="tooltip">
-                        <td class="dragndrop">{{ $item->name }}</td>
-                        <td>
-                          @if ($item->status != 1)
-                            <span class="label label-danger"><i>{{ ucwords(lang('disabled', $translation)) }}</i></span>
-                          @else
-                            <span class="label label-success">{{ ucwords(lang('enabled', $translation)) }}</span>
-                          @endif
-                        </td>
+                        <td class="dragndrop">{{ $item->designation_id }}</td>
+                        <td class="dragndrop">{{ $item->designation }}</td>
+                        <td class="dragndrop">{{ $item->shortcode }}</td>
+                        <td class="dragndrop">{{ $item->seniority_order }}</td>
+
                         <td>{{ $item->created_at }}</td>
                         <td>{{ Helper::time_ago(strtotime($item->updated_at), lang('ago', $translation), Helper::get_periods($translation)) }}</td>
                         <td>
-                          <a href="{{ route('admin.division.edit', $item->id) }}" class="btn btn-xs btn-primary" title="{{ ucwords(lang('edit', $translation)) }}">
+                          <a href="{{ route('admin.designation.edit', $item->id) }}" class="btn btn-xs btn-primary" title="{{ ucwords(lang('edit', $translation)) }}">
                             <i class="fa fa-pencil"></i>&nbsp; {{ ucwords(lang('edit', $translation)) }}
                           </a>
-                          <form action="{{ route('admin.division.delete') }}" method="POST" onsubmit="return confirm('{{ lang('Are you sure to delete this #item?', $translation, ['#item'=>$this_object]) }}');" style="display: inline">
+                          <form action="{{ route('admin.designation.delete') }}" method="POST" onsubmit="return confirm('{{ lang('Are you sure to delete this #item?', $translation, ['#item'=>$this_object]) }}');" style="display: inline">
                             {{ csrf_field() }}
                             <input type="hidden" name="id" value="{{ $item->id }}">
                             <button type="submit" class="btn btn-xs btn-danger" title="{{ ucwords(lang('delete', $translation)) }}">
@@ -118,7 +116,7 @@
                         <td>{{ $item->created_at }}</td>
                         <td>{{ Helper::time_ago(strtotime($item->deleted_at), lang('ago', $translation), Helper::get_periods($translation)) }}</td>
                         <td>
-                          <form action="{{ route('admin.division.restore') }}" method="POST" onsubmit="return confirm('{{ lang('Are you sure to restore this #item?', $translation, ['#item'=>$this_object]) }}');">
+                          <form action="{{ route('admin.designation.restore') }}" method="POST" onsubmit="return confirm('{{ lang('Are you sure to restore this #item?', $translation, ['#item'=>$this_object]) }}');">
                             {{ csrf_field() }}
                             <input type="hidden" name="id" value="{{ $item->id }}">
                             <button type="submit" class="btn btn-xs btn-primary" title="{{ ucwords(lang('restore', $translation)) }}">
@@ -151,9 +149,6 @@
 @endsection
 
 @section('script')
-  <script>
-    var AjaxSortingURL = '{{ route("admin.division.sorting") }}';
-  </script>
   <!-- Sortable-Table -->
   @include('_form_element.sortable_table.script')
 @endsection
