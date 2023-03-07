@@ -143,6 +143,7 @@ Route::group([
 
                 // Department
                 Route::group(['prefix' => 'department'], function () {
+                    Route::post('/get-branches', 'SysDepartmentController@get_branches')->name('admin.department.get_branches');
                     Route::get('/', 'SysDepartmentController@list')->name('admin.department.list');
                     Route::get('/get-data', 'SysDepartmentController@get_data')->name('admin.department.get_data');
                     Route::get('/create', 'SysDepartmentController@create')->name('admin.department.create');
@@ -155,6 +156,38 @@ Route::group([
                     Route::post('/restore', 'SysDepartmentController@restore')->name('admin.department.restore');
                     Route::post('/sorting', 'SysDepartmentController@sorting')->name('admin.department.sorting');
                 });
+
+                 // Unit
+                 Route::group(['prefix' => 'unit'], function () {
+                    Route::post('/get-depts', 'SysUnitController@get_depts')->name('admin.unit.get_depts');
+
+                    Route::get('/', 'SysUnitController@list')->name('admin.unit.list');
+                    Route::get('/get-data', 'SysUnitController@get_data')->name('admin.unit.get_data');
+                    Route::get('/create', 'SysUnitController@create')->name('admin.unit.create');
+                    Route::post('/do-create', 'SysUnitController@do_create')->name('admin.unit.do_create');
+                    Route::get('/edit/{id}', 'SysUnitController@edit')->name('admin.unit.edit');
+                    Route::post('/do-edit/{id}', 'SysUnitController@do_edit')->name('admin.unit.do_edit');
+                    Route::post('/delete', 'SysUnitController@delete')->name('admin.unit.delete');
+                    Route::get('/deleted', 'SysUnitController@list_deleted')->name('admin.unit.deleted');
+                    Route::get('/get-data-deleted', 'SysUnitController@get_data_deleted')->name('admin.unit.get_data_deleted');
+                    Route::post('/restore', 'SysUnitController@restore')->name('admin.unit.restore');
+                    Route::post('/sorting', 'SysUnitController@sorting')->name('admin.unit.sorting');
+                });
+
+                // Designation
+                Route::group(['prefix' => 'designation'], function () {
+                    Route::get('/', 'DesignationController@list')->name('admin.designation.list');
+                    Route::get('/create', 'DesignationController@create')->name('admin.designation.create');
+                    Route::post('/do-create', 'DesignationController@do_create')->name('admin.designation.do_create');
+                    Route::get('/edit/{id}', 'DesignationController@edit')->name('admin.designation.edit');
+                    Route::post('/do-edit/{id}', 'DesignationController@do_edit')->name('admin.designation.do_edit');
+                    Route::post('/delete', 'DesignationController@delete')->name('admin.designation.delete');
+                    Route::get('/deleted', 'DesignationController@list_deleted')->name('admin.designation.deleted');
+                    Route::post('/restore', 'DesignationController@restore')->name('admin.designation.restore');
+                    Route::post('/sorting', 'DesignationController@sorting')->name('admin.designation.sorting');
+                });
+
+
                 // RULE
                 Route::group(['prefix' => 'rule'], function () {
                     Route::get('/', 'RuleController@list')->name('admin.rule.list');
