@@ -15,6 +15,7 @@ use App\Libraries\Helper;
 use App\Models\system\SysLog;
 use App\Models\system\SysBranch;
 use App\Models\system\SysDepartment;
+use App\Models\system\SysDivision;
 
 class SysDepartmentController extends Controller
 {
@@ -58,7 +59,8 @@ class SysDepartmentController extends Controller
     public function create()
     {
         $branches = SysBranch::where('status', 1)->get();
-        return view('admin.system.department.form', compact( 'branches'));
+        $divisions = SysDivision::where('status', 1)->orderBy('name', 'asc')->get();
+        return view('admin.system.department.form', compact( 'branches', 'divisions'));
     }
 
     public function do_create(Request $request)
@@ -164,7 +166,7 @@ class SysDepartmentController extends Controller
 
            // GET THE DATA BASED ON ID
            $dept = SysDepartment::find($id);
-           $branches = SysBranch::all();
+           $divisions = SysDivision::all();
 
            // CHECK IS DATA FOUND
            if (!$dept) {
@@ -177,7 +179,7 @@ class SysDepartmentController extends Controller
            $data = $this->oneRecordwith_branchName($dept);
         //    dd($data);
 
-           return view('admin.system.department.editform', compact('data', 'branches'));
+           return view('admin.system.department.editform', compact('data', 'divisions'));
     }
 
     public function do_edit($id, Request $request)
@@ -612,5 +614,30 @@ class SysDepartmentController extends Controller
             'data' => $data
         ];
         return response()->json($response, 200);
+    }
+
+    public function get_branches(Request $request){
+
+        $div_id=$request->post('div_id');
+
+        echo $div_id;
+		// $state=DB::table('sysBranch')->where('division_id',$div_id)->orderBy('state','asc')->get();
+        $branches = SysBranch::where('division_id', $div_id)->orderBy('name', 'asc')->get();
+		// $html='<option value="">Select Branch</option>';
+        $html = '';
+		foreach($branches as $list){
+			$html.='<option value="'.$list->id.'">'.$list->name.'</option>';
+		}
+		echo $html;
+
+
+        // $branches = SysBranch::where('division_id', $id)->orderBy('name', 'asc')->get();
+        // return response()->json(['branches'=>$branches]);
+    }
+
+    public static function chooseBranches($division_id)
+    {
+
+        return ("nahidss");
     }
 }

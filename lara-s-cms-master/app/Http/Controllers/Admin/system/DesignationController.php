@@ -12,99 +12,101 @@ use App\Libraries\Helper;
 
 // MODELS
 use App\Models\system\SysLog;
-use App\Models\system\SysDivision;
+use App\Models\Designation;
 
-class DivisionController extends Controller
+class DesignationController extends Controller
 {
     // SET THIS MODULE
-    private $module = 'Division';
+    private $module = 'Designation';
     // SET THIS OBJECT/ITEM NAME
-    private $item = 'office';
+    private $item = 'designation';
 
     public function list()
     {
         // AUTHORIZING...
-        $authorize = Helper::authorizing($this->module, 'View List');
-        if ($authorize['status'] != 'true') {
-            return back()->with('error', $authorize['message']);
-        }
+        // $authorize = Helper::authorizing($this->module, 'View List');
+        // if ($authorize['status'] != 'true') {
+        //     return back()->with('error', $authorize['message']);
+        // }
 
         // GET THE DATA
-        $data = SysDivision::orderBy('ordinal')->get();
+        $data = Designation::all();
 
-        return view('admin.system.division.list', compact('data'));
+        return view('admin.system.designation.list', compact('data'));
     }
 
     public function create()
     {
         // AUTHORIZING...
-        $authorize = Helper::authorizing($this->module, 'Add New');
-        if ($authorize['status'] != 'true') {
-            return back()->with('error', $authorize['message']);
-        }
+        // $authorize = Helper::authorizing($this->module, 'Add New');
+        // if ($authorize['status'] != 'true') {
+        //     return back()->with('error', $authorize['message']);
+        // }
 
-        return view('admin.system.division.form');
+        return view('admin.system.designation.form');
     }
 
     public function do_create(Request $request)
     {
         // AUTHORIZING...
-        $authorize = Helper::authorizing($this->module, 'Add New');
-        if ($authorize['status'] != 'true') {
-            return back()->with('error', $authorize['message']);
-        }
+        // $authorize = Helper::authorizing($this->module, 'Add New');
+        // if ($authorize['status'] != 'true') {
+        //     return back()->with('error', $authorize['message']);
+        // }
 
         // SET THIS OBJECT/ITEM NAME BASED ON TRANSLATION
         $this->item = ucwords(lang($this->item, $this->translation));
 
         // LARAVEL VALIDATION
         $validation = [
-            'name' => 'required|unique:sys_divisions,name'
+            'designation_id' => 'required|integer',
+            'designation' => 'required'
         ];
         $message = [
-            'required' => ':attribute ' . lang('field is required', $this->translation),
-            'unique' => ':attribute ' . lang('has already been taken, please input another data', $this->translation)
+            'required' => ':attribute ' . lang('field is required', $this->translation)
         ];
         $names = [
-            'name' => ucwords(lang('name', $this->translation))
+            'designation_id' => ucwords(lang('designation_id', $this->translation)),
+            'designation' => ucwords(lang('designation', $this->translation))
         ];
         $this->validate($request, $validation, $message, $names);
 
         // HELPER VALIDATION FOR PREVENT SQL INJECTION & XSS ATTACK
-        $name = Helper::validate_input_text($request->name);
-        if (!$name) {
+        $designation_id = (int) $request->designation_id;
+        if ($designation < 1) {
+            return back()
+                ->withInput()
+                ->with('error', lang('#item must be chosen at least one', $this->translation, ['#item' => ucwords(lang('office', $this->translation))]));
+        }
+        $designation = Helper::validate_input_text($request->designation);
+        if (!$designation) {
             return back()
                 ->withInput()
                 ->with('error', lang('Invalid format for #item', $this->translation, ['#item' => ucwords(lang('name', $this->translation))]));
         }
-        $description = Helper::validate_input_text($request->description);
-        $status = (int) $request->status;
+        $shortcode = Helper::validate_input_text($request->shortcode);
+        $seniority_order = $request->seniority_order;
 
-        // SET ORDER / ORDINAL
-        $last = SysDivision::select('ordinal')->orderBy('ordinal', 'desc')->first();
-        $ordinal = 1;
-        if ($last) {
-            $ordinal = $last->ordinal + 1;
-        }
 
         // SAVE THE DATA
-        $data = new SysDivision();
-        $data->name = $name;
-        $data->description = $description;
-        $data->ordinal = $ordinal;
-        $data->status = $status;
+        $data = new Designation();
+        $data->designation_id = $designation_id;
+        $data->designation = $designation;
+        $data->shortcode = $shortcode;
+        $data->seniority_order = $seniority_order;
+
 
         if ($data->save()) {
             // LOGGING
             $log = new SysLog();
             $log->subject = Session::get('admin')->id;
-            $log->action = 9;
+            $log->action = 13;
             $log->object = $data->id;
             $log->save();
 
             // SUCCESS
             return redirect()
-                ->route('admin.division.list')
+                ->route('admin.designation.list')
                 ->with('success', lang('Successfully added a new #item : #name', $this->translation, ['#item' => $this->item, '#name' => $name]));
         }
 
@@ -112,6 +114,7 @@ class DivisionController extends Controller
         return back()
             ->withInput()
             ->with('error', lang('Oops, failed to add a new #item. Please try again.', $this->translation, ['#item' => $this->item]));
+
     }
 
     public function edit($id)

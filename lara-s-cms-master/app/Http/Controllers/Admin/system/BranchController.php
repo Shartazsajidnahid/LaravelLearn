@@ -139,8 +139,13 @@ class BranchController extends Controller
         }
 
 
+        if($request->yesno == "subBranchno"){
+            $parent_branch_id = 0;
+        }
+        else{
+            $parent_branch_id = (int) $request->parent_branch_id;
+        }
 
-        $parent_branch_id = (int) $request->parent_branch_id;
 
         // SAVE THE DATA
         $data = new SysBranch();
