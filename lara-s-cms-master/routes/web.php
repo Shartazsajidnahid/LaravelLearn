@@ -21,6 +21,12 @@ use App\Http\Middleware\CheckGeneralUser;
 
 // });
 
+
+// Route::get('/employees', [Admin\system\HomeController::class, 'toEmployee']);
+Route::get('/employees', 'Admin\system\HomeController@toEmployee');
+Route::get('/alldivision', [HomeController::class, 'general_alldivision']);
+
+
 Route::middleware([CheckGeneralUser::class])->group(function(){
     Route::get('/general', [HomeController::class, 'general_home']);
     Route::get('/logout', [AuthController::class, 'logout'])->name('general.logout');
@@ -29,7 +35,6 @@ Route::middleware([CheckGeneralUser::class])->group(function(){
     Route::get('/aboutus', [HomeController::class, 'general_aboutus']);
     Route::get('/allbrance', [HomeController::class, 'general_allbrance']);
     Route::get('/alldivision', [HomeController::class, 'general_alldivision']);
-
 });
 
 // WEBSITE
@@ -185,6 +190,19 @@ Route::group([
                     Route::get('/deleted', 'DesignationController@list_deleted')->name('admin.designation.deleted');
                     Route::post('/restore', 'DesignationController@restore')->name('admin.designation.restore');
                     Route::post('/sorting', 'DesignationController@sorting')->name('admin.designation.sorting');
+                });
+
+                 // Functional_ Designation
+                 Route::group(['prefix' => 'functional_designation'], function () {
+                    Route::get('/', 'FunctionalDesignationController@list')->name('admin.functional_designation.list');
+                    Route::get('/create', 'FunctionalDesignationController@create')->name('admin.functional_designation.create');
+                    Route::post('/do-create', 'FunctionalDesignationController@do_create')->name('admin.functional_designation.do_create');
+                    Route::get('/edit/{id}', 'FunctionalDesignationController@edit')->name('admin.functional_designation.edit');
+                    Route::post('/do-edit/{id}', 'FunctionalDesignationController@do_edit')->name('admin.functional_designation.do_edit');
+                    Route::post('/delete', 'FunctionalDesignationController@delete')->name('admin.functional_designation.delete');
+                    Route::get('/deleted', 'FunctionalDesignationController@list_deleted')->name('admin.functional_designation.deleted');
+                    Route::post('/restore', 'FunctionalDesignationController@restore')->name('admin.functional_designation.restore');
+                    Route::post('/sorting', 'FunctionalDesignationController@sorting')->name('admin.functional_designation.sorting');
                 });
 
 
