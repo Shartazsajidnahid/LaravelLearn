@@ -54,26 +54,10 @@ class DesignationController extends Controller
         //     return back()->with('error', $authorize['message']);
         // }
 
-        // SET THIS OBJECT/ITEM NAME BASED ON TRANSLATION
-        $this->item = ucwords(lang($this->item, $this->translation));
-
-        // LARAVEL VALIDATION
-        $validation = [
-            'designation_id' => 'required|integer',
-            'designation' => 'required'
-        ];
-        $message = [
-            'required' => ':attribute ' . lang('field is required', $this->translation)
-        ];
-        $names = [
-            'designation_id' => ucwords(lang('designation_id', $this->translation)),
-            'designation' => ucwords(lang('designation', $this->translation))
-        ];
-        $this->validate($request, $validation, $message, $names);
 
         // HELPER VALIDATION FOR PREVENT SQL INJECTION & XSS ATTACK
         $designation_id = (int) $request->designation_id;
-        if ($designation < 1) {
+        if ($designation_id < 1) {
             return back()
                 ->withInput()
                 ->with('error', lang('#item must be chosen at least one', $this->translation, ['#item' => ucwords(lang('office', $this->translation))]));
@@ -107,7 +91,7 @@ class DesignationController extends Controller
             // SUCCESS
             return redirect()
                 ->route('admin.designation.list')
-                ->with('success', lang('Successfully added a new #item : #name', $this->translation, ['#item' => $this->item, '#name' => $name]));
+                ->with('success', lang('Successfully added a new #item : #designation', $this->translation, ['#item' => $this->item, '#designation' => $designation]));
         }
 
         // FAILED
@@ -132,22 +116,22 @@ class DesignationController extends Controller
         if ((int) $id < 1) {
             // INVALID OBJECT ID
             return redirect()
-                ->route('admin.division.list')
+                ->route('admin.designation.list')
                 ->with('error', lang('#item ID is invalid, please recheck your link again', $this->translation, ['#item' => $this->item]));
         }
 
         // GET THE DATA BASED ON ID
-        $data = SysDivision::find($id);
+        $data = Designation::find($id);
 
         // CHECK IS DATA FOUND
         if (!$data) {
             // DATA NOT FOUND
             return redirect()
-                ->route('admin.division.list')
+                ->route('admin.designation.list')
                 ->with('error', lang('#item not found, please recheck your link again', $this->translation, ['#item' => $this->item]));
         }
 
-        return view('admin.system.division.form', compact('data'));
+        return view('admin.system.designation.form', compact('data'));
     }
 
     public function do_edit($id, Request $request)
@@ -230,10 +214,10 @@ class DesignationController extends Controller
     public function delete(Request $request)
     {
         // AUTHORIZING...
-        $authorize = Helper::authorizing($this->module, 'Delete');
-        if ($authorize['status'] != 'true') {
-            return back()->with('error', $authorize['message']);
-        }
+        // $authorize = Helper::authorizing($this->module, 'Delete');
+        // if ($authorize['status'] != 'true') {
+        //     return back()->with('error', $authorize['message']);
+        // }
 
         // SET THIS OBJECT/ITEM NAME BASED ON TRANSLATION
         $this->item = ucwords(lang($this->item, $this->translation));
@@ -244,18 +228,18 @@ class DesignationController extends Controller
         if ((int) $id < 1) {
             // INVALID OBJECT ID
             return redirect()
-                ->route('admin.division.list')
+                ->route('admin.designation.list')
                 ->with('error', lang('#item ID is invalid, please recheck your link again', $this->translation, ['#item' => $this->item]));
         }
 
         // GET THE DATA BASED ON ID
-        $data = SysDivision::find($id);
+        $data = Designation::find($id);
 
         // CHECK IS DATA FOUND
         if (!$data) {
             // DATA NOT FOUND
             return redirect()
-                ->route('admin.division.list')
+                ->route('admin.designation.list')
                 ->with('error', lang('#item not found, please recheck your link again', $this->translation, ['#item' => $this->item]));
         }
 
@@ -270,7 +254,7 @@ class DesignationController extends Controller
 
             // SUCCESS
             return redirect()
-                ->route('admin.division.list')
+                ->route('admin.designation.list')
                 ->with('success', lang('Successfully deleted #item : #name', $this->translation, ['#item' => $this->item, '#name' => $data->name]));
         }
 
