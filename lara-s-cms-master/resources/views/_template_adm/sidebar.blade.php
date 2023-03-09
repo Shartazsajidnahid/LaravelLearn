@@ -21,7 +21,7 @@
                 </a>
             </li>
 
-            @if (Helper::authorizing('Banner', 'View List')['status'] == 'true')
+            {{-- @if (Helper::authorizing('Banner', 'View List')['status'] == 'true')
                 @php
                     $menu_active = '';
                     if(Helper::is_menu_active('/banner/')){
@@ -61,7 +61,7 @@
                         @endif
                     </ul>
                 </li>
-            @endif
+            @endif --}}
         </ul>
     </div>
 
@@ -72,16 +72,13 @@
         <hr>
         <h3>{{ ucwords(lang('administration', $translation)) }}</h3>
         <ul class="nav side-menu">
-            @if (Helper::authorizing('System Logs', 'View List')['status'] == 'true')
-                <?php $priv_admin++; ?>
-                <li><a href="{{ route('admin.logs') }}"><i class="fa fa-exchange"></i> {{ ucwords(lang('logs', $translation)) }}</a></li>
-            @endif
+
 
             @if (Helper::authorizing('User', 'View List')['status'] == 'true')
                 @php
                     $priv_admin++;
                     $menu_active = '';
-                    if(Helper::is_menu_active('/system/user/')){
+                    if (Helper::is_menu_active('/system/user/')) {
                         $menu_active = 'current-page';
                     }
                 @endphp
@@ -96,7 +93,7 @@
                 @php
                     $priv_admin++;
                     $menu_active = '';
-                    if(Helper::is_menu_active('/system/usergroup/')){
+                    if (Helper::is_menu_active('/system/usergroup/')) {
                         $menu_active = 'current-page';
                     }
                 @endphp
@@ -108,44 +105,45 @@
             @endif
 
             @if (Helper::authorizing('Division', 'View List')['status'] == 'true')
-            <li><a id="menu-language"><i class="fa fa-language"></i> {{ ucwords(lang('division tree', $translation)) }} <span class="fa fa-chevron-down"></span></a>
-                <ul class="nav child_menu">
-                    @if (Helper::authorizing('Division', 'View List')['status'] == 'true')
-                        @php
-                            $priv_admin++;
-                            $menu_active = '';
-                            // if(Helper::is_menu_active('/system/dictionary/')){
+                <li><a id="menu-language"><i class="fa fa-sitemap"></i>
+                        {{ ucwords(lang('division tree', $translation)) }} <span class="fa fa-chevron-down"></span></a>
+                    <ul class="nav child_menu">
+                        @if (Helper::authorizing('Division', 'View List')['status'] == 'true')
+                            @php
+                                $priv_admin++;
+                                $menu_active = '';
+                                // if(Helper::is_menu_active('/system/dictionary/')){
                                 $menu_active = 'current-page';
-                            // }
-                        @endphp
-                        <li class="{{ $menu_active }}">
-                            <a href="{{ route('admin.division.list') }}">
-                                {{ ucwords(lang('division', $translation)) }}
-                            </a>
-                        </li>
-                    @endif
+                                // }
+                            @endphp
+                            <li class="{{ $menu_active }}">
+                                <a href="{{ route('admin.division.list') }}">
+                                    {{ ucwords(lang('division', $translation)) }}
+                                </a>
+                            </li>
+                        @endif
 
-                    @if (Helper::authorizing('Branch', 'View List')['status'] == 'true')
-                        @php
-                            $priv_admin++;
-                            $menu_active = '';
-                            // if(Helper::is_menu_active('/system/dictionary/')){
+                        @if (Helper::authorizing('Branch', 'View List')['status'] == 'true')
+                            @php
+                                $priv_admin++;
+                                $menu_active = '';
+                                // if(Helper::is_menu_active('/system/dictionary/')){
                                 $menu_active = 'current-page';
-                            // }
-                        @endphp
-                        <li class="{{ $menu_active }}">
-                            <a href="{{ route('admin.branch.list') }}">
-                                {{ ucwords(lang('branch', $translation)) }}
-                            </a>
-                        </li>
-                    @endif
+                                // }
+                            @endphp
+                            <li class="{{ $menu_active }}">
+                                <a href="{{ route('admin.branch.list') }}">
+                                    {{ ucwords(lang('branch', $translation)) }}
+                                </a>
+                            </li>
+                        @endif
 
-                    {{-- @if (Helper::authorizing('Branch', 'View List')['status'] == 'true') --}}
+                        {{-- @if (Helper::authorizing('Branch', 'View List')['status'] == 'true') --}}
                         @php
                             $priv_admin++;
                             $menu_active = '';
                             // if(Helper::is_menu_active('/system/dictionary/')){
-                                $menu_active = 'current-page';
+                            $menu_active = 'current-page';
                             // }
                         @endphp
                         <li class="{{ $menu_active }}">
@@ -153,42 +151,81 @@
                                 {{ ucwords(lang('department', $translation)) }}
                             </a>
                         </li>
-                    {{-- @endif --}}
+                        {{-- @endif --}}
 
-                    {{-- @if (Helper::authorizing('Branch', 'View List')['status'] == 'true') --}}
+                        {{-- @if (Helper::authorizing('Branch', 'View List')['status'] == 'true') --}}
                         @php
-                        $priv_admin++;
-                        $menu_active = '';
-                        // if(Helper::is_menu_active('/system/dictionary/')){
+                            $priv_admin++;
+                            $menu_active = '';
+                            // if(Helper::is_menu_active('/system/dictionary/')){
                             $menu_active = 'current-page';
-                    // }
-                    @endphp
+                            // }
+                        @endphp
                         <li class="{{ $menu_active }}">
                             <a href="{{ route('admin.unit.list') }}">
                                 {{ ucwords(lang('unit', $translation)) }}
                             </a>
                         </li>
+                        {{-- @endif --}}
+                    </ul>
+                </li>
+
+                @if (Helper::is_menu_active('/system/dictionary/') || Helper::is_menu_active('/system/language/'))
+                    <script>
+                        setTimeout(function() {
+                            document.getElementById('menu-language').click();
+                        }, 1000);
+                    </script>
+                @endif
+            @endif
+
+
+            {{-- Designation dropdown --}}
+            <li><a id="menu-language"><i class="fa fa-server" aria-hidden="true"></i>
+                    {{ ucwords(lang('designation', $translation)) }} <span class="fa fa-chevron-down"></span></a>
+                <ul class="nav child_menu">
+                    @php
+                        $priv_admin++;
+                        $menu_active = '';
+                        // if(Helper::is_menu_active('/system/dictionary/')){
+                        $menu_active = 'current-page';
+                        // }
+                    @endphp
+                    <li class="{{ $menu_active }}">
+                        <a href="{{ route('admin.designation.list') }}">
+                            {{ ucwords(lang('designation', $translation)) }}
+                        </a>
+                    </li>
                     {{-- @endif --}}
 
-
+                    {{-- @if (Helper::authorizing('Branch', 'View List')['status'] == 'true') --}}
+                    @php
+                        $priv_admin++;
+                        $menu_active = '';
+                        // if(Helper::is_menu_active('/system/dictionary/')){
+                        $menu_active = 'current-page';
+                        // }
+                    @endphp
+                    <li class="{{ $menu_active }}">
+                        <a href="{{ route('admin.functional_designation.list') }}">
+                            {{ ucwords(lang('functional designation', $translation)) }}
+                        </a>
+                    </li>
 
                 </ul>
             </li>
-            @if(Helper::is_menu_active('/system/dictionary/') || Helper::is_menu_active('/system/language/'))
-                <script>
-                    setTimeout(function(){
-                        document.getElementById('menu-language').click();
-                    }, 1000);
-                </script>
-            @endif
-        @endif
 
+            @if (Helper::authorizing('System Logs', 'View List')['status'] == 'true')
+                <?php $priv_admin++; ?>
+                <li><a href="{{ route('admin.logs') }}"><i class="fa fa-exchange"></i>
+                        {{ ucwords(lang('logs', $translation)) }}</a></li>
+            @endif
 
             @if (Helper::authorizing('Rule', 'View List')['status'] == 'true')
                 @php
                     $priv_admin++;
                     $menu_active = '';
-                    if(Helper::is_menu_active('/system/rule/')){
+                    if (Helper::is_menu_active('/system/rule/')) {
                         $menu_active = 'current-page';
                     }
                 @endphp
@@ -200,13 +237,14 @@
             @endif
 
             @if (Helper::authorizing('Language', 'View List')['status'] == 'true')
-                <li><a id="menu-language"><i class="fa fa-language"></i> {{ ucwords(lang('language', $translation)) }} <span class="fa fa-chevron-down"></span></a>
+                <li><a id="menu-language"><i class="fa fa-language"></i> {{ ucwords(lang('language', $translation)) }}
+                        <span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu">
                         @if (Helper::authorizing('Dictionary', 'View List')['status'] == 'true')
                             @php
                                 $priv_admin++;
                                 $menu_active = '';
-                                if(Helper::is_menu_active('/system/dictionary/')){
+                                if (Helper::is_menu_active('/system/dictionary/')) {
                                     $menu_active = 'current-page';
                                 }
                             @endphp
@@ -221,7 +259,7 @@
                             @php
                                 $priv_admin++;
                                 $menu_active = '';
-                                if(Helper::is_menu_active('/system/language/')){
+                                if (Helper::is_menu_active('/system/language/')) {
                                     $menu_active = 'current-page';
                                 }
                             @endphp
@@ -233,9 +271,9 @@
                         @endif
                     </ul>
                 </li>
-                @if(Helper::is_menu_active('/system/dictionary/') || Helper::is_menu_active('/system/language/'))
+                @if (Helper::is_menu_active('/system/dictionary/') || Helper::is_menu_active('/system/language/'))
                     <script>
-                        setTimeout(function(){
+                        setTimeout(function() {
                             document.getElementById('menu-language').click();
                         }, 1000);
                     </script>
@@ -276,7 +314,8 @@
 
             @if (Helper::authorizing('Config', 'Update')['status'] == 'true')
                 <?php $priv_admin++; ?>
-                <li><a href="{{ route('admin.config') }}"><i class="fa fa-gears"></i> {{ ucwords(lang('config', $translation)) }}</a></li>
+                <li><a href="{{ route('admin.config') }}"><i class="fa fa-gears"></i>
+                        {{ ucwords(lang('config', $translation)) }}</a></li>
             @endif
         </ul>
     </div>

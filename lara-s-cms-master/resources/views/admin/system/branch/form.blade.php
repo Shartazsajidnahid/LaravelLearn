@@ -92,7 +92,7 @@
 
                                 echo set_input_form2('textarea', 'location', ucwords(lang('location', $translation)), $data, $errors, false);
 
-                                echo set_input_form2('textarea', 'cbs_branch_code', ucwords(lang('cbs_branch_code', $translation)), $data, $errors, false);
+                                echo set_input_form2('text', 'cbs_branch_code', ucwords(lang('cbs_branch_code', $translation)), $data, $errors, false);
 
                                 $config = new \stdClass();
                                 $config->attributes = 'autocomplete="off"';
