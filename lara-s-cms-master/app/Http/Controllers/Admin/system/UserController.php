@@ -15,6 +15,7 @@ use App\Libraries\Helper;
 use App\Models\system\SysLog;
 use App\Models\system\SysUser;
 use App\Models\system\SysGroup;
+use App\Models\system\SysDivision;
 use App\Models\system\SysUserGroup;
 use App\Models\system\SysLanguage;
 
@@ -122,13 +123,17 @@ class UserController extends Controller
 
                 return $html;
             })
+            ->addColumn('attach_to_division', function ($data) {
+                $html = '<a href="' . route('admin.user.add_to_division', $data->id) . '" class="btn btn-xs btn-info" title="' . ucwords(lang('attach', $this->translation)) . '"><i class="fa fa-pencil"></i>&nbsp; ' . ucwords(lang('attach', $this->translation)) . '</a>';
+                return $html;
+            })
             ->editColumn('updated_at', function ($data) {
                 return Helper::time_ago(strtotime($data->updated_at), lang('ago', $this->translation), Helper::get_periods($this->translation));
             })
             ->editColumn('created_at', function ($data) {
                 return $data->created_at;
             })
-            ->rawColumns(['item_status', 'action'])
+            ->rawColumns(['item_status', 'action', 'attach_to_division'])
             ->toJson();
     }
 
@@ -455,6 +460,43 @@ class UserController extends Controller
         return back()
             ->with('error', lang('Oops, failed to delete #item. Please try again.', $this->translation, ['#item' => $this->item]));
     }
+
+    public function add_to_division($id)
+    {
+        // AUTHORIZING...
+
+        // SET THIS OBJECT/ITEM NAME BASED ON TRANSLATION
+        $this->item = ucwords(lang($this->item, $this->translation));
+
+        // CHECK OBJECT ID
+        if ((int) $id < 1) {
+            // INVALID OBJECT ID
+            return redirect()
+                ->route('admin.user.list')
+                ->with('error', lang('#item ID is invalid, please recheck your link again', $this->translation, ['#item' => $this->item]));
+        }
+
+        // GET THE DATA BASED ON ID
+        $data = SysUser::leftJoin('sys_user_group', 'sys_users.id', 'sys_user_group.user')
+            ->leftJoin('sys_groups', 'sys_groups.id', 'sys_user_group.group')
+            ->select('sys_users.*', 'sys_groups.id as usergroup')
+            ->where('sys_users.id', $id)
+            ->first();
+
+        // CHECK IS DATA FOUND
+        if (!$data) {
+            // DATA NOT FOUND
+            return redirect()
+                ->route('admin.user.list')
+                ->with('error', lang('#item not found, please recheck your link again', $this->translation, ['#item' => $this->item]));
+        }
+
+        $divisions = SysDivision::all();
+
+        return view('admin.system.user.add_to_division', compact('data', 'divisions'));
+    }
+
+
 
     public function list_deleted()
     {
