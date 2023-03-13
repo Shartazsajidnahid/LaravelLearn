@@ -193,7 +193,7 @@ Route::group([
                 });
 
                  // Functional_ Designation
-                 Route::group(['prefix' => 'functional_designation'], function () {
+                Route::group(['prefix' => 'functional_designation'], function () {
                     Route::get('/', 'FunctionalDesignationController@list')->name('admin.functional_designation.list');
                     Route::get('/create', 'FunctionalDesignationController@create')->name('admin.functional_designation.create');
                     Route::post('/do-create', 'FunctionalDesignationController@do_create')->name('admin.functional_designation.do_create');
@@ -205,6 +205,18 @@ Route::group([
                     Route::post('/sorting', 'FunctionalDesignationController@sorting')->name('admin.functional_designation.sorting');
                 });
 
+                // Files
+                Route::group(['prefix' => 'filetype'], function () {
+                    Route::get('/', 'FiletypeController@list')->name('admin.filetype.list');
+                    Route::get('/create', 'FiletypeController@create')->name('admin.filetype.create');
+                    Route::post('/do-create', 'FiletypeController@do_create')->name('admin.filetype.do_create');
+                    Route::get('/edit/{id}', 'FiletypeController@edit')->name('admin.filetype.edit');
+                    Route::post('/do-edit/{id}', 'FiletypeController@do_edit')->name('admin.filetype.do_edit');
+                    Route::post('/delete', 'FiletypeController@delete')->name('admin.filetype.delete');
+                    Route::get('/deleted', 'FiletypeController@list_deleted')->name('admin.filetype.deleted');
+                    // Route::post('/restore', 'FunctionalDesignationController@restore')->name('admin.functional_designation.restore');
+                    // Route::post('/sorting', 'FunctionalDesignationController@sorting')->name('admin.functional_designation.sorting');
+                });
 
                 // RULE
                 Route::group(['prefix' => 'rule'], function () {
@@ -248,6 +260,9 @@ Route::group([
                     Route::post('/restore', 'UserController@restore')->name('admin.user.restore');
                     Route::get('/enable/{id}', 'UserController@enable')->name('admin.user.enable');
                     Route::get('/disable/{id}', 'UserController@disable')->name('admin.user.disable');
+
+                    Route::get('/add_to_division/{id}', 'UserController@add_to_division')->name('admin.user.add_to_division');
+                    Route::post('/do-add_to_division/{id}', 'UserController@do_add_to_division')->name('admin.user.do_add_to_division');
                 });
 
                 // LANGUAGE
