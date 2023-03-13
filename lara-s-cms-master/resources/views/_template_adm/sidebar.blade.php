@@ -20,48 +20,6 @@
                     <i class="fa fa-user"></i> {{ ucwords(lang('my profile', $translation)) }}
                 </a>
             </li>
-
-            {{-- @if (Helper::authorizing('Banner', 'View List')['status'] == 'true')
-                @php
-                    $menu_active = '';
-                    if(Helper::is_menu_active('/banner/')){
-                        $menu_active = 'current-page';
-                    }
-                @endphp
-                <li class="{{ $menu_active }}">
-                    <a href="{{ route('admin.banner.list') }}">
-                        <i class="fa fa-image"></i> {{ ucwords(lang('banner', $translation)) }}
-                    </a>
-                </li>
-            @endif
-
-            @if (Helper::authorizing('Product', 'View List')['status'] == 'true')
-                @php
-                    $menu_active = '';
-                    if(Helper::is_menu_active('/product/')){
-                        $menu_active = 'current-page';
-                    }
-                @endphp
-                <li class="{{ $menu_active }}">
-                    <a href="{{ route('admin.product.list') }}">
-                        <i class="fa fa-cubes"></i> {{ ucwords(lang('product', $translation)) }}
-                    </a>
-                </li>
-            @endif
-
-            @if (Helper::authorizing('Article', 'View List')['status'] == 'true')
-                <li>
-                    <a><i class="fa fa-newspaper-o"></i> {{ ucwords(lang('article', $translation)) }} <span class="fa fa-chevron-down"></span></a>
-                    <ul class="nav child_menu">
-                        @if (Helper::authorizing('Topic', 'View List')['status'] == 'true')
-                            <li><a href="{{ route('admin.topic.list') }}">{{ ucwords(lang('topic', $translation)) }}</a></li>
-                        @endif
-                        @if (Helper::authorizing('Article', 'View List')['status'] == 'true')
-                            <li><a href="{{ route('admin.article.list') }}">{{ ucwords(lang('article', $translation)) }}</a></li>
-                        @endif
-                    </ul>
-                </li>
-            @endif --}}
         </ul>
     </div>
 
@@ -215,11 +173,45 @@
                 </ul>
             </li>
 
+
+            {{-- filesystem --}}
+            <li><a id="menu-language"><i class="fa fa-file" aria-hidden="true"></i>
+                    {{ ucwords(lang('filesystem', $translation)) }} <span class="fa fa-chevron-down"></span></a>
+                <ul class="nav child_menu">
+                    @php
+                        $priv_admin++;
+                        $menu_active = '';
+                        // if(Helper::is_menu_active('/system/dictionary/')){
+                        $menu_active = 'current-page';
+                        // }
+                    @endphp
+                    <li><a href="{{ route('admin.filetype.list') }}">
+                        {{ ucwords(lang('file type', $translation)) }}</a></li>
+                    {{-- @endif --}}
+
+                    {{-- @if (Helper::authorizing('Branch', 'View List')['status'] == 'true') --}}
+                    @php
+                        $priv_admin++;
+                        $menu_active = '';
+                        // if(Helper::is_menu_active('/system/dictionary/')){
+                        $menu_active = 'current-page';
+                        // }
+                    @endphp
+                    <li><a href="{{ route('admin.filetype.list') }}">
+                        {{ ucwords(lang('files', $translation)) }}</a></li>
+
+                </ul>
+            </li>
+
+
+
+
             @if (Helper::authorizing('System Logs', 'View List')['status'] == 'true')
                 <?php $priv_admin++; ?>
                 <li><a href="{{ route('admin.logs') }}"><i class="fa fa-exchange"></i>
                         {{ ucwords(lang('logs', $translation)) }}</a></li>
             @endif
+
 
             @if (Helper::authorizing('Rule', 'View List')['status'] == 'true')
                 @php

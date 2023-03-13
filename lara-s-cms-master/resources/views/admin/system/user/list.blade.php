@@ -49,7 +49,7 @@
               <i class="fa fa-check-circle"></i>&nbsp; {{ ucwords(lang('active items', $translation)) }}
             </a>
           </div>
-        </div> 
+        </div>
       @endif
     </div>
 
@@ -71,11 +71,11 @@
                     <th>{{ ucwords(lang('email', $translation)) }}</th>
                     <th>{{ ucwords(lang('name', $translation)) }}</th>
                     <th>{{ ucwords(lang('usergroup', $translation)) }}</th>
-                    <th>{{ ucwords(lang('division', $translation)) }}</th>
                     <th>{{ ucwords(lang('status', $translation)) }}</th>
                     <th>{{ ucwords(lang('created', $translation)) }}</th>
                     <th>{{ ucwords(lang('last updated', $translation)) }}</th>
                     <th>{{ ucwords(lang('action', $translation)) }}</th>
+                    <th>{{ ucwords(lang('attach_to_division', $translation)) }}</th>
                   </tr>
                 </thead>
                 <tbody></tbody>
@@ -88,7 +88,6 @@
                     <th>{{ ucwords(lang('email', $translation)) }}</th>
                     <th>{{ ucwords(lang('name', $translation)) }}</th>
                     <th>{{ ucwords(lang('usergroup', $translation)) }}</th>
-                    <th>{{ ucwords(lang('division', $translation)) }}</th>
                     <th>{{ ucwords(lang('status', $translation)) }}</th>
                     <th>{{ ucwords(lang('created', $translation)) }}</th>
                     <th>{{ ucwords(lang('deleted at', $translation)) }}</th>
@@ -129,11 +128,12 @@
           {data: 'email', name: 'sys_users.email'},
           {data: 'name', name: 'sys_users.name'},
           {data: 'groupname', name: 'groupname'},
-          {data: 'division_name', name: 'division_name'},
           {data: 'item_status', name: 'item_status'},
           {data: 'created_at', name: 'sys_users.created_at'},
           {data: 'updated_at', name: 'sys_users.updated_at'},
           {data: 'action', name: 'action'},
+          {data: 'attach_to_division', name: 'attach_to_division'},
+
         ]
       });
     }
@@ -153,7 +153,6 @@
           {data: 'email', name: 'sys_users.email'},
           {data: 'name', name: 'sys_users.name'},
           {data: 'groupname', name: 'groupname'},
-          {data: 'division_name', name: 'division_name'},
           {data: 'item_status', name: 'item_status'},
           {data: 'created_at', name: 'sys_users.created_at'},
           {data: 'deleted_at', name: 'sys_users.deleted_at'},
