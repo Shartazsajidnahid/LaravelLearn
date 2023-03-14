@@ -3,7 +3,7 @@
 @php
   // USE LIBRARIES
   use App\Libraries\Helper;
-
+  
   $this_object = ucwords(lang('branch', $translation));
 
   if(isset($data)){
@@ -49,7 +49,7 @@
               <i class="fa fa-check-circle"></i>&nbsp; {{ ucwords(lang('active items', $translation)) }}
             </a>
           </div>
-        </div>
+        </div> 
       @endif
     </div>
 
