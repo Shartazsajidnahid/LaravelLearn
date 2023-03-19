@@ -42,6 +42,7 @@ class SysUnitController extends Controller
         return $newdata;
 
     }
+
     public function list()
     {
         // AUTHORIZING...
@@ -634,5 +635,21 @@ class SysUnitController extends Controller
 
         // $branches = SysBranch::where('division_id', $id)->orderBy('name', 'asc')->get();
         // return response()->json(['branches'=>$branches]);
+    }
+
+    public function get_units(Request $request){
+
+        $sid=$request->post('sid');
+
+        echo $sid;
+		// $state=DB::table('sysBranch')->where('division_id',$div_id)->orderBy('state','asc')->get();
+        $depts = SysUnit::where('department_id', $sid)->orderBy('name', 'asc')->get();
+		// $html='<option value="">Select Branch</option>';
+        $html = '';
+		foreach($depts as $list){
+			$html.='<option value="'.$list->id.'">'.$list->name.'</option>';
+		}
+		echo $html;
+
     }
 }

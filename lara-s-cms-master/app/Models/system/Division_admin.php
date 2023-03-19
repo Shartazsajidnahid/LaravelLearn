@@ -14,6 +14,6 @@ class Division_admin extends Model
      * @var array
      */
     protected $fillable = [
-        'admin_id', 'division_id', 'department_id', 'unit_id', 'status', 'created_at', 'updated_at', 'deleted_at'
+        'admin_id', 'division_id', 'branch_id', 'department_id', 'unit_id', 'assign_to', 'created_at', 'updated_at', 'deleted_at'
     ];
 }

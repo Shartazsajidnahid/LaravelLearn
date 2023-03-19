@@ -74,9 +74,10 @@ class BranchController extends Controller
                 }
             });
         }
-        $divisions = $divisions->get();
 
-        return view('admin.system.branch.form', compact('divisions'));
+        $divisions = $divisions->get();
+        $branches = SysBranch::all();
+        return view('admin.system.branch.form', compact('divisions', 'branches'));
     }
 
     public function do_create(Request $request)
@@ -138,12 +139,23 @@ class BranchController extends Controller
             $ordinal = $last->ordinal + 1;
         }
 
+
+        if($request->yesno == "subBranchno"){
+            $parent_branch_id = 0;
+        }
+        else{
+            $parent_branch_id = (int) $request->parent_branch_id;
+        }
+
+
         // SAVE THE DATA
         $data = new SysBranch();
         $data->division_id = $division_id;
+        $data->parent_id = $parent_branch_id;
         $data->name = $name;
         $data->location = $location;
         $data->phone = $phone;
+        $data->cbs_branch_code = $request->cbs_branch_code;
         $data->gmaps = $gmaps;
         $data->ordinal = $ordinal;
         $data->status = $status;
@@ -225,8 +237,10 @@ class BranchController extends Controller
             });
         }
         $divisions = $divisions->get();
+        $branches = SysBranch::all();
 
-        return view('admin.system.branch.form', compact('data', 'divisions'));
+
+        return view('admin.system.branch.form', compact('data', 'divisions', 'data', 'branches'));
     }
 
     public function do_edit($id, Request $request)
@@ -519,6 +533,7 @@ class BranchController extends Controller
 
         // GET PARAMATERS
         $division = (int) $request->input('division');
+        // dd($division);
 
         // AUTHORIZING DIVISION...
         $allowed_divisions = [];

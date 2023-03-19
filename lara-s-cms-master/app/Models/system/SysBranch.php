@@ -22,6 +22,6 @@ class SysBranch extends Model
      * @var array
      */
     protected $fillable = [
-        'division_id', 'name', 'location', 'gmaps', 'phone', 'status', 'ordinal', 'created_at', 'updated_at', 'deleted_at'
+        'division_id', 'name', 'location', 'gmaps', 'phone', 'cbs_branch_code', 'parent_id', 'status', 'ordinal', 'created_at', 'updated_at', 'deleted_at'
     ];
 }
