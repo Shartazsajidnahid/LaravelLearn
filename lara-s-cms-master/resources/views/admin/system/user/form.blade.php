@@ -1,7 +1,7 @@
 @extends('_template_adm.master')
 
 @php
-    $pagetitle = ucwords(lang('admin', $translation)); 
+    $pagetitle = ucwords(lang('admin', $translation));
     if(isset($data)){
         $pagetitle .= ' ('.ucwords(lang('edit', $translation)).')';
         $link = route('admin.user.do_edit', $data->id);
@@ -90,19 +90,19 @@
                                     <input type="password" id="confirm-password" class="form-control col-md-7 col-xs-12" name="password_confirmation" autocomplete="off" placeholder="{{ lang('must be the same as the password above', $translation) }}" <?php if(!isset($data)){ echo 'required="required"'; } ?>>
                                 </div>
                             </div>
-                            
+
                             <div class="ln_solid"></div>
 
                             <div class="form-group">
                                 <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
-                                    <button type="submit" class="btn btn-success"><i class="fa fa-save"></i>&nbsp; 
+                                    <button type="submit" class="btn btn-success"><i class="fa fa-save"></i>&nbsp;
                                         @if (isset($data))
                                             {{ ucwords(lang('save', $translation)) }}
                                         @else
                                             {{ ucwords(lang('submit', $translation)) }}
                                         @endif
                                     </button>
-                                    <a href="{{ route('admin.user.list') }}" class="btn btn-danger"><i class="fa fa-times"></i>&nbsp; 
+                                    <a href="{{ route('admin.user.list') }}" class="btn btn-danger"><i class="fa fa-times"></i>&nbsp;
                                         @if (isset($data))
                                             {{ ucwords(lang('close', $translation)) }}
                                         @else

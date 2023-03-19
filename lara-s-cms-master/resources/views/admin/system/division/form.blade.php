@@ -1,7 +1,7 @@
 @extends('_template_adm.master')
 
 @php
-    $pagetitle = ucwords(lang('office', $translation)); 
+    $pagetitle = ucwords(lang('division', $translation));
     if(isset($data)){
         $pagetitle .= ' ('.ucwords(lang('edit', $translation)).')';
         $link = route('admin.division.do_edit', $data->id);
@@ -42,25 +42,25 @@
                         @php
                             // set_input_form2($type, $input_name, $label_name, $data, $errors, $required = false, $config = null)
                             echo set_input_form2('text', 'name', ucwords(lang('name', $translation)), $data, $errors, true);
-                            
+
                             echo set_input_form2('textarea', 'description', ucwords(lang('description', $translation)), $data, $errors, false);
 
                             $config = new \stdClass();
                             $config->default = 'checked';
                             echo set_input_form2('switch', 'status', ucwords(lang('status', $translation)), $data, $errors, false, $config);
                         @endphp
-                        
+
                         <div class="ln_solid"></div>
                         <div class="form-group">
                             <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
-                                <button type="submit" class="btn btn-success"><i class="fa fa-save"></i>&nbsp; 
+                                <button type="submit" class="btn btn-success"><i class="fa fa-save"></i>&nbsp;
                                     @if (isset($data))
                                         {{ ucwords(lang('save', $translation)) }}
                                     @else
                                         {{ ucwords(lang('submit', $translation)) }}
                                     @endif
                                 </button>
-                                <a href="{{ route('admin.division.list') }}" class="btn btn-danger"><i class="fa fa-times"></i>&nbsp; 
+                                <a href="{{ route('admin.division.list') }}" class="btn btn-danger"><i class="fa fa-times"></i>&nbsp;
                                     @if (isset($data))
                                         {{ ucwords(lang('close', $translation)) }}
                                     @else

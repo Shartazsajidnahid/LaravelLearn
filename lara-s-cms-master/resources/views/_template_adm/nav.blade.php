@@ -46,6 +46,7 @@
                                     </a>
                                 </li>
                             @endforeach
+
                         @else
                             <li>
                                 <a>
@@ -53,7 +54,19 @@
                                 </a>
                             </li>
                         @endif
+
                     </ul>
+                </li>
+                <li>
+                    <a href="{{route('admin.showmenu')  }}">
+                        <span>Show Menu</span>
+                    </a>
+                </li>
+
+                <li>
+                    <a href="{{route('admin.addmenu')  }}">
+                        <span>Add Menu</span>
+                    </a>
                 </li>
             </ul>
         </nav>
