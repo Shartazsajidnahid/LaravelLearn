@@ -12,9 +12,30 @@
 */
 
 use App\Http\Controllers\Admin\system\HomeController;
+use App\Http\Controllers\Admin\system\AuthController;
+use App\Http\Middleware\CheckGeneralUser;
 
 
-Route::get('/general', [HomeController::class, 'index2']);
+// GENERAL USER
+// Route::group(['middleware' => 'check.generaluser'], function () {
+
+// });
+
+
+// Route::get('/employees', [Admin\system\HomeController::class, 'toEmployee']);
+Route::get('/employees', 'Admin\system\HomeController@toEmployee');
+Route::get('/alldivision', [HomeController::class, 'general_alldivision']);
+
+
+Route::middleware([CheckGeneralUser::class])->group(function(){
+    Route::get('/general', [HomeController::class, 'general_home']);
+    Route::get('/logout', [AuthController::class, 'logout'])->name('general.logout');
+    // Route::get('/logout', 'Admin\system\AuthController@logout')->name('general.logout');
+    Route::get('/team', [HomeController::class, 'general_team']);
+    Route::get('/aboutus', [HomeController::class, 'general_aboutus']);
+    Route::get('/allbrance', [HomeController::class, 'general_allbrance']);
+    Route::get('/alldivision', [HomeController::class, 'general_alldivision']);
+});
 
 // WEBSITE
 Route::group(['namespace' => 'Web'], function () {
@@ -58,7 +79,7 @@ Route::group(['namespace' => 'Web'], function () {
 
 // ADMIN
 Route::group([
-    'prefix' => env('ADMIN_DIR'),
+    'prefix' => env('ADMIN_DIR') ,
     'namespace' => 'Admin'
 ], function () {
     /**
@@ -125,6 +146,92 @@ Route::group([
                     Route::post('/sorting', 'BranchController@sorting')->name('admin.branch.sorting');
                 });
 
+                // Department
+                Route::group(['prefix' => 'department'], function () {
+                    Route::post('/get-branches', 'SysDepartmentController@get_branches')->name('admin.department.get_branches');
+                    Route::get('/', 'SysDepartmentController@list')->name('admin.department.list');
+                    Route::get('/get-data', 'SysDepartmentController@get_data')->name('admin.department.get_data');
+                    Route::get('/create', 'SysDepartmentController@create')->name('admin.department.create');
+                    Route::post('/do-create', 'SysDepartmentController@do_create')->name('admin.department.do_create');
+                    Route::get('/edit/{id}', 'SysDepartmentController@edit')->name('admin.department.edit');
+                    Route::post('/do-edit/{id}', 'SysDepartmentController@do_edit')->name('admin.department.do_edit');
+                    Route::post('/delete', 'SysDepartmentController@delete')->name('admin.department.delete');
+                    Route::get('/deleted', 'SysDepartmentController@list_deleted')->name('admin.department.deleted');
+                    Route::get('/get-data-deleted', 'SysDepartmentController@get_data_deleted')->name('admin.department.get_data_deleted');
+                    Route::post('/restore', 'SysDepartmentController@restore')->name('admin.department.restore');
+                    Route::post('/sorting', 'SysDepartmentController@sorting')->name('admin.department.sorting');
+                });
+
+                 // Unit
+                 Route::group(['prefix' => 'unit'], function () {
+                    Route::post('/get-depts', 'SysUnitController@get_depts')->name('admin.unit.get_depts');
+                    Route::post('/get-units', 'SysUnitController@get_units')->name('admin.unit.get_units');
+                    Route::get('/', 'SysUnitController@list')->name('admin.unit.list');
+                    Route::get('/get-data', 'SysUnitController@get_data')->name('admin.unit.get_data');
+                    Route::get('/create', 'SysUnitController@create')->name('admin.unit.create');
+                    Route::post('/do-create', 'SysUnitController@do_create')->name('admin.unit.do_create');
+                    Route::get('/edit/{id}', 'SysUnitController@edit')->name('admin.unit.edit');
+                    Route::post('/do-edit/{id}', 'SysUnitController@do_edit')->name('admin.unit.do_edit');
+                    Route::post('/delete', 'SysUnitController@delete')->name('admin.unit.delete');
+                    Route::get('/deleted', 'SysUnitController@list_deleted')->name('admin.unit.deleted');
+                    Route::get('/get-data-deleted', 'SysUnitController@get_data_deleted')->name('admin.unit.get_data_deleted');
+                    Route::post('/restore', 'SysUnitController@restore')->name('admin.unit.restore');
+                    Route::post('/sorting', 'SysUnitController@sorting')->name('admin.unit.sorting');
+                });
+
+                // Designation
+                Route::group(['prefix' => 'designation'], function () {
+                    Route::get('/', 'DesignationController@list')->name('admin.designation.list');
+                    Route::get('/create', 'DesignationController@create')->name('admin.designation.create');
+                    Route::post('/do-create', 'DesignationController@do_create')->name('admin.designation.do_create');
+                    Route::get('/edit/{id}', 'DesignationController@edit')->name('admin.designation.edit');
+                    Route::post('/do-edit/{id}', 'DesignationController@do_edit')->name('admin.designation.do_edit');
+                    Route::post('/delete', 'DesignationController@delete')->name('admin.designation.delete');
+                    Route::get('/deleted', 'DesignationController@list_deleted')->name('admin.designation.deleted');
+                    Route::post('/restore', 'DesignationController@restore')->name('admin.designation.restore');
+                    Route::post('/sorting', 'DesignationController@sorting')->name('admin.designation.sorting');
+                });
+
+                 // Functional_ Designation
+                Route::group(['prefix' => 'functional_designation'], function () {
+                    Route::get('/', 'FunctionalDesignationController@list')->name('admin.functional_designation.list');
+                    Route::get('/create', 'FunctionalDesignationController@create')->name('admin.functional_designation.create');
+                    Route::post('/do-create', 'FunctionalDesignationController@do_create')->name('admin.functional_designation.do_create');
+                    Route::get('/edit/{id}', 'FunctionalDesignationController@edit')->name('admin.functional_designation.edit');
+                    Route::post('/do-edit/{id}', 'FunctionalDesignationController@do_edit')->name('admin.functional_designation.do_edit');
+                    Route::post('/delete', 'FunctionalDesignationController@delete')->name('admin.functional_designation.delete');
+                    Route::get('/deleted', 'FunctionalDesignationController@list_deleted')->name('admin.functional_designation.deleted');
+                    Route::post('/restore', 'FunctionalDesignationController@restore')->name('admin.functional_designation.restore');
+                    Route::post('/sorting', 'FunctionalDesignationController@sorting')->name('admin.functional_designation.sorting');
+                });
+
+                // Filetypes
+                Route::group(['prefix' => 'filetype'], function () {
+                    Route::get('/', 'FiletypeController@list')->name('admin.filetype.list');
+                    Route::get('/create', 'FiletypeController@create')->name('admin.filetype.create');
+                    Route::post('/do-create', 'FiletypeController@do_create')->name('admin.filetype.do_create');
+                    Route::get('/edit/{id}', 'FiletypeController@edit')->name('admin.filetype.edit');
+                    Route::post('/do-edit/{id}', 'FiletypeController@do_edit')->name('admin.filetype.do_edit');
+                    Route::post('/delete', 'FiletypeController@delete')->name('admin.filetype.delete');
+                    Route::get('/deleted', 'FiletypeController@list_deleted')->name('admin.filetype.deleted');
+                    // Route::post('/restore', 'FunctionalDesignationController@restore')->name('admin.functional_designation.restore');
+                    // Route::post('/sorting', 'FunctionalDesignationController@sorting')->name('admin.functional_designation.sorting');
+                });
+
+                // Files
+                Route::group(['prefix' => 'file'], function () {
+                    Route::get('/get-files', 'FilesController@get_files')->name('admin.file.get_files');
+                    Route::get('/', 'FilesController@list')->name('admin.file.list');
+                    Route::get('/create', 'FilesController@create')->name('admin.file.create');
+                    Route::post('/do-create', 'FilesController@do_create')->name('admin.file.do_create');
+                    Route::get('/edit/{id}', 'FilesController@edit')->name('admin.file.edit');
+                    Route::post('/do-edit/{id}', 'FilesController@do_edit')->name('admin.file.do_edit');
+                    Route::post('/delete', 'FilesController@delete')->name('admin.file.delete');
+                    Route::get('/deleted', 'FilesController@list_deleted')->name('admin.file.deleted');
+                    // Route::post('/restore', 'FunctionalDesignationController@restore')->name('admin.functional_designation.restore');
+                    // Route::post('/sorting', 'FunctionalDesignationController@sorting')->name('admin.functional_designation.sorting');
+                });
+
                 // RULE
                 Route::group(['prefix' => 'rule'], function () {
                     Route::get('/', 'RuleController@list')->name('admin.rule.list');
@@ -167,6 +274,9 @@ Route::group([
                     Route::post('/restore', 'UserController@restore')->name('admin.user.restore');
                     Route::get('/enable/{id}', 'UserController@enable')->name('admin.user.enable');
                     Route::get('/disable/{id}', 'UserController@disable')->name('admin.user.disable');
+
+                    Route::get('/add_to_division/{id}', 'UserController@add_to_division')->name('admin.user.add_to_division');
+                    Route::post('/do-add_to_division/{id}', 'UserController@do_add_to_division')->name('admin.user.do_add_to_division');
                 });
 
                 // LANGUAGE
@@ -197,6 +307,14 @@ Route::group([
         // HOME
         Route::get('/', 'system\HomeController@index')->name('admin.home');
         // Route::get('/general', 'system\HomeController@index2')->name('admin.demo');
+
+
+        //Menu
+        Route::get('/showmenu', 'MenuController@getMenu')->name('admin.showmenu');
+        Route::get('/addmenu', 'MenuController@list')->name('admin.addmenu');
+        Route::post('/createmenu', 'MenuController@do_create')->name('admin.createmenu');
+        Route::get('/addcontroller', 'MenuController@add_controller')->name('admin.addcontroller');
+        Route::post('/createcontroller', 'MenuController@create_controller')->name('admin.createcontroller');
 
         // BANNER
         Route::group(['prefix' => 'banner'], function () {
