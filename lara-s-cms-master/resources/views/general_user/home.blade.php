@@ -42,10 +42,13 @@
     <div class="row" style="height: 500px;">
         <div class="col-3" style="padding-top: 50px;">
             <div>
-                <div><img src="{{url('images/Rashed.jpg')}}" class="rounded-circle" alt="Cinque Terre" width="200" height="200"> </div>
-                <a href="Home.html">Md. Rashed Chowdhury</a>
-                <p class="">20181220001</p>
-                <p class="">FAVP</p>
+                {{-- <div><img src="{{url('images/Rashed.jpg')}}" class="rounded-circle" alt="Cinque Terre" width="200" height="200"> </div> --}}
+
+                <div><img class="u-image u-image-circle u-image-1" src="{{ asset('uploads/employees/'.$user->profile_image) }}" width="200" height="200"> </div>
+
+                <a href="Home.html"> {{ $user->name }} </a>
+                <p class="">{{ $user->email }}</p>
+                <p class="">{{ $user->mobile }}</p>
                 <p class="">ICTD</p>
                 <a href="#" target="_blank"  class="u-btn u-button-style u-hover-palette-1-dark-1 u-palette-1-base u-btn-2" style="color:#9900ff;font-weight: bold; text-style: none;" >Code of conduct</a>
             </div>
@@ -68,38 +71,14 @@
                 <!-- Slides Container -->
                 <div data-u="slides" style="position: absolute; left: 0px; top: 0px; width: 600px; height: 300px;
                      overflow: hidden;">
+
+                    @foreach ($banners as $item)
                     <div>
-                        <img data-u="image" src="images/notice11.JPG" />
-                        <div data-u="thumb">Do you notice it scales while window resize?</div>
+                        <img data-u="image" src="{{ asset($item->image) }}" />
+                        <div data-u="thumb"> {{ $item->description}}</div>
                     </div>
-                    <div>
-                        <img data-u="image" src="images/notice2.JPG" />
-                        <div data-u="thumb">Do you know this is text format thumbnail?</div>
-                    </div>
-                    <div>
-                        <img data-u="image" src="images/notice3.JPG" />
-                        <div data-u="thumb">Do you notice the navigator is in multiline?</div>
-                    </div>
-                    <div>
-                        <img data-u="image" src="images/980x380/004.jpg" />
-                        <div data-u="thumb">Do you like navigator to act by mouse hover?</div>
-                    </div>
-                    <div>
-                        <img data-u="image" src="images/980x380/001.jpg" />
-                        <div data-u="thumb">Do you notice arrows appear when mouse over?</div>
-                    </div>
-                    <div>
-                        <img data-u="image" src="images/980x380/002.jpg" />
-                        <div data-u="thumb">Do you notice the slideshow plays outside?</div>
-                    </div>
-                    <div>
-                        <img data-u="image" src="images/980x380/003.jpg" />
-                        <div data-u="thumb">Do you know there are <a href="../transitions/slideshow-transitions(360).html">360+ slideshow transitions</a>?</div>
-                    </div>
-                    <div>
-                        <img data-u="image" src="images/980x380/004.jpg" />
-                        <div data-u="thumb">Do you know <a href="https://www.jssor.com/help">Jssor Slider Maker</a> is ready to create layer animation?</div>
-                    </div>
+                    @endforeach
+
                 </div>
 
                 <!--#region Thumbnail Navigator Skin Begin -->
@@ -233,9 +212,16 @@
         <div class="u-align-left u-border-3 u-border-grey-75 u-container-style u-group u-group-1" style="height: 100%; overflow-y: scroll;">
             <div class="u-container-layout u-container-layout-2">
                 <h3 class="u-align-center u-text  u-text-default-lg u-text-default-xl u-text-4 font-weight: bold" style="color:#9900ff;font-weight: bold; text-style: none;" >Top 10 Depositor</h3>
-                @foreach ($users as $user)
-                    <p> {{ $user }}</p>
-                @endforeach
+                    <p>Name1 | BRANCH 1</p>
+                    <p>Name2 | BRANCH 2</p>
+                    <p>Name3 | BRANCH 3</p>
+                    <p>Name4 | BRANCH 4</p>
+                    <p>Name5 | BRANCH 5</p>
+                    <p>Name6 | BRANCH 6</p>
+                    <p>Name7 | BRANCH 3</p>
+                    <p>Name8 | BRANCH 8</p>
+                    <p>Name9 | BRANCH 8</p>
+                    <p>Name9 | BRANCH 10</p>
             </div>
         </div>
     </div>

@@ -31,30 +31,20 @@
         <h3>{{ ucwords(lang('administration', $translation)) }}</h3>
         <ul class="nav side-menu">
 
-            @if (Helper::authorizing('Banner', 'View List')['status'] == 'true')
+
+
+            @if (Helper::authorizing('User', 'View List')['status'] == 'true')
                 @php
+                    $priv_admin++;
                     $menu_active = '';
-                    if(Helper::is_menu_active('/banner/')){
+                    if (Helper::is_menu_active('/system/user/')) {
                         $menu_active = 'current-page';
                     }
                 @endphp
                 <li class="{{ $menu_active }}">
-                    <a href="{{ route('admin.banner.list') }}">
-                        <i class="fa fa-image"></i> {{ ucwords(lang('banner', $translation)) }}
+                    <a href="{{ route('employees.index') }}">
+                        <i class="fa fa-user"></i> {{ ucwords(lang('employee', $translation)) }}
                     </a>
-                </li>
-            @endif
-            @if (Helper::authorizing('Article', 'View List')['status'] == 'true')
-                <li>
-                    <a><i class="fa fa-newspaper-o"></i> {{ ucwords(lang('article', $translation)) }} <span class="fa fa-chevron-down"></span></a>
-                    <ul class="nav child_menu">
-                        @if (Helper::authorizing('Topic', 'View List')['status'] == 'true')
-                            <li><a href="{{ route('admin.topic.list') }}">{{ ucwords(lang('topic', $translation)) }}</a></li>
-                        @endif
-                        @if (Helper::authorizing('Article', 'View List')['status'] == 'true')
-                            <li><a href="{{ route('admin.article.list') }}">{{ ucwords(lang('article', $translation)) }}</a></li>
-                        @endif
-                    </ul>
                 </li>
             @endif
 
@@ -212,7 +202,7 @@
                         // }
                     @endphp
                     <li><a href="{{ route('admin.filetype.list') }}">
-                        {{ ucwords(lang('file type', $translation)) }}</a></li>
+                            {{ ucwords(lang('file type', $translation)) }}</a></li>
                     {{-- @endif --}}
 
                     {{-- @if (Helper::authorizing('Branch', 'View List')['status'] == 'true') --}}
@@ -224,13 +214,43 @@
                         // }
                     @endphp
                     <li><a href="{{ route('admin.file.list') }}">
-                        {{ ucwords(lang('files', $translation)) }}</a></li>
+                            {{ ucwords(lang('files', $translation)) }}</a></li>
 
                 </ul>
             </li>
 
 
+            @if (Helper::authorizing('Banner', 'View List')['status'] == 'true')
+                @php
+                    $menu_active = '';
+                    if (Helper::is_menu_active('/banner/')) {
+                        $menu_active = 'current-page';
+                    }
+                @endphp
+                <li class="{{ $menu_active }}">
+                    <a href="{{ route('admin.banner.list') }}">
+                        <i class="fa fa-image"></i> {{ ucwords(lang('banner', $translation)) }}
+                    </a>
+                </li>
+            @endif
 
+            @if (Helper::authorizing('Article', 'View List')['status'] == 'true')
+                <li>
+                    <a><i class="fa fa-newspaper-o"></i> {{ ucwords(lang('article', $translation)) }} <span
+                            class="fa fa-chevron-down"></span></a>
+                    <ul class="nav child_menu">
+                        @if (Helper::authorizing('Topic', 'View List')['status'] == 'true')
+                            <li><a href="{{ route('admin.topic.list') }}">{{ ucwords(lang('topic', $translation)) }}</a>
+                            </li>
+                        @endif
+                        @if (Helper::authorizing('Article', 'View List')['status'] == 'true')
+                            <li><a
+                                    href="{{ route('admin.article.list') }}">{{ ucwords(lang('article', $translation)) }}</a>
+                            </li>
+                        @endif
+                    </ul>
+                </li>
+            @endif
 
             @if (Helper::authorizing('System Logs', 'View List')['status'] == 'true')
                 <?php $priv_admin++; ?>
