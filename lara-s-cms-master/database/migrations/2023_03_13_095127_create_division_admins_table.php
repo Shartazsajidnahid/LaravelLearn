@@ -17,8 +17,10 @@ class CreateDivisionAdminsTable extends Migration
             $table->id();
             $table->bigInteger('admin_id')->index('FK_sys_users');
             $table->bigInteger('division_id')->index('FK_sys_divisions');
+            $table->bigInteger('branch_id')->index('FK_sys_branches');
             $table->bigInteger('department_id')->index('FK_sys_departments');
             $table->bigInteger('unit_id')->index('FK_sys_units');
+            $table->integer('assign_to');   //branch?dept?unit?
             $table->timestamps();
         });
     }

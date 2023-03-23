@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateFilesTable extends Migration
+class CreateEmployeeUsersTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,10 @@ class CreateFilesTable extends Migration
      */
     public function up()
     {
-        Schema::create('files', function (Blueprint $table) {
+        Schema::create('employee_users', function (Blueprint $table) {
             $table->id();
-            $table->string('name',60);
-            $table->bigInteger('file_type')->index('FK_filetypes');
-            $table->bigInteger('division_admin_id')->index('FK_division_admins');
-            $table->string('filepath');
-            $table->boolean('status')->default(1);
+            $table->bigInteger('user')->index('FK_sys_users');
+            $table->bigInteger('employee')->index('FK_employees');
             $table->timestamps();
         });
     }
@@ -31,6 +28,6 @@ class CreateFilesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('files');
+        Schema::dropIfExists('employee_users');
     }
 }
