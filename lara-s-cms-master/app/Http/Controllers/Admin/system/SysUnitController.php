@@ -40,7 +40,6 @@ class SysUnitController extends Controller
         }
         // dd($newdata);
         return $newdata;
-
     }
 
     public function list()
@@ -626,7 +625,7 @@ class SysUnitController extends Controller
 		// $state=DB::table('sysBranch')->where('division_id',$div_id)->orderBy('state','asc')->get();
         $depts = SysDepartment::where('branch_id', $sid)->orderBy('name', 'asc')->get();
 		// $html='<option value="">Select Branch</option>';
-        $html = '';
+        $html = '<option>choose one</option>';
 		foreach($depts as $list){
 			$html.='<option value="'.$list->id.'">'.$list->name.'</option>';
 		}
@@ -645,7 +644,7 @@ class SysUnitController extends Controller
 		// $state=DB::table('sysBranch')->where('division_id',$div_id)->orderBy('state','asc')->get();
         $depts = SysUnit::where('department_id', $sid)->orderBy('name', 'asc')->get();
 		// $html='<option value="">Select Branch</option>';
-        $html = '';
+        $html = '<option>choose one</option>';
 		foreach($depts as $list){
 			$html.='<option value="'.$list->id.'">'.$list->name.'</option>';
 		}

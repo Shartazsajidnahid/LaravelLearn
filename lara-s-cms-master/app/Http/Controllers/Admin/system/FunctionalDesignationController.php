@@ -49,12 +49,6 @@ class FunctionalDesignationController extends Controller
 
     public function do_create(Request $request)
     {
-        // AUTHORIZING...
-        // $authorize = Helper::authorizing($this->module, 'Add New');
-        // if ($authorize['status'] != 'true') {
-        //     return back()->with('error', $authorize['message']);
-        // }
-
 
         // HELPER VALIDATION FOR PREVENT SQL INJECTION & XSS ATTACK
         $func_designation_id = (int) $request->func_designation_id;

@@ -29,10 +29,10 @@ class FiletypeController extends Controller
     public function create()
     {
         // AUTHORIZING...
-        $authorize = Helper::authorizing($this->module, 'Add New');
-        if ($authorize['status'] != 'true') {
-            return back()->with('error', $authorize['message']);
-        }
+        // $authorize = Helper::authorizing($this->module, 'Add New');
+        // if ($authorize['status'] != 'true') {
+        //     return back()->with('error', $authorize['message']);
+        // }
 
         return view('admin.filetype.form');
     }

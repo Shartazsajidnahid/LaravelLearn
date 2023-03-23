@@ -5,6 +5,7 @@ namespace App\Models\system;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
+
 class SysBranch extends Model
 {
     use SoftDeletes;
@@ -25,3 +26,5 @@ class SysBranch extends Model
         'division_id', 'name', 'location', 'gmaps', 'phone', 'cbs_branch_code', 'parent_id', 'status', 'ordinal', 'created_at', 'updated_at', 'deleted_at'
     ];
 }
+
+

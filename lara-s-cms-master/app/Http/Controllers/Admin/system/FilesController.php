@@ -41,6 +41,22 @@ class FilesController extends Controller
 
     }
 
+    public function categorize($data){
+        // dd($data);
+        $newdata = array();
+        foreach( $data as $value ) {
+            $newarr = files::where('file_type', $value->id)->get();
+            $newdata[] = $newarr;
+
+        }
+        // foreach( $newdata as $value ) {
+        //     dd($value);
+
+        // }
+        // dd($newdata);
+        return $newdata;
+    }
+
     public function list()
     {
         // $location = public_path("uploads/files");
@@ -122,13 +138,15 @@ class FilesController extends Controller
             $type = filetype::where('id', $file_type)->pluck('filetype');
             // File upload location
 
-            $path = 'uploads/files/'.$admin->id;
+            $path = 'uploads/files/'.$admin->name.'-'.$admin->id;
             if(! File::exists($path)) {
                 // path does not exist
                 File::makeDirectory($path);
             }
 
-            $location = 'uploads/files/'.$admin->id.'/'.$type[0];
+
+
+            $location = 'uploads/files/'.$admin->name.'-'.$admin->id.'/'.$type[0];
             // dd($location);
 
             if (! File::exists($location)) {
