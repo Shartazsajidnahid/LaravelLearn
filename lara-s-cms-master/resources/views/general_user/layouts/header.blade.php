@@ -2,7 +2,7 @@
     <div class="u-clearfix u-sheet u-sheet-1">
     <div class="u-clearfix u-sheet u-sheet-1" style="color:#9900ff;">
         <a href="index.php" class="u-image u-logo u-image-1" data-image-width="150" data-image-height="103" title="Home" style="margin-top: 10px;">
-            <img src="images/logo.png" class="u-logo-image u-logo-image-1">
+            <img src="{{asset('images/logo.png')}}" class="u-logo-image u-logo-image-1">
         </a>
         <nav class="u-menu u-menu-dropdown u-offcanvas u-menu-1">
             <div class="menu-collapse" style="font-size: 1rem; letter-spacing: 0px;">

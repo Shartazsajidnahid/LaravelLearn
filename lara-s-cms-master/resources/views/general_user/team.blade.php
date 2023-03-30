@@ -36,18 +36,18 @@
                 <div
                     class="u-border-2 u-border-grey-75 u-container-style u-custom-color-3 u-expanded-width u-group u-group-1">
                     <div class="u-container-layout u-container-layout-1">
-                        <h2 class="u-text u-text-default u-text-1">Department / Branch</h2>
-                        <p class="u-text u-text-2"> Address: ................................................<br>
+                        <h2 class="u-text u-text-default u-text-1">{{ $office->name }}</h2>
+                        <p class="u-text u-text-2"> Address: {{ $office->location }}<br>
                             <br>
                         </p>
-                        <p class="u-text u-text-3"> Tel:...........<br>Email:.......
+                        <p class="u-text u-text-3"> Tel: {{ $office->phone }}<br>Email:
                         </p>
                     </div>
                 </div>
                 <div class="u-container-style u-group u-shape-rectangle u-group-2">
                     <div class="u-container-layout u-container-layout-2">
                         <h1 class="u-align-center u-text u-text-default u-text-4"> Member</h1>
-                        <img class="u-image u-image-default u-image-1" src="images/divider1.gif" alt=""
+                        <img class="u-image u-image-default u-image-1" src="{{asset('images/divider1.gif')}}" alt=""
                             data-image-width="640" data-image-height="400">
                     </div>
                 </div>
@@ -63,14 +63,14 @@
                             <div class="u-container-layout u-similar-container u-container-layout-1">
                                 <div alt="" >
 
-                                    <img class="u-image u-image-circle u-image-1" src="{{ asset('uploads/employees/'.$item->profile_image) }}" width="500" height="500">
+                                    <img class="u-image u-image-circle u-image-1" src="{{ asset('uploads/employees/'.$item['profile_image']) }}" width="500" height="500">
                                 </div>
-                                <h5 class="u-align-left u-text u-text-1">Name: {{ $item->name}}</h5>
-                                <p class="u-align-left u-text u-text-2">Designation: {{ $item->name}}</p>
-                                <p class="u-align-left u-text u-text-3">Functional Designation: {{ $item->name}}</p>
-                                <p class="u-align-left u-text u-text-4">E-Mail: {{ $item->email}}</p>
-                                <p class="u-align-left u-text u-text-5">Mobile : {{ $item->mobile}}</p>
-                                <p class="u-align-left u-text u-text-6">IP Phone: {{ $item->ip_phone}}</p>
+                                <h5 class="u-align-left u-text u-text-1">Name: {{ $item['name']}}</h5>
+                                <p class="u-align-left u-text u-text-2">Designation: {{ $item['destination']}}</p>
+                                <p class="u-align-left u-text u-text-3">Functional Designation: {{ $item['func_destination']}}</p>
+                                <p class="u-align-left u-text u-text-4">E-Mail: {{ $item['email']}}</p>
+                                <p class="u-align-left u-text u-text-5">Mobile : {{ $item['mobile']}}</p>
+                                <p class="u-align-left u-text u-text-6">IP Phone: {{ $item['ip_phone']}}</p>
                             </div>
                         @endforeach
 

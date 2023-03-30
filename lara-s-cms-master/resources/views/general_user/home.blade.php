@@ -44,12 +44,12 @@
             <div>
                 {{-- <div><img src="{{url('images/Rashed.jpg')}}" class="rounded-circle" alt="Cinque Terre" width="200" height="200"> </div> --}}
 
-                <div><img class="u-image u-image-circle u-image-1" src="{{ asset('uploads/employees/'.$user->profile_image) }}" width="200" height="200"> </div>
+                <div><img class="u-image u-image-circle u-image-1" src="{{ asset('uploads/employees/'.$user['profile_image']) }}" width="200" height="200"> </div>
 
-                <a href="Home.html"> {{ $user->name }} </a>
-                <p class="">{{ $user->email }}</p>
-                <p class="">{{ $user->mobile }}</p>
-                <p class="">ICTD</p>
+                <a href="Home.html"> {{ $user['name'] }} </a>
+                <p class="">{{ $user['email'] }}</p>
+                <p class="">{{ $user['func_destination'] }} <span> |&nbsp;  </span>{{ $user['destination'] }}</p>
+                <p class="">{{ $user['mobile'] }}</p>
                 <a href="#" target="_blank"  class="u-btn u-button-style u-hover-palette-1-dark-1 u-palette-1-base u-btn-2" style="color:#9900ff;font-weight: bold; text-style: none;" >Code of conduct</a>
             </div>
         </div>

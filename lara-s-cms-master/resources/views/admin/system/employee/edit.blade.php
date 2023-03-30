@@ -1,11 +1,10 @@
-
-
-
 @extends('_template_adm.master')
 
 @php
-    $pagetitle = ucwords(lang('Employees', $translation));
+    $pagetitle = ucwords(lang('Employee', $translation));
     $link_get_data = route('admin.department.get_branches');
+    $link_get_data_dept = route('admin.unit.get_depts');
+    $link_get_data_unit = route('admin.unit.get_units');
     if (isset($data)) {
         $pagetitle .= ' (' . ucwords(lang('edit', $translation)) . ')';
         $link = route('admin.department.do_edit', $data->id);
@@ -30,7 +29,7 @@
             </div>
         </div>
         <div class="clearfix"></div>
-        <div class=>
+        <div class="row">
             <div class="col-md-12 col-sm-12 col-xs-12">
                 <div class="x_panel">
                     <div class="x_title">
@@ -40,111 +39,178 @@
                     <div class="x_content">
 
                         <div class="card push-top">
-                          <div class="card-header">
-                            <b>Edit Employee</b>
-                          </div>
-                          <div class="card-body">
-                            @if ($errors->any())
-                              <div class="alert alert-danger">
-                                <ul>
-                                    @foreach ($errors->all() as $error)
-                                      <li>{{ $error }}</li>
-                                    @endforeach
-                                </ul>
-                              </div><br />
-                            @endif
-                              <form method="post" action="{{ route('employees.update',$employee->id)}}" enctype="multipart/form-data">
-                                @csrf
-                                @method('PATCH')
-                                <div class="form-row">
 
-                                    <div class="form-group col-md-6">
-                                        <label for="inputState">Name</label>
-                                     <input type="text" class="form-control" placeholder="First name" name="name" value="{{ $employee->name }}"aria-label="First name">
-                                    </div>
+                            <div class="card-body">
 
-                                    <div class="form-group col-md-6">
-                                        <label for="inputState">userName</label>
-                                      <input type="text" class="form-control" placeholder="User name" name="user_name" value="{{ $employee->user_name }}"aria-label="Last name">
-                                    </div>
-                                  </div>
+                                <form method="post" action="{{ route('employees.update',$employee->id) }}" enctype="multipart/form-data">
+                                    @csrf
+                                    @method('PATCH')
 
-                                  <div class="form-row">
-                                    <div class="form-group col-md-6">
-                                        <label for="inputState">Branch</label>
-                                        <input type="text" class="form-control" placeholder="Brance" name="brance" value="{{ $employee->brance }}" aria-label="First name">
+                                    {{-- <div class="form-row">
+                                        <div class="form-group vinput_main_branch col-md-6">
+                                            <label for="parent branch" class="control-label col-md-2 ">
+                                                Branch
+                                            </label>
+                                            <div class="col-md-10 ">
+                                                <select class="form-control select2" name="branch_id" id="branches">
 
-                                    </div>
-                                    <div class="form-group col-md-6">
-                                        <label for="inputState">Department</label>
-                                        <input type="text" class="form-control" placeholder="Department" name="department" value="{{ $employee->department }}"aria-label="Last name">
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="form-group vinput_main_branch col-md-6">
+                                            <label for="parent branch" class="control-label col-md-2">
+                                                Branch
+                                            </label>
+                                            <div class="col-md-10 ">
+                                                <select class="form-control select2" name="branch_id" id="branches">
 
-                                    </div>
-                                </div>
-                                  <div class="form-row">
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div> --}}
+                                    <div class="form-row">
 
-                                    <div class="form-group col-md-6">
-                                        <label for="inputState">Designation</label>
-                                      <input type="text" class="form-control" placeholder="Designation" name="designation" value="{{ $employee->designation }}"aria-label="First name">
+                                        <div class="form-group col-md-6">
+                                            <label for="inputState">Name</label>
+                                            <input type="text" class="form-control" value="{{ $employee->name }}"
+                                                name="name" aria-label="First name">
+                                        </div>
+
+                                        <div class="form-group col-md-6">
+                                            <label for="inputState">userName</label>
+                                            <input type="text" class="form-control" value="{{ $employee->user_name }}"
+                                                name="user_name" aria-label="Last name">
+                                        </div>
                                     </div>
 
-                                    <div class="form-group col-md-6">
-                                        <label for="inputState">Functional Designation</label>
-                                      <input type="text" class="form-control" placeholder="FunctionalDesignation" name="functional_designation" value="{{ $employee->functional_designation }}"aria-label="Last name">
-                                    </div>
-                                  </div>
-                                  <div class="form-row">
-                                    <div class="form-group col-md-6" col-md-6>
-                                        <label for="inputState">Gender</label>
-                                      <input type="text" class="form-control" placeholder="Gender" name="gender" value="{{ $employee->gender }}"aria-label="First name">
-                                    </div>
-                                    <div class="form-group col-md-6">
-                                        <label for="inputState">DOB</label>
-                                      <input type="date" class="form-control" placeholder="DOB" name="dob" value="{{ $employee->dob }}"aria-label="Last name">
-                                    </div>
-                                  </div>
-                                  <div class="form-row">
-                                    <div class="form-group col-md-6">
-                                        <label for="inputState">Phone</label>
-                                      <input type="tel" class="form-control" placeholder="Phone" name="phone"value="{{ $employee->phone }}"aria-label="First name">
-                                    </div>
-                                    <div class="form-group col-md-6">
-                                        <label for="inputState">Office phone</label>
-                                      <input type="tel" class="form-control" placeholder="Officephone" name="office_phone" value="{{ $employee->office_phone }}" aria-label="Last name">
-                                    </div>
-                                  </div>
-                                  <div class="form-row">
-                                    <div class="form-group col-md-6">
-                                        <label for="inputState">IP Phone</label>
-                                      <input type="tel" class="form-control" placeholder="Ip phone" name="ip_phone" value="{{ $employee->ip_phone }}"aria-label="First name">
-                                    </div>
-                                    <div class="form-group col-md-6">
-                                        <label for="inputState">PABX Phone</label>
-                                      <input type="tel" class="form-control" placeholder="Pabx Phone" name="pabx_phone" value="{{ $employee->pabx_phone }}"aria-label="Last name">
-                                    </div>
-                                  </div>
-                                  <div class="form-row">
-                                    <div class="form-group col-md-6">
-                                        <label for="inputState">Email</label>
-                                      <input type="email" class="form-control" placeholder="Email" name="email"  value="{{ $employee->email }}" aria-label="First name">
-                                    </div>
-                                    <div class="form-group col-md-6">
-                                        <label for="inputState">Password</label>
-                                      <input type="text" class="form-control" placeholder="Password" name="password" value="{{ $employee->password }}"aria-label="Last name">
-                                    </div>
-                                  </div>
-                                  <div class="form-row">
+                                    <div class="form-row">
+                                        <div class="form-group col-md-6">
+                                            <label for="inputState">Office</label>
+                                            <select class="form-control select2" name="division_id" id="divisions"  value="{{ $employee->division_id }}">
+                                                <option></option>
+                                                @foreach ($divisions as $cntrl)
+                                                    <option value="{{ $cntrl->id }}">
+                                                        {{ $cntrl->name }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                        <div class="form-group col-md-6">
+                                            <label for="inputState">Branch</label>
+                                            <select class="form-control select2" name="branch_id" id="branches" value="{{ $employee->branch_id }}">
 
-                                    <div class="form-group col-md-12">
-                                        <label for="inputState">Profile Image</label>
-                                      <input type="file" name="profile_image" value="{{ $employee->profile_image }}" class="form-control">
-                                      <img src="{{ asset('uploads/employees/'.$employee->profile_image) }}"  width="70px" height="70px" alt="Image">
+                                            </select>
+                                        </div>
                                     </div>
-                                  </div>
-                                  <br>
-                                  <button type="submit" class="btn btn-danger">Update</button>
-                              </form>
-                          </div>
+
+
+                                    <div class="form-row">
+                                        <div class="form-group col-md-6">
+                                            <label for="inputState">Department</label>
+                                            <select class="form-control select2" name="department_id" id="depts" value="{{ $employee->department_id }}">
+
+                                            </select>
+                                        </div>
+                                        <div class="form-group col-md-6">
+                                            <label for="inputState">Unit</label>
+                                            <select class="form-control select2" name="unit_id" id="units" value="{{ $employee->unit_id }}">
+
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+
+                                        <div class="form-group col-md-6">
+                                            <label for="inputState">Designation</label>
+                                            <select class="form-control select2" name="designation_id" value="{{ $employee->designation_id }}">
+                                                <option></option>
+                                                @foreach ($designations as $cntrl)
+                                                    <option value="{{ $cntrl->id }}">
+                                                        {{ $cntrl->designation }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+
+                                        <div class="form-group col-md-6">
+                                            <label for="inputState">Functional Designation</label>
+                                            <select class="form-control select2" name="func_designation_id">
+                                                <option value="{{ $employee->func_designation_id }}" default></option>
+                                                @foreach ($func_designations as $cntrl)
+                                                    <option value="{{ $cntrl->id }}">
+                                                        {{ $cntrl->designation }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="form-group col-md-6" col-md-6>
+                                            <label for="inputState">Gender</label>
+                                            <input type="text" class="form-control" placeholder="Gender" name="gender"  value="{{ $employee->gender }}"
+                                                aria-label="First name">
+                                        </div>
+                                        <div class="form-group col-md-6">
+                                            <label for="inputState">DOB</label>
+                                            <input type="date" class="form-control" placeholder="DOB" name="dob" value="{{ $employee->dob }}"
+                                                aria-label="Last name">
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="form-group col-md-6">
+                                            <label for="inputState">Mobile</label>
+                                            <input type="tel" class="form-control" value="{{ $employee->mobile }}"
+                                                name="mobile"aria-label="First name">
+                                        </div>
+                                        <div class="form-group col-md-6">
+                                            <label for="inputState">Office phone</label>
+                                            <input type="tel" class="form-control" name="office_phone" value="{{ $employee->office_phone }}"
+                                                aria-label="Last name">
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="form-group col-md-6">
+                                            <label for="inputState">IP Phone</label>
+                                            <input type="tel" class="form-control" name="ip_phone" value="{{ $employee->ip_phone }}"
+                                                aria-label="First name">
+                                        </div>
+                                        <div class="form-group col-md-6">
+                                            <label for="inputState">PABX Phone</label>
+                                            <input type="tel" class="form-control"  value="{{ $employee->pabx_phone }}"
+                                                name="pabx_phone"aria-label="Last name">
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="form-group col-md-6">
+                                            <label for="inputState">Email</label>
+                                            <input type="email" class="form-control" name="email" value="{{ $employee->email }}"
+                                                aria-label="First name">
+                                        </div>
+                                        <div class="form-group col-md-6">
+                                            <label for="inputState">Password</label>
+                                            <input type="text" class="form-control" name="password" value="{{ $employee->password }}"
+                                                aria-label="Last name">
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+
+                                        <div class="form-group col-md-6">
+                                            <label for="inputState">Profile Image</label>
+                                            <input type="file" name="profile_image" class="form-control" value="{{ $employee->profile_image }}" >
+                                            {{-- <img src="{{ asset('uploads/employees/'.$employee->profile_image) }}"  width="70px" height="70px" alt="Image"> --}}
+
+                                        </div>
+                                        <div class="form-group col-md-6">
+                                            <label for="inputState">Joining Date</label>
+                                            <input type="date" name="joinning_date" class="form-control" value="{{ $employee->joining_date }}">
+
+                                        </div>
+                                    </div>
+                                    <br>
+                                    <button type="submit" class="btn btn-danger">Update User</button>
+                                </form>
+
+                            </div>
                         </div>
 
                     </div>
@@ -153,6 +219,7 @@
         </div>
     </div>
 @endsection
+
 
 @section('css')
     <!-- Switchery -->
@@ -167,5 +234,55 @@
     <!-- Select2 -->
     @include('_form_element.select2.script')
 
+    <script>
+        // Initialize Select2
+        $('.select2').select2();
+    </script>
 
+
+    {{-- <script src="https://code.jquery.com/jquery-3.6.3.min.js"
+        integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous"></script> --}}
+
+    <script>
+        jQuery(document).ready(function() {
+            jQuery('#divisions').change(function() {
+                let div_id = jQuery(this).val();
+                // alert(div_id);
+
+                jQuery.ajax({
+                    url: '{{ $link_get_data }}',
+                    type: 'post',
+                    data: 'div_id=' + div_id + '&_token={{ csrf_token() }}',
+                    success: function(result) {
+                        jQuery('#branches').html(result)
+                    }
+                });
+            });
+
+            jQuery('#branches').change(function() {
+                let sid = jQuery(this).val();
+                jQuery.ajax({
+                    url: '{{ $link_get_data_dept }}',
+                    type: 'post',
+                    data: 'sid=' + sid + '&_token={{ csrf_token() }}',
+                    success: function(result) {
+                        jQuery('#depts').html(result)
+                    }
+                });
+            });
+
+            jQuery('#depts').change(function() {
+                let sid = jQuery(this).val();
+                jQuery.ajax({
+                    url: '{{ $link_get_data_unit }}',
+                    type: 'post',
+                    data: 'sid=' + sid + '&_token={{ csrf_token() }}',
+                    success: function(result) {
+                        jQuery('#units').html(result)
+                    }
+                });
+            });
+
+        });
+    </script>
 @endsection
