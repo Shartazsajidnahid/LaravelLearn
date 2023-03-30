@@ -49,11 +49,6 @@ class FilesController extends Controller
             $newdata[] = $newarr;
 
         }
-        // foreach( $newdata as $value ) {
-        //     dd($value);
-
-        // }
-        // dd($newdata);
         return $newdata;
     }
 

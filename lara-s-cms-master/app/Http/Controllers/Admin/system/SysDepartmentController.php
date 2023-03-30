@@ -28,6 +28,7 @@ class SysDepartmentController extends Controller
     private function oneRecordwith_branchName($value){
         $newarr = array('id'=>$value->id, 'branch_id'=> $value->branch_id, 'name' =>$value->name , 'location'=>$value->location  , 'phone'=>$value->phone , 'ordinal'=>$value->ordinal, 'status'=>$value->status , 'created_at'=>$value->created_at, 'updated_at'=>$value->updated_at);
         $branch = SysBranch::find($value->branch_id);
+
         $newarr['branch_name'] = $branch->name;
         return $newarr;
     }

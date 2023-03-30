@@ -157,7 +157,7 @@ class BranchController extends Controller
         $data->phone = $phone;
         $data->cbs_branch_code = $request->cbs_branch_code;
         $data->gmaps = $gmaps;
-        $data->ordinal = $ordinal;
+        // $data->ordinal = $ordinal;
         $data->status = $status;
 
         if ($data->save()) {

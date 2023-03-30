@@ -23,23 +23,46 @@ use App\Libraries\Helper;
 
 class EmployeeController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+    public function oneRecordwith_names($value){
+        $newarr = array('id'=>$value->id, 'name' =>$value->name, 'user_name' =>$value->user_name , 'division_id'=> $value->division_id,
+        'branch_id'=> $value->branch_id, 'department_id'=> $value->department_id, 'unit_id'=> $value->unit_id,
+        'designation_id'=>$value->designation_id  , 'func_designation_id'=>$value->func_designation_id , 'gender'=>$value->gender, 'mobile'=>$value->mobile ,
+        'pabx_phone'=>$value->pabx_phone, 'dob'=>$value->dob , 'email'=>$value->email, 'office_phone'=>$value->office_phone ,
+        'ip_phone'=>$value->ip_phone  , 'password'=>$value->password , 'profile_image'=>$value->profile_image, 'joinning_date'=>$value->joinning_date ,
+        'created_at'=>$value->created_at, 'updated_at'=>$value->updated_at);
+
+        $destination = Designation::where('id', $value->designation_id)->pluck('designation');
+        $func_destination = Functional_designation::where('id', $value->func_designation_id)->pluck('designation');
+
+        // $branch = Designation::find($value->designation_id);
+        // $branch = Functional_designation::find($value->func_designation_id);
+
+        $newarr['destination'] = $destination[0];
+        $newarr['func_destination'] = $func_destination[0];
+        // dd($newarr);
+        return $newarr;
+    }
+
+    public function getDatawithNames($data){
+        $newdata = array();
+        foreach( $data as $value ) {
+            $newarr = $this->oneRecordwith_names($value);
+            $newdata[] = $newarr;
+        }
+        // dd($newdata);
+        return $newdata;
+
+    }
+
     public function index()
     {
 
-        $employee = Employee::all();
+        $data = Employee::all();
+        $employee = $this->getDatawithNames($data);
         // dd($employee);
         return view('admin.system.employee.index', compact('employee'));
     }
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function create()
     {
         $divisions = SysDivision::where('status', 1)->get();
@@ -50,6 +73,14 @@ class EmployeeController extends Controller
 
     public function store(Request $request)
     {
+        $request->validate([
+
+            'branch_id' => 'required|string' ,
+            'department_id' => 'required|string' ,
+            'unit_id' => 'required|string' ,
+            'email' => 'required|email' ,
+            '*' => 'required',
+        ]);
         $employee = new Employee;
         $employee->name = $request->input('name');
         $employee->user_name = $request->input('user_name');
@@ -81,6 +112,7 @@ class EmployeeController extends Controller
             $file->move('uploads/employees/', $filename);
             $employee->profile_image = $filename;
         }
+
         $employee->save();
 
         // SAVE THE DATA
@@ -121,8 +153,11 @@ class EmployeeController extends Controller
 
     public function edit($id)
     {
+        $divisions = SysDivision::where('status', 1)->get();
+        $designations = Designation::all();
+        $func_designations = Functional_designation::all();
         $employee = Employee::findOrFail($id);
-        return view('admin.system.employee.edit', compact('employee'));
+        return view('admin.system.employee.edit', compact('employee', 'divisions', 'designations', 'func_designations'));
     }
 
     public function update(Request $request, $id)
