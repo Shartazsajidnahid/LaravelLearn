@@ -31,7 +31,7 @@ Route::middleware([CheckGeneralUser::class])->group(function(){
     Route::get('/general', [HomeController::class, 'general_home']);
     Route::get('/logout', [AuthController::class, 'logout'])->name('general.logout');
     // Route::get('/logout', 'Admin\system\AuthController@logout')->name('general.logout');
-    Route::get('/team', [HomeController::class, 'general_team']);
+    Route::get('/team/{home}/{id}', [HomeController::class, 'general_team'])->name('general.team');;
     Route::get('/aboutus', [HomeController::class, 'general_aboutus']);
     Route::get('/allbrance', [HomeController::class, 'general_allbrance']);
     Route::get('/alldivision', [HomeController::class, 'general_alldivision']);
@@ -108,7 +108,7 @@ Route::group([
 
             // PROFILE
             Route::get('profile', 'UserController@profile')->name('admin.profile');
-            Route::post('edit-profile', 'UserController@profile_edit')->name('admin.profile.edit');
+            Route::post('edit-profile', 'UserController@profile_edit')->name('admin.employees');
 
             // SYSTEM
             Route::group(['prefix' => 'system'], function () {
@@ -130,6 +130,9 @@ Route::group([
                     Route::post('/restore', 'DivisionController@restore')->name('admin.division.restore');
                     Route::post('/sorting', 'DivisionController@sorting')->name('admin.division.sorting');
                 });
+
+                //Employees
+                Route::resource('employees', EmployeeController::class);
 
                 // BRANCH
                 Route::group(['prefix' => 'branch'], function () {
@@ -228,6 +231,20 @@ Route::group([
                     Route::post('/do-edit/{id}', 'FilesController@do_edit')->name('admin.file.do_edit');
                     Route::post('/delete', 'FilesController@delete')->name('admin.file.delete');
                     Route::get('/deleted', 'FilesController@list_deleted')->name('admin.file.deleted');
+                    // Route::post('/restore', 'FunctionalDesignationController@restore')->name('admin.functional_designation.restore');
+                    // Route::post('/sorting', 'FunctionalDesignationController@sorting')->name('admin.functional_designation.sorting');
+                });
+
+                // CHO
+                Route::group(['prefix' => 'cho'], function () {
+                    // Route::get('/get-files', 'FilesController@get_files')->name('admin.file.get_files');
+                    Route::get('/', 'HomeController@cho_index')->name('admin.cho.list');
+                    Route::get('/create', 'HomeController@cho_create')->name('admin.cho.create');
+                    // Route::post('/do-create', 'FilesController@do_create')->name('admin.file.do_create');
+                    // Route::get('/edit/{id}', 'FilesController@edit')->name('admin.file.edit');
+                    // Route::post('/do-edit/{id}', 'FilesController@do_edit')->name('admin.file.do_edit');
+                    // Route::post('/delete', 'FilesController@delete')->name('admin.file.delete');
+                    // Route::get('/deleted', 'FilesController@list_deleted')->name('admin.file.deleted');
                     // Route::post('/restore', 'FunctionalDesignationController@restore')->name('admin.functional_designation.restore');
                     // Route::post('/sorting', 'FunctionalDesignationController@sorting')->name('admin.functional_designation.sorting');
                 });
