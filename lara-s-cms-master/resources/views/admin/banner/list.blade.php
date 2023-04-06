@@ -142,7 +142,9 @@
                     html += '<td>'+value.created_at_edited+'</td>';
                     html += '<td>'+value.updated_at_edited+'</td>';
 
-                    action_edit = '<a href="{{ url("/".env("ADMIN_DIR")."/banner/edit") }}/'+value.id+'" class="btn btn-xs btn-primary" title="{{ ucwords(lang("edit", $translation)) }}"><i class="fa fa-pencil"></i>&nbsp; {{ ucwords(lang("edit", $translation)) }}</a>';
+
+                    action_edit = '<a href="{{ url("/manager/banner/edit") }}/'+value.id+'" class="btn btn-xs btn-primary" title="{{ ucwords(lang("edit", $translation)) }}"><i class="fa fa-pencil"></i>&nbsp; {{ ucwords(lang("edit", $translation)) }}</a>';
+                    // action_edit = '<a href="{{ url("/".env("ADMIN_DIR")."/banner/edit") }}/'+value.id+'" class="btn btn-xs btn-primary" title="{{ ucwords(lang("edit", $translation)) }}"><i class="fa fa-pencil"></i>&nbsp; {{ ucwords(lang("edit", $translation)) }}</a>';
                     action_delete = '<form action="{{ route("admin.banner.delete") }}" method="POST" onsubmit="return confirm(\'{{ lang("Are you sure to delete this #item?", $translation, ["#item"=>$this_object]) }}\');" style="display: inline">{{ csrf_field() }}<input type="hidden" name="id" value="'+value.id+'"><button type="submit" class="btn btn-xs btn-danger" title="{{ ucwords(lang("delete", $translation)) }}"><i class="fa fa-trash"></i>&nbsp; {{ ucwords(lang("delete", $translation)) }}</button></form>';
                     html += '<td>'+action_edit+action_delete+'</td>';
                   html += '</tr>';

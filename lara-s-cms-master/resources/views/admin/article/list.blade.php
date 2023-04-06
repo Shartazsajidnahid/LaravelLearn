@@ -29,7 +29,7 @@ if(isset($data)){
                   <i class="fa fa-plus-circle"></i>&nbsp; {{ ucwords(lang('add new', $translation)) }}
                 </a>
             </div>
-          </div>  
+          </div>
         @endif
     </div>
     <div class="clearfix"></div>

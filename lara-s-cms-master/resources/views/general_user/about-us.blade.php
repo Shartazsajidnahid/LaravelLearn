@@ -110,8 +110,8 @@
                                     <div class="u-container-style u-custom-color-3 u-group u-group-2">
                                         <div class="u-container-layout u-container-layout-4">
                                             {{-- <div class="u-align-left u-image u-image-circle u-image-contain u-preserve-proportions u-image-2" alt="" data-image-width="914" data-image-height="1280"></div> --}}
-                                            <div><img src="{{url('images/1582480549.jpeg')}}" class="u-align-left u-image u-image-circle u-image-contain u-preserve-proportions u-image-2" alt="Cinque Terre" width="320" height="304"> </div>
-                                            <h5 class="u-align-right u-text u-text-3"> Mohammed Zabed Amin</h5>
+                                            <div><img src="{{url('')}}" class="u-align-left u-image u-image-circle u-image-contain u-preserve-proportions u-image-2" alt="Cinque Terre" width="320" height="304"> </div>
+                                            <h5 class="u-align-right u-text u-text-3"> Name</h5>
                                             <h5 class="u-align-right u-text u-text-4"> DMD &amp; COO &amp; CAMLCO</h5>
                                             <a href="{{ url('team') }}" data-page-id="301504267" class="u-border-1 u-border-active-palette-2-base u-border-hover-palette-1-base u-btn u-button-style u-none u-text-palette-1-base u-btn-8" target="_blank"> Banking Operations Division</a>
                                             <a href="{{ url('team') }}" data-page-id="301504267" class="u-border-1 u-border-active-palette-2-base u-border-hover-palette-1-base u-btn u-button-style u-none u-text-palette-1-base u-btn-9" target="_blank"> AML &amp; CFT Division</a>

@@ -31,8 +31,6 @@
         <h3>{{ ucwords(lang('administration', $translation)) }}</h3>
         <ul class="nav side-menu">
 
-
-
             @if (Helper::authorizing('User', 'View List')['status'] == 'true')
                 @php
                     $priv_admin++;
@@ -220,26 +218,83 @@
             </li>
 
 
-            @if (Helper::authorizing('Banner', 'View List')['status'] == 'true')
-                @php
-                    $menu_active = '';
-                    if (Helper::is_menu_active('/banner/')) {
+            {{-- filesystem --}}
+            <li><a id="menu-language"><i class="fa fa-home" aria-hidden="true"></i>
+                    {{ ucwords(lang('Portal Home', $translation)) }} <span class="fa fa-chevron-down"></span></a>
+                <ul class="nav child_menu">
+
+                    {{-- banner --}}
+                    @if (Helper::authorizing('Banner', 'View List')['status'] == 'true')
+                        @php
+                            $menu_active = '';
+                            if (Helper::is_menu_active('/banner/')) {
+                                $menu_active = 'current-page';
+                            }
+                        @endphp
+                        <li class="{{ $menu_active }}">
+                            <a href="{{ route('admin.banner.list') }}">
+                                {{-- <i class="fa fa-image"></i>  --}}
+                                {{ ucwords(lang('banner', $translation)) }}
+                            </a>
+                        </li>
+                    @endif
+                    @php
+                        $priv_admin++;
+                        $menu_active = '';
+                        // if(Helper::is_menu_active('/system/dictionary/')){
                         $menu_active = 'current-page';
-                    }
-                @endphp
-                <li class="{{ $menu_active }}">
-                    <a href="{{ route('admin.banner.list') }}">
-                        <i class="fa fa-image"></i> {{ ucwords(lang('banner', $translation)) }}
-                    </a>
-                </li>
-            @endif
+                        // }
+                    @endphp
+
+                    {{-- News --}}
+                    @if (Helper::authorizing('Topic', 'View List')['status'] == 'true')
+                        <li><a href="{{ route('admin.topic.list') }}">
+                            {{-- <i class="fa fa-newspaper-o" aria-hidden="true"></i> --}}
+                                    {{ ucwords(lang(' news', $translation)) }}</a>
+                        </li>
+                    @endif
+
+                    @php
+                        $priv_admin++;
+                        $menu_active = '';
+                        // if(Helper::is_menu_active('/system/dictionary/')){
+                        $menu_active = 'current-page';
+                        // }
+                    @endphp
+
+                    {{-- Applinks --}}
+                    <li><a href="{{ route('admin.applink.list') }}">
+                            {{-- <i class="fa fa-link" aria-hidden="true"></i> --}}
+                            {{ ucwords(lang(' applink', $translation)) }}</a>
+                    </li>
+                    @php
+                        $priv_admin++;
+                        $menu_active = '';
+                        // if(Helper::is_menu_active('/system/dictionary/')){
+                        $menu_active = 'current-page';
+                        // }
+                    @endphp
+                    {{-- Exchange rates --}}
+                    <li><a href="{{ route('admin.exchange_rates.list') }}">
+                            {{-- <i class="fa fa-money"  aria-hidden="true"></i> --}}
+                            {{ ucwords(lang(' exchange rate', $translation)) }}</a>
+                    </li>
+                    @php
+                        $priv_admin++;
+                        $menu_active = '';
+                        // if(Helper::is_menu_active('/system/dictionary/')){
+                        $menu_active = 'current-page';
+                        // }
+                    @endphp
+                    {{-- Exchange rates --}}
+                    <li><a href="{{ route('admin.top_branch.create') }}">
+                            {{-- <i class="fa fa-money"  aria-hidden="true"></i> --}}
+                            {{ ucwords(lang(' top 10 branch', $translation)) }}</a>
+                    </li>
+                </ul>
+            </li>
 
 
-            @if (Helper::authorizing('Topic', 'View List')['status'] == 'true')
-
-                <li><a href="{{ route('admin.topic.list') }}"><i class="fa fa-newspaper-o" aria-hidden="true"></i>{{ ucwords(lang('news', $translation)) }}</a>
-                </li>
-            @endif
 
             @if (Helper::authorizing('System Logs', 'View List')['status'] == 'true')
                 <?php $priv_admin++; ?>

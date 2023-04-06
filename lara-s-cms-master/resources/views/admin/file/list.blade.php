@@ -56,7 +56,6 @@
         <div class="clearfix"></div>
 
         <div class="row">
-
             <div class="col-md-3 col-sm-12 col-xs-12">
                 <div class="control-group">
                   <div class="controls">
@@ -186,7 +185,7 @@
                         html += '<td>'+value.created_at+'</td>';
                         html += '<td>'+value.updated_at+'</td>';
 
-                        action_edit = '<a href="{{ url("/manager/system/branch/edit") }}/'+value.id+'" class="btn btn-xs btn-primary" title="{{ ucwords(lang("edit", $translation)) }}"><i class="fa fa-pencil"></i>&nbsp; {{ ucwords(lang("edit", $translation)) }}</a>';
+                        action_edit = '<a href="{{ url("/manager/system/file/edit") }}/'+value.id+'" class="btn btn-xs btn-primary" title="{{ ucwords(lang("edit", $translation)) }}"><i class="fa fa-pencil"></i>&nbsp; {{ ucwords(lang("edit", $translation)) }}</a>';
                         action_delete = '<form action="{{ route("admin.branch.delete") }}" method="POST" onsubmit="return confirm(\'{{ lang("Are you sure to delete this #item?", $translation, ["#item"=>$this_object]) }}\');" style="display: inline">{{ csrf_field() }}<input type="hidden" name="id" value="'+value.id+'"><button type="submit" class="btn btn-xs btn-danger" title="{{ ucwords(lang("delete", $translation)) }}"><i class="fa fa-trash"></i>&nbsp; {{ ucwords(lang("delete", $translation)) }}</button></form>';
                         html += '<td>'+action_edit+action_delete+'</td>';
                     html += '</tr>';

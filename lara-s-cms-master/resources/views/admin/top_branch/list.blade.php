@@ -3,8 +3,7 @@
 @php
   // USE LIBRARIES
   use App\Libraries\Helper;
-
-  $this_object = ucwords(lang('filetype', $translation));
+  $this_object = ucwords(lang('top 10 branch', $translation));
 
   if(isset($data)){
     $pagetitle = $this_object;
