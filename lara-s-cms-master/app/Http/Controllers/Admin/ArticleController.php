@@ -40,6 +40,7 @@ class ArticleController extends Controller
 
     public function get_data(Datatables $datatables, Request $request)
     {
+        dd("check");
         // AUTHORIZING...
         $authorize = Helper::authorizing($this->module, 'View List');
         if ($authorize['status'] != 'true') {
@@ -68,7 +69,7 @@ class ArticleController extends Controller
             ->groupBy(
                 'articles.id'
             );
-
+            dd($query);
         return $datatables->eloquent($query)
             ->addColumn('item_status', function ($data) {
                 if ($data->status != 1) {

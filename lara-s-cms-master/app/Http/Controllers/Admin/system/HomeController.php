@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Admin\system\FilesController;
 use App\Http\Controllers\Admin\system\EmployeeController;
+use Carbon\Carbon;
 
 // MODELS
 use App\Models\filetype;
@@ -14,7 +15,9 @@ use App\Models\Employee;
 use App\Models\Banner;
 use App\Models\Employee_User;
 use App\Models\system\SysBranch;
-
+use App\Models\Topic;
+use App\Models\Applink;
+use App\Models\Exchange_rate;
 
 class Sub_branch {
     public $id;
@@ -85,9 +88,22 @@ class HomeController extends Controller
         $banners = $query->orderBy('ordinal')->get();
 
         // GET THE NEWS
-        $query = Banner::whereNotNull('id');
+        $news = Topic::select("*")
+        ->where([
+            ["status", "=", 1],
+            ["description", "!=", null]
+        ])
+        ->get();
 
-        return view('general_user.home', compact('user', 'banners'));
+        // GET THE APPLINKS
+        $applinks = Applink::all();
+
+        // GET THE EXCHANGE RATES
+        $exchange_rate = Exchange_rate::all();
+
+        // dd($news);
+
+        return view('general_user.home', compact('user', 'banners', 'news', 'applinks', 'exchange_rate'));
     }
     private function getIDname($home){
         $office = '';
@@ -163,6 +179,60 @@ class HomeController extends Controller
         }
         // dd($branches);
         return view('general_user.allbrance', ['branches'=>$branches]);
+    }
+
+    public function general_subbranch()
+    {
+        $branches = [];
+        foreach( range('a', 'z') as $cur_char ){
+        //   $responses = DB::select('select * from sys_branches where name like \'' . $cur_char . '%\''); //and Branch, not Head Office
+          $responses = DB::table('sys_branches')
+            ->where('name', 'like',  $cur_char.'%')
+            ->where('parent_id', '!=', 0 )
+            ->get();
+
+          $resType = new ResponseType($cur_char, $responses);
+          array_push($branches, $resType);
+        }
+        // dd($branches);
+        return view('general_user.sub_branch', ['branches'=>$branches], ['title'=> 'Sub-branches']);
+    }
+
+    public function general_branch()
+    {
+        $branches = [];
+        foreach( range('a', 'z') as $cur_char ){
+        //   $responses = DB::select('select * from sys_branches where name like \'' . $cur_char . '%\''); //and Branch, not Head Office
+          $responses = DB::table('sys_branches')
+            ->where('name', 'like',  $cur_char.'%')
+            ->where('parent_id', '=', 0 )
+            ->get();
+
+          $resType = new ResponseType($cur_char, $responses);
+          array_push($branches, $resType);
+        }
+        // dd($branches);
+        return view('general_user.sub_branch', ['branches'=>$branches], ['title'=> 'Branches']);
+    }
+
+    public function general_division()
+    {
+        // $mytime = Carbon::now();
+        // dd( $mytime->toDateString());
+        // dd( $mytime->toDateTimeString());
+        $branches = [];
+        foreach( range('a', 'z') as $cur_char ){
+        //   $responses = DB::select('select * from sys_branches where name like \'' . $cur_char . '%\''); //and Branch, not Head Office
+          $responses = DB::table('sys_branches')
+            ->where('name', 'like',  $cur_char.'%')
+            ->where('division_id', '=', 2 )
+            ->get();
+
+          $resType = new ResponseType($cur_char, $responses);
+          array_push($branches, $resType);
+        }
+        // dd($branches);
+        return view('general_user.sub_branch', ['branches'=>$branches], ['title'=> 'Divisions']);
     }
 
 

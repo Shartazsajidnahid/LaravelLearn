@@ -100,7 +100,8 @@ class TopicController extends Controller
 
         // LARAVEL VALIDATION
         $validation = [
-            'name' => 'required|unique:topics,name'
+            'name' => 'required|unique:topics,name',
+            'description' => 'required '
         ];
         $message = [
             'required' => ':attribute ' . lang('field is required', $this->translation),
@@ -119,9 +120,17 @@ class TopicController extends Controller
                 ->with('error', lang('Invalid format for #item', $this->translation, ['#item' => ucwords(lang('name', $this->translation))]));
         }
 
+        $description = Helper::validate_input_text($request->description);
+        if (!$name) {
+            return back()
+                ->withInput()
+                ->with('error', lang('Invalid format for #item', $this->translation, ['#item' => ucwords(lang('description', $this->translation))]));
+        }
+
         // SAVE THE DATA
         $data = new Topic();
         $data->name = $name;
+        $data->description =  $description;
         $data->status = (int) $request->status;
 
         if ($data->save()) {

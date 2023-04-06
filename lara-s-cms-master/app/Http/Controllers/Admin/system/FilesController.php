@@ -210,7 +210,7 @@ class FilesController extends Controller
         }
 
         // GET THE DATA BASED ON ID
-        $data = filetype::find($id);
+        $data = files::find($id);
 
         // CHECK IS DATA FOUND
         if (!$data) {
@@ -219,8 +219,8 @@ class FilesController extends Controller
                 ->route('admin.file.list')
                 ->with('error', lang('#item not found, please recheck your link again', $this->translation, ['#item' => $this->item]));
         }
-
-        return view('admin.file.form', compact('data'));
+        $filetypes = filetype::all();
+        return view('admin.file.form', compact('data', 'filetypes'));
     }
 
     public function do_edit($id, Request $request)
@@ -229,41 +229,99 @@ class FilesController extends Controller
         // SET THIS OBJECT/ITEM NAME BASED ON TRANSLATION
         $this->item = ucwords(lang($this->item, $this->translation));
 
-        // CHECK OBJECT ID
-        if ((int) $id < 1) {
-            // INVALID OBJECT ID
-            return redirect()
-                ->route('admin.file.list')
-                ->with('error', lang('#item ID is invalid, please recheck your link again', $this->translation, ['#item' => $this->item]));
-        }
-
-        // GET THE DATA BASED ON ID
-        $data = filetype::find($id);
-
-        // CHECK IS DATA FOUND
-        if (!$data) {
-            // DATA NOT FOUND
-            return back()
-                ->withInput()
-                ->with('error', lang('#item not found, please reload your page before resubmit', $this->translation, ['#item' => $this->item]));
-        }
-
-
         // LARAVEL VALIDATION
         $validation = [
-            'filetype' => 'required'
+            'name' => 'required',
+            'file' => 'required',
+            'file_type' => 'required'
         ];
         $message = [
             'required' => ':attribute ' . lang('field is required', $this->translation)
         ];
-        $filetype = [
-            'filetype' => ucwords(lang('filetype', $this->translation))
+
+        $name = [
+            'file_type' => ucwords(lang('filetype', $this->translation))
         ];
-        $this->validate($request, $validation, $message, $filetype);
+        $this->validate($request, $validation, $message, $name);
+
+        // HELPER VALIDATION FOR PREVENT SQL INJECTION & XSS ATTACK
+        $file_type = (int) $request->file_type;
+        if ($file_type < 1) {
+            return back()
+                ->withInput()
+                ->with('error', lang('#item must be chosen at least one', $this->translation, ['#item' => ucwords(lang('filetype', $this->translation))]));
+        }
+        $name = Helper::validate_input_text($request->name);
+        if (!$name) {
+            return back()
+                ->withInput()
+                ->with('error', lang('Invalid format for #item', $this->translation, ['#item' => ucwords(lang('name', $this->translation))]));
+        }
+        // dd($request->status);
+        // dd($request->file('file'));
+
+        //find division_admin_id
+        $admin = Session::get('admin');
 
 
-        // GET THE UPLOADED RESULT
-        $data->filetype = Helper::validate_input_text($request->filetype);
+        if($request->file('file')) {
+
+            $file = $request->file('file');
+            $filename = $file->hashName();
+
+            //create files folder
+            $path = 'uploads/files';
+            if(! File::exists($path)) {
+                // path does not exist
+                File::makeDirectory($path);
+            }
+
+            $type = filetype::where('id', $file_type)->pluck('filetype');
+            // File upload location
+
+            $path = 'uploads/files/'.$admin->name.'-'.$admin->id;
+            if(! File::exists($path)) {
+                // path does not exist
+                File::makeDirectory($path);
+            }
+
+            $location = 'uploads/files/'.$admin->name.'-'.$admin->id.'/'.$type[0];
+            // dd($location);
+
+            if (! File::exists($location)) {
+                File::makeDirectory($location);
+            }
+
+            // Upload file
+            $file->move($location,$filename);
+
+            // File path
+            $filepath = url( $location.'/'.$filename);
+        }
+        else{
+            return back()
+                ->withInput()
+                ->with('error', lang('one #item must be chosen', $this->translation, ['#item' => ucwords(lang('file', $this->translation))]));
+        }
+
+        // dd($admin);
+
+        // SAVE THE DATA
+        $data = files::find($id);
+        $data->name = $name;
+        $data->file_type = $file_type;
+        $data->filepath = $filepath;
+
+        // dd($data);
+
+        if($request->status){
+            $data->status = 1;
+        }
+        else{
+            $data->status = 0;
+        }
+
+
 
 
         // UPDATE THE DATA

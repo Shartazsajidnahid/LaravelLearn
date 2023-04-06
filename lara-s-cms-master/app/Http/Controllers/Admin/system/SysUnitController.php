@@ -27,6 +27,8 @@ class SysUnitController extends Controller
 
 
     private function oneRecordwith_deptName($value){
+        // if($value->created_at)
+        // dd($value->created_at->toDateTimeString());
         $newarr = array('id'=>$value->id, 'department_id'=> $value->department_id, 'name' =>$value->name , 'location'=>$value->location  , 'phone'=>$value->phone , 'ordinal'=>$value->ordinal, 'status'=>$value->status , 'created_at'=>$value->created_at, 'updated_at'=>$value->updated_at);
         $dept = SysDepartment::find($value->department_id);
         // if($dept == null) {
