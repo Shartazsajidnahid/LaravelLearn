@@ -13,6 +13,8 @@
 
 use App\Http\Controllers\Admin\system\HomeController;
 use App\Http\Controllers\Admin\system\AuthController;
+use App\Http\Controllers\Admin\ExchangeRateController;
+use App\Http\Controllers\Admin\TopBranchController;
 use App\Http\Middleware\CheckGeneralUser;
 
 
@@ -29,6 +31,9 @@ Route::get('/alldivision', [HomeController::class, 'general_alldivision']);
 
 Route::middleware([CheckGeneralUser::class])->group(function(){
     Route::get('/general', [HomeController::class, 'general_home']);
+    Route::get('/sub_branch', [HomeController::class, 'general_subbranch'])->name('general.sub_branch');
+    Route::get('/branch', [HomeController::class, 'general_branch'])->name('general.branch');
+    Route::get('/division', [HomeController::class, 'general_division'])->name('general.division');
     Route::get('/logout', [AuthController::class, 'logout'])->name('general.logout');
     // Route::get('/logout', 'Admin\system\AuthController@logout')->name('general.logout');
     Route::get('/team/{home}/{id}', [HomeController::class, 'general_team'])->name('general.team');;
@@ -391,6 +396,35 @@ Route::group([
             Route::post('/delete', 'ArticleController@delete')->name('admin.article.delete');
             Route::get('/enable/{id}', 'ArticleController@enable')->name('admin.article.enable');
             Route::get('/disable/{id}', 'ArticleController@disable')->name('admin.article.disable');
+        });
+
+        // APPLINK
+        Route::group(['prefix' => 'applink'], function () {
+            Route::get('/', 'ApplinkController@index')->name('admin.applink.list');
+            Route::get('/create', 'ApplinkController@create')->name('admin.applink.create');
+            Route::post('/do-create', 'ApplinkController@do_create')->name('admin.applink.do_create');
+            Route::post('/destroy/{id}', 'ApplinkController@destroy')->name('admin.applink.delete');
+        });
+
+        // EXHANGE RATE
+        Route::group(['prefix' => 'exchange_rates'], function () {
+
+            Route::get('/create', [ExchangeRateController::class, 'create'])->name('admin.exchange_rates.create');
+            Route::post('/store', [ExchangeRateController::class, 'store'])->name('admin.exchange_rates.store');
+            Route::post('/update/{id}', [ExchangeRateController::class, 'update'])->name('admin.exchange_rates.update');
+            Route::get('/edit/{id}', [ExchangeRateController::class, 'edit'])->name('admin.exchange_rates.edit');
+            Route::get('', [ExchangeRateController::class, 'index'])->name('admin.exchange_rates.list');
+            Route::post('/destroy/{id}', [ExchangeRateController::class, 'destroy'])->name('admin.exchange_rates.destroy');
+        });
+
+        // TOP BRANCH
+        Route::group(['prefix' => 'top_branch'], function () {
+            Route::get('', [TopBranchController::class, 'index'])->name('admin.top_branch.list');
+            Route::get('/create', [TopBranchController::class, 'create'])->name('admin.top_branch.create');
+            Route::post('/store', [TopBranchController::class, 'store'])->name('admin.top_branch.store');
+            Route::post('/update/{id}', [TopBranchController::class, 'update'])->name('admin.top_branch.update');
+            Route::get('/edit/{id}', [TopBranchController::class, 'edit'])->name('admin.top_branch.edit');
+            Route::post('/destroy/{id}', [TopBranchController::class, 'destroy'])->name('admin.top_branch.destroy');
         });
     });
 });
