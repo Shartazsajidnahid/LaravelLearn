@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateTopicsTable extends Migration
+class CreateTopBranchesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,17 +13,12 @@ class CreateTopicsTable extends Migration
      */
     public function up()
     {
-        Schema::create('topics', function (Blueprint $table) {
+        Schema::create('top__branches', function (Blueprint $table) {
             $table->id();
-            $table->string('name')->unique();
-            $table->text('description');
-            $table->boolean('status')->default('1')->comment('0:inactive | 1:active');
+            $table->integer('rank');
+            $table->bigInteger('branch_id')->index('FK_sys_branches');
             $table->timestamps();
-            $table->softDeletes();
         });
-
-        $seeder = new TopicsSeederInitial();
-        $seeder->run();
     }
 
     /**
@@ -33,6 +28,6 @@ class CreateTopicsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('topics');
+        Schema::dropIfExists('top__branches');
     }
 }
