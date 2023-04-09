@@ -420,6 +420,7 @@ Route::group([
         // TOP BRANCH
         Route::group(['prefix' => 'top_branch'], function () {
             Route::get('', [TopBranchController::class, 'index'])->name('admin.top_branch.list');
+            Route::get('', [TopBranchController::class, 'get_branches'])->name('admin.top_branch.list');
             Route::get('/create', [TopBranchController::class, 'create'])->name('admin.top_branch.create');
             Route::post('/store', [TopBranchController::class, 'store'])->name('admin.top_branch.store');
             Route::post('/update/{id}', [TopBranchController::class, 'update'])->name('admin.top_branch.update');
