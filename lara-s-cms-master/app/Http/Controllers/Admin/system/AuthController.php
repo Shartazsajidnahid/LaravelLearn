@@ -135,9 +135,11 @@ class AuthController extends Controller
                 ->leftJoin('sys_divisions', 'sys_branches.division_id', '=', 'sys_divisions.id')
                 ->whereNull('sys_branches.deleted_at')
                 ->where('sys_group_branch.group', $admin->group_id)
+
                 ->orderBy('sys_divisions.name')
                 ->orderBy('sys_branches.name')
                 ->get();
+
             if (count($get_branch_allowed) > 0) {
                 foreach ($get_branch_allowed as $item) {
                     $obj = new \stdClass();

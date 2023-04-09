@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\File;
 use Session;
+use Illuminate\Support\Arr;
 
 // LIBRARIES
 use App\Libraries\Helper;
@@ -30,8 +31,10 @@ class FilesController extends Controller
         $newarr['filetypename'] = $fileType->filetype;
         return $newarr;
     }
+
     private function getDatawithfiletype($data){
         $newdata = array();
+
         foreach( $data as $value ) {
             $newarr = $this->oneRecordwith_filetype($value);
             $newdata[] = $newarr;
@@ -41,14 +44,30 @@ class FilesController extends Controller
 
     }
 
-    public function categorize($data){
+    public function categorize($types, $files){
         // dd($data);
         $newdata = array();
-        foreach( $data as $value ) {
-            $newarr = files::where('file_type', $value->id)->get();
-            $newdata[] = $newarr;
+        foreach( $types as $data ) {
+            // $newarr = files::where('file_type', $value->id)->get();
+            // $newdata[] = $newarr;
 
+            // $newarr = Arr::where($files, function ($value, $key) {
+            //     return $value->file_type == $data->id;
+            // });
+            $newarr = array();
+            foreach($files as $value){
+                if($value->file_type==$data->id){
+                    $newarr[] = $value;
+                };
+            }
+            $newdata[] = $newarr;
         }
+
+        // dd($newdata);
+        // $newdata = Arr::where($myArray, function ($value, $key) {
+        //     return $value['type'] == 1;
+        // });
+
         return $newdata;
     }
 

@@ -18,6 +18,7 @@ use App\Models\system\SysBranch;
 use App\Models\Topic;
 use App\Models\Applink;
 use App\Models\Exchange_rate;
+use App\Models\system\Division_admin;
 
 class Sub_branch {
     public $id;
@@ -125,16 +126,34 @@ class HomeController extends Controller
     private function getFiles($home,$id){
         $office = $this->getIDname($home);
 
-        $files = DB::table('employees')
-            ->where($office, '=', $id)
+        // $files = Division_admin::select(
+        //     'files.*'
+        // )
+        //     ->leftJoin('files', 'files.division_admin_id', '=', 'division_admins.id')
+        //     // ->leftJoin($home, 'division_admins.'.$office, '=', $home.'.id')
+        //     ->where('division_admins.'.$office, '=', $id)
+        //     ->get();
+
+        // dd($id);
+
+        $files = DB::table('files')
+            ->leftJoin('division_admins', 'files.division_admin_id', '=', 'division_admins.id')
+            ->where('division_admins.'.$office, '=', $id)
             ->get();
 
-        // dd($employees);
+
+
+        // $files = DB::table('employees')
+        //     ->where($office, '=', $id)
+        //     ->get();
+
+        // dd($files);
         return $files;
     }
 
     public function general_team($home,$id)
     {
+
         //get breanch, dept or unit
         $office = DB::table($home)
             ->where('id', '=', $id)
@@ -147,7 +166,7 @@ class HomeController extends Controller
 
         // $allfiles = files::all();
         $filetypes = filetype::all();
-        $data = (new FilesController)->categorize($filetypes);
+        $data = (new FilesController)->categorize($filetypes, $this->getFiles($home,$id));
 
         return view('general_user.team', compact('data', 'filetypes', 'employees', 'office'));
     }
