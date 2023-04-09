@@ -202,7 +202,7 @@
                                         </div>
                                         <div class="form-group col-md-6">
                                             <label for="inputState">Joining Date</label>
-                                            <input type="date" name="joinning_date" class="form-control" value="{{ $employee->joining_date }}">
+                                            <input type="date" name="joinning_date" class="form-control" value="{{ $employee->joinning_date }}">
 
                                         </div>
                                     </div>

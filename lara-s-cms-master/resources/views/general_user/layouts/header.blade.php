@@ -28,9 +28,9 @@
                     <li class="u-nav-item">
                         <a class="u-button-style u-nav-link u-text-active-palette-1-base u-text-body-alt-color u-text-hover-palette-2-base" href="{{asset('aboutus')}}" target="_blank" style="padding: 10px 20px;font-weight: bold">About US</a>
                     </li>
-                    <li class="u-nav-item">
+                    {{-- <li class="u-nav-item">
                         <a class="u-button-style u-nav-link u-text-active-palette-1-base u-text-body-alt-color u-text-hover-palette-2-base" href="{{asset('team')}}" target="_blank" style="padding: 10px 20px;font-weight: bold">Team</a>
-                    </li>
+                    </li> --}}
                     <li class="u-nav-item">
                         <a class="u-button-style u-nav-link u-text-active-palette-1-base u-text-body-alt-color u-text-hover-palette-2-base" href="{{asset('allbrance')}}" style="padding: 10px 20px;font-weight: bold">All Branches</a>
                     </li>
