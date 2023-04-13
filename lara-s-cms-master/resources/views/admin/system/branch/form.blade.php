@@ -62,7 +62,7 @@
                                     Main Branch
                                 </label>
                                 <div class="col-md-6 col-sm-6 col-xs-12">
-                                    <select class="form-control" name="parent_branch_id">
+                                    <select class="form-control select2" name="parent_branch_id">
                                         @foreach ($branches as $cntrl)
                                             <option value="{{ $cntrl->id }}">
                                                 {{ $cntrl->name }}

@@ -31,7 +31,7 @@
         <link rel="stylesheet" type="text/css" href="bootstrap-5.0.2-dist/css/bootstrap.min.css" />
         <script type="text/javascript" src="bootstrap-5.0.2-dist/js/bootstrap.min.js"></script>
         <!--b
-        <script type="application/ld+json">{
+            <script type="application/ld+json">{
         "@context": "http://schema.org",
         "@type": "Organization",
         "name": "Site2",
@@ -219,8 +219,10 @@
                         <div class="form-group" style="margin-bottom: 0px;">
                             <label>
 
-                                <img src="{{ asset('uploads/applinks/'.$item->image) }}" width="30" height="30" alt="" />
-                                &nbsp;<a style="color:#9900ff;font-weight: bold;" href={{$item->link}}>{{ $item->name }}</a>
+                                <img src="{{ asset('uploads/applinks/' . $item->image) }}" width="30" height="30"
+                                    alt="" />
+                                &nbsp;<a style="color:#9900ff;font-weight: bold;"
+                                    href={{ $item->link }}>{{ $item->name }}</a>
                             </label>
                         </div>
                     @endforeach
@@ -232,45 +234,48 @@
 
     <div class="row" style="padding: 10px 50px 0px 50px; height: 350px;">
         <div class="col-3">
-            <div class="u-align-left u-border-3 u-border-grey-75 u-container-style u-group u-group-1" style="height: 100%; overflow-y: scroll;">
+            <div class="u-align-left u-border-3 u-border-grey-75 u-container-style u-group u-group-1"
+                style="height: 100%; overflow-y: scroll;">
                 <div class="u-container-layout u-container-layout-2">
-                    <h3 class="u-align-center u-text  u-text-default-lg u-text-default-xl u-text-4 font-weight: bold" style="color:#9900ff;font-weight: bold; text-style: none;" >Top 10 Depositor</h3>
-                        <p>Name1 | BRANCH 1</p>
-                        <p>Name2 | BRANCH 2</p>
-                        <p>Name3 | BRANCH 3</p>
-                        <p>Name4 | BRANCH 4</p>
-                        <p>Name5 | BRANCH 5</p>
-                        <p>Name6 | BRANCH 6</p>
-                        <p>Name7 | BRANCH 3</p>
-                        <p>Name8 | BRANCH 8</p>
-                        <p>Name9 | BRANCH 8</p>
-                        <p>Name9 | BRANCH 10</p>
+                    <h3 class="u-align-center u-text  u-text-default-lg u-text-default-xl u-text-4 font-weight: bold"
+                        style="color:#9900ff;font-weight: bold; text-style: none;">Top 10 Depositor</h3>
+                    <p>Name1 | BRANCH 1</p>
+                    <p>Name2 | BRANCH 2</p>
+                    <p>Name3 | BRANCH 3</p>
+                    <p>Name4 | BRANCH 4</p>
+                    <p>Name5 | BRANCH 5</p>
+                    <p>Name6 | BRANCH 6</p>
+                    <p>Name7 | BRANCH 3</p>
+                    <p>Name8 | BRANCH 8</p>
+                    <p>Name9 | BRANCH 8</p>
+                    <p>Name9 | BRANCH 10</p>
                 </div>
             </div>
         </div>
         <div class="col-3">
-            <div class="u-border-4 u-border-grey-75 u-container-style u-group u-shape-rectangle u-group-4" style="height: 100%; overflow-y: scroll;">
+            <div class="u-border-4 u-border-grey-75 u-container-style u-group u-shape-rectangle u-group-4"
+                style="height: 100%; overflow-y: scroll;">
                 <div class="u-container-layout u-container-layout-9">
-                    <h3 class="u-align-center u-text  u-text-16" style="color:#9900ff;font-weight: bold; text-style: none;">Top   10 <br>Branch</h3>
-                    <p>BRANCH 1</p>
-                    <p>BRANCH 2</p>
-                    <p>BRANCH 3</p>
-                    <p>BRANCH 4</p>
-                    <p>BRANCH 5</p>
-                    <p>BRANCH 6</p>
-                    <p>BRANCH 7</p>
-                    <p>BRANCH 8</p>
-                    <p>BRANCH 9</p>
-                    <p>BRANCH 10</p>
+                    <h3 class="u-align-center u-text  u-text-16"
+                        style="color:#9900ff;font-weight: bold; text-style: none;">Top 10 <br>Branch</h3>
+                    @foreach ($top_branches as $item)
+                        <p></p>
+                        <a href="{{ route('general.team', ['home' => 'sys_branches', 'id' =>  $item['id']]) }}">
+                            {{ $item['name'] }}
+                        </a>
+
+                    @endforeach
                 </div>
             </div>
         </div>
         <div class="col-3">
-            <div class="u-border-3 u-border-grey-75 u-container-style u-group u-shape-rectangle u-group-3" style="height: 100%; overflow-y: scroll;">
-                <div class="u-container-layout u-container-layout-8" >
-                    <h3 class="u-align-center u-text  u-text-15" style="color:#9900ff;font-weight: bold; text-style: none; ">Exchange Rates </h3>
+            <div class="u-border-3 u-border-grey-75 u-container-style u-group u-shape-rectangle u-group-3"
+                style="height: 100%; overflow-y: scroll;">
+                <div class="u-container-layout u-container-layout-8">
+                    <h3 class="u-align-center u-text  u-text-15"
+                        style="color:#9900ff;font-weight: bold; text-style: none; ">Exchange Rates </h3>
                     <div class="u-table u-table-responsive u-table-1">
-                        <table border="1" rules="all" >
+                        <table border="1" rules="all">
                             <tbody>
                                 <tr>
                                     <td class="u-border-1 u-border-grey-dark-1 u-table-cell">Currency</td>
@@ -278,8 +283,9 @@
                                     <td class="u-border-1 u-border-grey-dark-1 u-table-cell">TT(Sell)</td>
                                 </tr>
                                 @foreach ($exchange_rate as $item)
-                                    <tr >
-                                        <td class="u-border-1 u-border-grey-dark-1 u-table-cell">{{ $item->currency }}</td>
+                                    <tr>
+                                        <td class="u-border-1 u-border-grey-dark-1 u-table-cell">{{ $item->currency }}
+                                        </td>
                                         <td class="u-border-1 u-border-grey-dark-1 u-table-cell">{{ $item->tt_buy }}</td>
                                         <td class="u-border-1 u-border-grey-dark-1 u-table-cell">{{ $item->tt_sell }}</td>
                                     </tr>
@@ -291,45 +297,72 @@
             </div>
         </div>
         <div class="col-3">
-            <div class="u-border-3 u-border-grey-75 u-container-style u-expanded-width-md u-expanded-width-sm u-expanded-width-xs u-group u-shape-rectangle u-group-6" style="height: 100%;overflow-y: scroll;">
+            <div class="u-border-3 u-border-grey-75 u-container-style u-expanded-width-md u-expanded-width-sm u-expanded-width-xs u-group u-shape-rectangle u-group-6"
+                style="height: 100%;overflow-y: scroll;">
                 <div class="u-container-layout u-container-layout-12">
-                    <h3 class="u-align-center u-text  u-text-28" style="color:#9900ff;font-weight: bold; text-style: none;">All Aplication Link</h3>
-                    <a href="https://mail.padmabankbd.com/" style="padding: 0px 10px !important;margin: 0px  !important" class="u-border-1 u-border-active-palette-2-base u-border-hover-palette-1-base u-btn u-button-style u-none u-text-palette-1-base u-btn-7" target="_blank"> Padma Email&nbsp; &nbsp;</a>
-                    <a href="http://192.168.200.72/padma_mis/"  style="padding: 0px 10px !important;margin: 0px  !important" class="u-border-1 u-border-active-palette-2-base u-border-hover-palette-1-base u-btn u-button-style u-none u-text-palette-1-base u-btn-8" target="_blank"> MIS&nbsp; &nbsp;</a>
-                    <a href="https://padmaclick.padmabankbd.com/padmaclick/" style="padding: 0px 10px !important;margin: 0px  !important" class="u-border-1 u-border-active-palette-2-base u-border-hover-palette-1-base u-btn u-button-style u-none u-text-palette-1-base u-btn-9"> Padma Click&nbsp; &nbsp;</a>
-                    <a href="https://padmaclick.padmabankbd.com/padmaclick/" style="padding: 0px 10px !important;margin: 0px  !important" class="u-border-1 u-border-active-palette-2-base u-border-hover-palette-1-base u-btn u-button-style u-none u-text-palette-1-base u-btn-10">Task Management System&nbsp; &nbsp;</a>
-                    <a href="https://padmaclick.padmabankbd.com/padmaclick/" style="padding: 0px 10px !important;margin: 0px  !important" class="u-border-1 u-border-active-palette-2-base u-border-hover-palette-1-base u-btn u-button-style u-none u-text-palette-1-base u-btn-11">Loan Tracking System&nbsp;&nbsp;</a>
-                    <a href="https://padmaclick.padmabankbd.com/padmaclick/" style="padding: 0px 10px !important;margin: 0px  !important" class="u-border-1 u-border-active-palette-2-base u-border-hover-palette-1-base u-btn u-button-style u-none u-text-palette-1-base u-btn-12">iBanking</a>
-                    <a href="http://192.168.200.97/edoc_padma_v2/index.php/home" style="padding: 0px 10px !important;margin: 0px  !important" class="u-border-1 u-border-active-palette-2-base u-border-hover-palette-1-base u-btn u-button-style u-none u-text-palette-1-base u-btn-13" target="_blank"> eDoc&nbsp; &nbsp;</a>
-                    <a href="https://192.168.249.10/partner-portal/login" style="padding: 0px 10px !important;margin: 0px  !important" class="u-border-1 u-border-active-palette-2-base u-border-hover-palette-1-base u-btn u-button-style u-none u-text-palette-1-base u-btn-14" target="_blank">NID Partner Portal</a>
-                    <a href="http://192.168.200.104:9191/BrowserWeb/servlet/BrowserServlet" style="padding: 0px 10px !important;margin: 0px  !important" class="u-border-1 u-border-active-palette-2-base u-border-hover-palette-1-base u-btn u-button-style u-none u-text-palette-1-base u-btn-15" target="_blank"> CBS T24&nbsp; &nbsp;</a>
+                    <h3 class="u-align-center u-text  u-text-28"
+                        style="color:#9900ff;font-weight: bold; text-style: none;">All Aplication Link</h3>
+                    <a href="https://mail.padmabankbd.com/" style="padding: 0px 10px !important;margin: 0px  !important"
+                        class="u-border-1 u-border-active-palette-2-base u-border-hover-palette-1-base u-btn u-button-style u-none u-text-palette-1-base u-btn-7"
+                        target="_blank"> Padma Email&nbsp; &nbsp;</a>
+                    <a href="http://192.168.200.72/padma_mis/"
+                        style="padding: 0px 10px !important;margin: 0px  !important"
+                        class="u-border-1 u-border-active-palette-2-base u-border-hover-palette-1-base u-btn u-button-style u-none u-text-palette-1-base u-btn-8"
+                        target="_blank"> MIS&nbsp; &nbsp;</a>
+                    <a href="https://padmaclick.padmabankbd.com/padmaclick/"
+                        style="padding: 0px 10px !important;margin: 0px  !important"
+                        class="u-border-1 u-border-active-palette-2-base u-border-hover-palette-1-base u-btn u-button-style u-none u-text-palette-1-base u-btn-9">
+                        Padma Click&nbsp; &nbsp;</a>
+                    <a href="https://padmaclick.padmabankbd.com/padmaclick/"
+                        style="padding: 0px 10px !important;margin: 0px  !important"
+                        class="u-border-1 u-border-active-palette-2-base u-border-hover-palette-1-base u-btn u-button-style u-none u-text-palette-1-base u-btn-10">Task
+                        Management System&nbsp; &nbsp;</a>
+                    <a href="https://padmaclick.padmabankbd.com/padmaclick/"
+                        style="padding: 0px 10px !important;margin: 0px  !important"
+                        class="u-border-1 u-border-active-palette-2-base u-border-hover-palette-1-base u-btn u-button-style u-none u-text-palette-1-base u-btn-11">Loan
+                        Tracking System&nbsp;&nbsp;</a>
+                    <a href="https://padmaclick.padmabankbd.com/padmaclick/"
+                        style="padding: 0px 10px !important;margin: 0px  !important"
+                        class="u-border-1 u-border-active-palette-2-base u-border-hover-palette-1-base u-btn u-button-style u-none u-text-palette-1-base u-btn-12">iBanking</a>
+                    <a href="http://192.168.200.97/edoc_padma_v2/index.php/home"
+                        style="padding: 0px 10px !important;margin: 0px  !important"
+                        class="u-border-1 u-border-active-palette-2-base u-border-hover-palette-1-base u-btn u-button-style u-none u-text-palette-1-base u-btn-13"
+                        target="_blank"> eDoc&nbsp; &nbsp;</a>
+                    <a href="https://192.168.249.10/partner-portal/login"
+                        style="padding: 0px 10px !important;margin: 0px  !important"
+                        class="u-border-1 u-border-active-palette-2-base u-border-hover-palette-1-base u-btn u-button-style u-none u-text-palette-1-base u-btn-14"
+                        target="_blank">NID Partner Portal</a>
+                    <a href="http://192.168.200.104:9191/BrowserWeb/servlet/BrowserServlet"
+                        style="padding: 0px 10px !important;margin: 0px  !important"
+                        class="u-border-1 u-border-active-palette-2-base u-border-hover-palette-1-base u-btn u-button-style u-none u-text-palette-1-base u-btn-15"
+                        target="_blank"> CBS T24&nbsp; &nbsp;</a>
                 </div>
             </div>
         </div>
     </div>
 
-        <div class="row" style="padding: 10px 50px 0px 50px; height: 50px;margin-top: 10px;">
-            <div class="col-1" style="color: #9900ff; font-weight: bold; font-size: 18px;">News:</div>
-            <div class="col-11" style="background-color: #ffccff">
-                <div id="ticker">
-                    <div id="ticker-box">
-                        <ul>
-                             @foreach ($news as $item)
-                                <li> {{ $item->description }} - <strong><i> {{ $item->name }}</i></strong>
-                                </li>
-                                @endforeach
+    <div class="row" style="padding: 10px 50px 0px 50px; height: 50px;margin-top: 10px;">
+        <div class="col-1" style="color: #9900ff; font-weight: bold; font-size: 18px;">News:</div>
+        <div class="col-11" style="background-color: #ffccff">
+            <div id="ticker">
+                <div id="ticker-box">
+                    <ul>
+                        @foreach ($news as $item)
+                            <li> {{ $item->description }} - <strong><i> {{ $item->name }}</i></strong>
+                            </li>
+                        @endforeach
 
-                                </ul>
-                    </div>
-                    <script>
-                        startTicker('ticker-box', {
-                            speed: 5,
-                            delay: 500
-                        });
-                    </script>
-
+                    </ul>
                 </div>
-                <!-- ticker -->
+                <script>
+                    startTicker('ticker-box', {
+                        speed: 5,
+                        delay: 500
+                    });
+                </script>
+
             </div>
+            <!-- ticker -->
         </div>
-    @endsection
+    </div>
+@endsection

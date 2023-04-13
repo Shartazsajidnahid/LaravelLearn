@@ -184,7 +184,7 @@
                                         </div>
                                     </div>
                                     <br>
-                                    <button type="submit" class="btn btn-danger">Create User</button>
+                                    <button type="submit" class="btn btn-success">Create User</button>
                                 </form>
 
                             </div>

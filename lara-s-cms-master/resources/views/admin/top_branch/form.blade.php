@@ -2,7 +2,7 @@
 
 @php
     $pagetitle = ucwords(lang('Top 10 branch', $translation));
-    $link_get_data = route('admin.department.get_branches');
+    $link_get_data = route('admin.top_branch.get_branches');
     if (isset($data)) {
         $pagetitle .= ' (' . ucwords(lang('edit', $translation)) . ')';
         $link = route('admin.top_branch.do_edit', $data->id);
@@ -44,42 +44,27 @@
                             {{ csrf_field() }}
 
                             <br>
-                            {{-- @foreach (range(1, 10) as $id) --}}
+                            @foreach (range(1, 10) as $id)
 
                             <div class="form-group vinput_main_branch">
 
-                                <label for="parent branch" class="control-label col-md-3 col-sm-3 col-xs-12 tex-center">
-
+                                <label for="branch_{{$id}}" class="control-label col-md-3 col-sm-3 col-xs-12 tex-center">
+                                    {{$id}}
                                 </label>
-                                <div class="col-md-1 col-sm-1 col-xs-12">
-                                    <select class="form-control select2" name="branch_1" id="nativelangdrop">
-                                        <option value="1">1</option>
-                                        <option value="2">2</option>
-                                        <option value="3">3</option>
-                                        <option value="4">4</option>
-                                    </select>
-                                </div>
                                 <div class="col-md-6 col-sm-6">
-                                    <select class="form-control select2" name="branch_1" id="nativelangdrop">
-                                        <option value="1">Branch 1</option>
-                                        <option value="2">Branch 2</option>
-                                        <option value="3">Branch 3</option>
-                                        <option value="4">Branch 4</option>
+                                    <select class="form-control select2" name="branch_{{$id}}" id="branch_{{$id}}">
+                                        <option value=0> Choose one </option>
+                                        @foreach ($branches as $item)
+                                            <option value={{$item['id']}}>{{$item['name']}}</option>
+                                        @endforeach
                                     </select>
                                 </div>
-
-
-                                &nbsp;<button  type="button" onclick="addTextInput()"><i class="fa fa-plus text-center" aria-hidden="true"></i></button>
-
                             </div>
-                            <div id="myForm">
-                            </div>
+                            @endforeach
                     </div>
-
 
                     {{-- @endforeach --}}
                     <div class="ln_solid"></div>
-
                     <div class="form-group">
                         <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
                             <button type="submit" class="btn btn-success"><i class="fa fa-save"></i>&nbsp;
@@ -126,14 +111,7 @@
         // Initialize Select2
         $('.select2').select2();
     </script>
-    <script>
-       function addTextInput() {
-            var x = document.createElement("INPUT");
-            x.setAttribute("type", "text");
-            x.setAttribute("name", "textInput");
-            x.setAttribute("value", "You Just added a text field");
-            document.getElementById("myForm").appendChild(x)
-        }
-    </script>
+
+
 
 @endsection
