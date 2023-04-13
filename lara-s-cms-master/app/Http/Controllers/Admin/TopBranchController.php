@@ -4,28 +4,49 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\File;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
 
 use Yajra\Datatables\Datatables;
 use App\Models\Exchange_rate;
 use App\Models\system\SysBranch;
+use App\Models\TopBranch;
 
 class TopBranchController extends Controller
 {
+
+    private function oneRecordwith_Rank($value, $top_branch){
+        $newarr = array('id'=>$value->id, 'rank'=> $top_branch->rank, 'name' =>$value->name, 'created_at' => $top_branch->created_at);
+        return $newarr;
+    }
+
+    public function getTopBranchWithName($branches){
+        $data = array();
+        foreach( $branches as $value ) {
+            if($oneBranch = SysBranch::find($value->branch_id)){
+                $data[] = $this->oneRecordwith_Rank($oneBranch, $value);
+            }
+        }
+        return $data;
+    }
+
     public function index()
     {
-        // $links = exchange_rate::all();
-        // dd($applink);
-        return view('admin.top_branch.list');
+        $branches = TopBranch::all();
+        $data =$this->getTopBranchWithName( $branches);
+        // dd($data);
+        return view('admin.top_branch.list', compact('data'));
     }
 
     public function create()
     {
+
+        //TODO: have to send only branch
         $data = SysBranch::all();
         $branches = $this->branch_with_null($data);
         return view('admin.top_branch.form', compact('branches'));
     }
     private function oneRecordwith_branchName($value){
-        $newarr = array('id'=>$value->id, 'status'=> 1, 'name' =>$value->name);
+        $newarr = array('id'=>$value->id, 'status'=> 1, 'name' =>$value->name, 'created_at' => $value->created_at);
         return $newarr;
     }
 
@@ -39,55 +60,117 @@ class TopBranchController extends Controller
         return $newdata;
     }
 
+    // public function branchArray($allRequest){
+    //     foreach($allRequest as $request){
+    //         $data[]=[
+            //     'rank' => $request->rank,
+            //     'branch_id' => $request->branch_id
+            // ]
+    //     }
+    //     return $data;
+    // }
+
+    private function saveRecord($branch_id, $rank, $created_at, $table_name){
+
+        if($created_at != null){
+            if(!$table_name::insert([
+                'rank'=> $rank,
+                'branch_id' => $branch_id,
+                'created_at' => $created_at
+            ])){
+                return false;
+            }
+        }
+        else{
+            $table_name::insert([
+            'rank'=> $rank,
+            'branch_id' => $branch_id
+        ]);
+        }
+        return true;
+
+    }
+
+    private function saveAllRecords($data, $table_name){
+        $index = 0;
+        foreach($data as $key => $value) {
+            ++$index;
+            if(!$this->saveRecord((int)$value, $index, null,  $table_name)){
+                return false;
+            };
+        }
+        return true;
+    }
+
     public function store(Request $request)
     {
-        dd((int)$request->branch_10);
-        $exchange_rate = new exchange_rate;
-        $exchange_rate->currency = $request->input('currency');
-        $exchange_rate->tt_buy = $request->input('tt_buy');
-        $exchange_rate->tt_sell = $request->input('tt_sell');
+        // LARAVEL VALIDATION
+        $validation = [
+            'branch_1' => 'required|not_in:0',
+            'branch_2' => 'required|not_in:0',
+            'branch_3' => 'required|not_in:0',
+            'branch_4' => 'required|not_in:0',
+            'branch_5' => 'required|not_in:0',
+            'branch_6' => 'required|not_in:0',
+            'branch_7' => 'required|not_in:0',
+            'branch_8' => 'required|not_in:0',
+            'branch_9' => 'required|not_in:0',
+            'branch_10' => 'required|not_in:0',
+        ];
+        $message = [
+            'required' => ':attribute ' . lang('field is required', $this->translation),
+            'not_in:0' => ':attribute ' . lang('field is required', $this->translation),
+            'unique' => ':attribute ' . lang('has already been taken, please input another data', $this->translation)
+        ];
+        $names = [
+            'branch_1' => ucwords(lang('branch_1', $this->translation)),
+            'branch_2' => ucwords(lang('branch_2', $this->translation)),
+            'branch_3' => ucwords(lang('branch_3', $this->translation)),
+            'branch_4' => ucwords(lang('branch_4', $this->translation)),
+            'branch_5' => ucwords(lang('branch_5', $this->translation)),
+            'branch_6' => ucwords(lang('branch_6', $this->translation)),
+            'branch_7' => ucwords(lang('branch_7', $this->translation)),
+            'branch_8' => ucwords(lang('branch_8', $this->translation)),
+            'branch_9' => ucwords(lang('branch_9', $this->translation)),
+            'branch_10' => ucwords(lang('branch_10', $this->translation)),
+        ];
+        $this->validate($request, $validation, $message, $names);
 
-        // dd($applink);
-        $exchange_rate->save();
+        $data = $request->all();
+        array_splice($data, 0, 1);
+        $unique = array_unique($data);
+        if ( count($data) != count($unique) ) {
+            return back()
+                ->withInput()
+                ->with('error', lang('all selected branches must be unique', $this->translation, ['#item' => ucwords(lang('department', $this->translation))]));
+        }
 
-        // SAVE THE DATA
+        $top_branch = TopBranch::all();
 
-        return redirect()->route('admin.exchange_rates.list')->with('success','Exchange_rates has been created successfully.');
-    }
+        if(!$top_branch->isEmpty()){
 
-    public function show($id)
-    {
+            foreach($top_branch as $branches){
+                if(!$this->saveRecord($branches->branch_id, $branches->rank, $branches->created_at, 'App\Models\ArchiveTopBranch')){
+                    return back()
+                    ->withInput()
+                    ->with('error', lang('Oops, failed to set #item. Please try again.', $this->translation, ['#item' => 'Top Branches']));
+                }
+            }
+            TopBranch::truncate();
+        }
 
-    }
-    public function edit($id)
-    {
-        $exchange_rate = exchange_rate::findOrFail($id);
-        return view('admin.exchange_rate.edit', compact('exchange_rate'));
-    }
-
-    public function update($id, Request $request)
-    {
-        $exchange_rate = exchange_rate::findOrFail($id);
-        $exchange_rate->currency = $request->input('currency');
-        $exchange_rate->tt_buy = $request->input('tt_buy');
-        $exchange_rate->tt_sell = $request->input('tt_sell');
-
-        // dd($applink);
-
-        $exchange_rate->update();
-
-        // SAVE THE DATA
-
-        return redirect()->route('admin.exchange_rates.list')->with('success','Exchange_rates has been Updated successfully.');
-    }
+        if($this->saveAllRecords($data, 'App\Models\TopBranch')){
+            return redirect()
+            ->route('admin.top_branch.list')
+            ->with('success', lang('Successfully set #item', $this->translation, ['#item' => 'Top Branches']));
+        }
 
 
-    public function destroy($id)
-    {
-        $exchange_rate = exchange_rate::findOrFail($id);
+        // FAILED
+        return back()
+            ->withInput()
+            ->with('error', lang('Oops, failed to set #item. Please try again.', $this->translation, ['#item' => 'Top Branches']));
 
-        $exchange_rate->delete();
-        return redirect()->route('admin.exchange_rates.list')->with('success','exchange_rates has been created successfully.');
     }
 
 }

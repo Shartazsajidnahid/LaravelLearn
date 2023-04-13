@@ -645,8 +645,6 @@ class SysUnitController extends Controller
     public function get_units(Request $request){
 
         $sid=$request->post('sid');
-
-        echo $sid;
 		// $state=DB::table('sysBranch')->where('division_id',$div_id)->orderBy('state','asc')->get();
         $depts = SysUnit::where('department_id', $sid)->orderBy('name', 'asc')->get();
 		// $html='<option value="">Select Branch</option>';

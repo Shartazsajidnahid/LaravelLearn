@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Admin\system\FilesController;
 use App\Http\Controllers\Admin\system\EmployeeController;
+use App\Http\Controllers\Admin\TopBranchController;
 use Carbon\Carbon;
 
 // MODELS
@@ -19,6 +20,9 @@ use App\Models\Topic;
 use App\Models\Applink;
 use App\Models\Exchange_rate;
 use App\Models\system\Division_admin;
+use App\Models\TopBranch;
+use App\Models\ArchiveTopBranch;
+
 
 class Sub_branch {
     public $id;
@@ -73,22 +77,32 @@ class HomeController extends Controller
         return view('admin.system.dashboard');
     }
 
+    function getTopBranches(){
 
+        if(TopBranch::exists()){
+            $data = TopBranch::all();
+        }
+        else{
+            $data = ArchiveTopBranch::latest()->take(10)->get();
+        }
+        $branches = (new TopBranchController)->getTopBranchWithName($data);
+        return $branches;
+    }
 
     public function general_home()
     {
-        // dd("nahid");
+        // USER INFO
         $admin = Session::get('admin');
         $employee_user = Employee_User::where('user', $admin->id)->first();
-        // dd($employee_user);
+
         $user_raw = Employee::where('id', $employee_user->employee)->first();
         $user = (new EmployeeController)->oneRecordwith_names($user_raw);
-        // dd($user);
-        // GET THE BANNERS
+
+        // BANNERS
         $query = Banner::whereNotNull('id');
         $banners = $query->orderBy('ordinal')->get();
 
-        // GET THE NEWS
+        // NEWS
         $news = Topic::select("*")
         ->where([
             ["status", "=", 1],
@@ -96,15 +110,16 @@ class HomeController extends Controller
         ])
         ->get();
 
-        // GET THE APPLINKS
+        // APPLINKS
         $applinks = Applink::all();
 
-        // GET THE EXCHANGE RATES
+        // EXCHANGE RATES
         $exchange_rate = Exchange_rate::all();
 
-        // dd($news);
+        // TOP BRANCHES
+        $top_branches = $this->getTopBranches();
 
-        return view('general_user.home', compact('user', 'banners', 'news', 'applinks', 'exchange_rate'));
+        return view('general_user.home', compact('user', 'banners', 'news', 'applinks', 'exchange_rate', 'top_branches'));
     }
     private function getIDname($home){
         $office = '';
@@ -126,28 +141,10 @@ class HomeController extends Controller
     private function getFiles($home,$id){
         $office = $this->getIDname($home);
 
-        // $files = Division_admin::select(
-        //     'files.*'
-        // )
-        //     ->leftJoin('files', 'files.division_admin_id', '=', 'division_admins.id')
-        //     // ->leftJoin($home, 'division_admins.'.$office, '=', $home.'.id')
-        //     ->where('division_admins.'.$office, '=', $id)
-        //     ->get();
-
-        // dd($id);
-
         $files = DB::table('files')
             ->leftJoin('division_admins', 'files.division_admin_id', '=', 'division_admins.id')
             ->where('division_admins.'.$office, '=', $id)
             ->get();
-
-
-
-        // $files = DB::table('employees')
-        //     ->where($office, '=', $id)
-        //     ->get();
-
-        // dd($files);
         return $files;
     }
 

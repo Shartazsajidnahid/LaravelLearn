@@ -77,7 +77,7 @@ class ExchangeRateController extends Controller
         $exchange_rate = exchange_rate::findOrFail($id);
 
         $exchange_rate->delete();
-        return redirect()->route('admin.exchange_rates.list')->with('success','exchange_rates has been created successfully.');
+        return redirect()->route('admin.exchange_rates.list')->with('success','exchange_rates has been deleted successfully.');
     }
 
 }
