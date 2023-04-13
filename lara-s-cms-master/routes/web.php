@@ -14,6 +14,7 @@
 use App\Http\Controllers\Admin\system\HomeController;
 use App\Http\Controllers\Admin\system\AuthController;
 use App\Http\Controllers\Admin\ExchangeRateController;
+use App\Http\Controllers\Admin\CHOController;
 use App\Http\Controllers\Admin\TopBranchController;
 use App\Http\Middleware\CheckGeneralUser;
 
@@ -240,19 +241,6 @@ Route::group([
                     // Route::post('/sorting', 'FunctionalDesignationController@sorting')->name('admin.functional_designation.sorting');
                 });
 
-                // CHO
-                Route::group(['prefix' => 'cho'], function () {
-                    // Route::get('/get-files', 'FilesController@get_files')->name('admin.file.get_files');
-                    Route::get('/', 'HomeController@cho_index')->name('admin.cho.list');
-                    Route::get('/create', 'HomeController@cho_create')->name('admin.cho.create');
-                    // Route::post('/do-create', 'FilesController@do_create')->name('admin.file.do_create');
-                    // Route::get('/edit/{id}', 'FilesController@edit')->name('admin.file.edit');
-                    // Route::post('/do-edit/{id}', 'FilesController@do_edit')->name('admin.file.do_edit');
-                    // Route::post('/delete', 'FilesController@delete')->name('admin.file.delete');
-                    // Route::get('/deleted', 'FilesController@list_deleted')->name('admin.file.deleted');
-                    // Route::post('/restore', 'FunctionalDesignationController@restore')->name('admin.functional_designation.restore');
-                    // Route::post('/sorting', 'FunctionalDesignationController@sorting')->name('admin.functional_designation.sorting');
-                });
 
                 // RULE
                 Route::group(['prefix' => 'rule'], function () {
@@ -420,12 +408,23 @@ Route::group([
         // TOP BRANCH
         Route::group(['prefix' => 'top_branch'], function () {
             Route::get('', [TopBranchController::class, 'index'])->name('admin.top_branch.list');
-            Route::get('', [TopBranchController::class, 'get_branches'])->name('admin.top_branch.list');
+            Route::post('/get_branches', [TopBranchController::class, 'get_branches'])->name('admin.top_branch.get_branches');
             Route::get('/create', [TopBranchController::class, 'create'])->name('admin.top_branch.create');
             Route::post('/store', [TopBranchController::class, 'store'])->name('admin.top_branch.store');
             Route::post('/update/{id}', [TopBranchController::class, 'update'])->name('admin.top_branch.update');
             Route::get('/edit/{id}', [TopBranchController::class, 'edit'])->name('admin.top_branch.edit');
             Route::post('/destroy/{id}', [TopBranchController::class, 'destroy'])->name('admin.top_branch.destroy');
+        });
+
+        // CHO
+        Route::group(['prefix' => 'cho'], function () {
+
+            Route::get('/create', [CHOController::class, 'create'])->name('admin.cho.create');
+            Route::post('/store', [CHOController::class, 'store'])->name('admin.cho.store');
+            Route::post('/update/{id}', [CHOController::class, 'update'])->name('admin.cho.update');
+            Route::get('/edit/{id}', [CHOController::class, 'edit'])->name('admin.cho.edit');
+            Route::get('', [CHOController::class, 'index'])->name('admin.cho.list');
+            Route::post('/destroy/{id}', [CHOController::class, 'destroy'])->name('admin.cho.destroy');
         });
     });
 });
