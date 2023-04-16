@@ -16,7 +16,7 @@ class CreateTopicsTable extends Migration
         Schema::create('topics', function (Blueprint $table) {
             $table->id();
             $table->string('name')->unique();
-            $table->text('description');
+            $table->text('description')->nullable();
             $table->boolean('status')->default('1')->comment('0:inactive | 1:active');
             $table->timestamps();
             $table->softDeletes();

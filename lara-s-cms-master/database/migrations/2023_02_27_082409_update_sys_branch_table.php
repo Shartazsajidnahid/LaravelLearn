@@ -17,7 +17,6 @@ class UpdateSysBranchTable extends Migration
         Schema::table('sys_branches', function (Blueprint $table) {
             $table->bigInteger('parent_id')->after('cbs_branch_code');
         });
-
     }
 
     /**

@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateTopBranchesTable extends Migration
+class CreateArchiveTopDepositorsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,10 @@ class CreateTopBranchesTable extends Migration
      */
     public function up()
     {
-        Schema::create('top_branches', function (Blueprint $table) {
+        Schema::create('archive_top_depositors', function (Blueprint $table) {
             $table->id();
             $table->integer('rank');
-            $table->bigInteger('branch_id')->index('FK_sys_branches');
+            $table->bigInteger('employee_id')->index('FK_employees');
             $table->timestamp('created_at');
         });
     }
@@ -28,6 +28,6 @@ class CreateTopBranchesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('top_branches');
+        Schema::dropIfExists('archive_top_depositors');
     }
 }
