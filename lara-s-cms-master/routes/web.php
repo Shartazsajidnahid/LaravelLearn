@@ -16,6 +16,7 @@ use App\Http\Controllers\Admin\system\AuthController;
 use App\Http\Controllers\Admin\ExchangeRateController;
 use App\Http\Controllers\Admin\CHOController;
 use App\Http\Controllers\Admin\TopBranchController;
+use App\Http\Controllers\Admin\TopDepositorController;
 use App\Http\Middleware\CheckGeneralUser;
 
 
@@ -31,7 +32,7 @@ Route::get('/alldivision', [HomeController::class, 'general_alldivision']);
 
 
 Route::middleware([CheckGeneralUser::class])->group(function(){
-    Route::get('/general', [HomeController::class, 'general_home']);
+    Route::get('/general', [HomeController::class, 'general_home'])->name('general.home');
     Route::get('/sub_branch', [HomeController::class, 'general_subbranch'])->name('general.sub_branch');
     Route::get('/branch', [HomeController::class, 'general_branch'])->name('general.branch');
     Route::get('/division', [HomeController::class, 'general_division'])->name('general.division');
@@ -416,6 +417,16 @@ Route::group([
             Route::post('/destroy/{id}', [TopBranchController::class, 'destroy'])->name('admin.top_branch.destroy');
         });
 
+        // TOP Depositor
+        Route::group(['prefix' => 'top_depositor'], function () {
+            Route::get('', [TopDepositorController::class, 'index'])->name('admin.top_depositor.list');
+            Route::post('/get_branches', [TopDepositorController::class, 'get_branches'])->name('admin.top_depositor.get_branches');
+            Route::get('/create', [TopDepositorController::class, 'create'])->name('admin.top_depositor.create');
+            Route::post('/store', [TopDepositorController::class, 'store'])->name('admin.top_depositor.store');
+            Route::post('/update/{id}', [TopDepositorController::class, 'update'])->name('admin.top_depositor.update');
+            Route::get('/edit/{id}', [TopDepositorController::class, 'edit'])->name('admin.top_depositor.edit');
+            Route::post('/destroy/{id}', [TopDepositorController::class, 'destroy'])->name('admin.top_depositor.destroy');
+        });
         // CHO
         Route::group(['prefix' => 'cho'], function () {
 
