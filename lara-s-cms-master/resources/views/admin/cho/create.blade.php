@@ -1,57 +1,3 @@
-{{-- <html>
-<head>
- <script src="js/jquery.js" type="text/javascript"></script>
- <script type="text/javascript">
-  $().ready(function() {
-   $('#add').click(function() {
-    return !$('#select1 option:selected').remove().appendTo('#select2');
-   });
-   $('#remove').click(function() {
-    return !$('#select2 option:selected').remove().appendTo('#select1');
-   });
-  });
- </script>
-
- <style type="text/css">
-  a {
-   display: block;
-   border: 1px solid #aaa;
-   text-decoration: none;
-   background-color: #fafafa;
-   color: #123456;
-   margin: 2px;
-   clear:both;
-  }
-  div {
-   float:left;
-   text-align: center;
-   margin: 10px;
-  }
-  select {
-   width: 100px;
-   height: 80px;
-  }
- </style>
-
-</head>
-
-<body>
- <div>
-  <select multiple id="select1">
-   <option value="1">Option 1</option>
-   <option value="2">Option 2</option>
-   <option value="3">Option 3</option>
-   <option value="4">Option 4</option>
-  </select>
-  <a href="#" id="add">add &gt;&gt;</a>
- </div>
- <div>
-  <select multiple id="select2"></select>
-  <a href="#" id="remove">&lt;&lt; remove</a>
- </div>
-</body>
-</html>  --}}
-
 @extends('_template_adm.master')
 
 @php
@@ -134,7 +80,7 @@
                                     Phone
                                 </label>
                                 <div class="col-md-6 col-sm-6 col-xs-12">
-                                    <input type="number" class="form-control" name="phone" aria-label="phone">
+                                    <input type="number" class="form-control" name="mobile" aria-label="phone">
                                 </div>
                             </div>
                             <div class="form-group vinput_main_branch">
@@ -147,36 +93,11 @@
                             </div>
                             <br>
                             <br>
-
-                            <div class="form-group vinput_main_branch">
-                                <label class="control-label col-md-3 col-sm-3 col-xs-12">
-                                    Select branches
-                                </label>
-
-                            </div>
-
-                            {{-- <div class="center">
-                                <div style="float:left;text-align: center; margin:10px ">
-
-                                    <label for="aoi">Area of Interest:</label>
-
-                                    <select multiple id="select1" name="aoi[]">
-                                        @foreach ($branches as $cntrl)
-                                            <option value="{{ $cntrl->id }}">
-                                                {{ $cntrl->name }}
-                                            </option>
-                                        @endforeach
-                                    </select>
-                                    <a href="#" id="add">add &gt;&gt;</a>
-                                </div>
-                                <div style="float:left;text-align: center; margin:10px">
-                                    <select multiple id="select2" name="selected[]"></select>
-                                    <a href="#" id="remove">&lt;&lt; remove</a>
-                                </div>
-                            </div> --}}
-
                                 <div class="form-group">
-                                    <div class="col-md-12 col-sm-6 col-xs-12 col-md-offset-3">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-12">
+                                        Select branches
+                                    </label>
+                                    <div class="col-md-6 col-sm-6 col-xs-12">
                                         {{-- <div style="float:left;text-align: center; margin:10px "> --}}
 
                                         <select multiple id="select1" name="selected[]" size="10" class="select2">

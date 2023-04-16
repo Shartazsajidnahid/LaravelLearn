@@ -45,29 +45,6 @@
                                 <form method="post" action="{{ route('employees.update',$employee->id) }}" enctype="multipart/form-data">
                                     @csrf
                                     @method('PATCH')
-
-                                    {{-- <div class="form-row">
-                                        <div class="form-group vinput_main_branch col-md-6">
-                                            <label for="parent branch" class="control-label col-md-2 ">
-                                                Branch
-                                            </label>
-                                            <div class="col-md-10 ">
-                                                <select class="form-control select2" name="branch_id" id="branches">
-
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div class="form-group vinput_main_branch col-md-6">
-                                            <label for="parent branch" class="control-label col-md-2">
-                                                Branch
-                                            </label>
-                                            <div class="col-md-10 ">
-                                                <select class="form-control select2" name="branch_id" id="branches">
-
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </div> --}}
                                     <div class="form-row">
 
                                         <div class="form-group col-md-6">

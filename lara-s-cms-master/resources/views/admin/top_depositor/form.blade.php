@@ -1,19 +1,18 @@
 @extends('_template_adm.master')
 
 @php
-    $pagetitle = ucwords(lang('department', $translation));
-    $link_get_data = route('admin.department.get_branches');
+    $pagetitle = ucwords(lang('Top 10 depositor', $translation));
+    $link_get_data = route('admin.top_branch.get_branches');
     if (isset($data)) {
         $pagetitle .= ' (' . ucwords(lang('edit', $translation)) . ')';
-        $link = route('admin.department.do_edit', $data->id);
+        $link = route('admin.top_depositor.do_edit', $data->id);
     } else {
         $pagetitle .= ' (' . ucwords(lang('new', $translation)) . ')';
-        $link = route('admin.department.do_create');
+        $link = route('admin.top_depositor.store');
         $data = null;
     }
     // $link_get_data = route('admin.branch.get_data');
     $function_get_data = 'refresh_data();';
-    $chosenbranches = $branches;
     $x = 'haha';
 @endphp
 
@@ -39,79 +38,57 @@
                     </div>
                     <div class="x_content">
                         <br />
+
                         <form class="form-horizontal form-label-left" action="{{ $link }}" method="POST">
                             {{ csrf_field() }}
+
+                            <br>
+                            @foreach (range(1, 10) as $id)
+
                             <div class="form-group vinput_main_branch">
-                                <label for="parent branch" class="control-label col-md-3 col-sm-3 col-xs-12">
-                                    Division
+
+                                <label for="branch_{{$id}}" class="control-label col-md-3 col-sm-3 col-xs-12 tex-center">
+                                    {{$id}}
                                 </label>
-                                <div class="col-md-6 col-sm-6 col-xs-12">
-                                    <select class="form-control select2" name="parent_branch_id" id="divisions">
-                                        <option>Select Division</option>
-                                        @foreach ($divisions as $cntrl)
-                                            <option value="{{ $cntrl->id }}" onclick="javascript:choosebranch();">
-                                                {{ $cntrl->name }}
-                                            </option>
+                                <div class="col-md-6 col-sm-6">
+                                    <select class="form-control select2" name="depositor_{{$id}}" id="depositor_{{$id}}">
+                                        <option value=0> Choose one </option>
+                                        @foreach ($employees as $item)
+                                            <option value={{$item['id']}}>{{$item['name']}} , {{$item['user_name']}}</option>
                                         @endforeach
                                     </select>
                                 </div>
                             </div>
-
-                            <div class="form-group vinput_main_branch">
-                                <label for="parent branch" class="control-label col-md-3 col-sm-3 col-xs-12">
-                                    Branch
-                                </label>
-                                <div class="col-md-6 col-sm-6 col-xs-12">
-                                    <select class="form-control select2" name="branch_id" id="branches">
-
-                                    </select>
-                                </div>
-                            </div>
-
-                            @php
-                                $config = new \stdClass();
-                                $config->attributes = 'autocomplete="off"';
-                                echo set_input_form2('text', 'name', ucwords(lang('name', $translation)), $data, $errors, true, $config);
-
-                                $config = new \stdClass();
-                                $config->attributes = 'autocomplete="off"';
-                                $config->placeholder = '6281234567890';
-                                echo set_input_form2('number', 'phone', ucwords(lang('phone', $translation)), $data, $errors, false, $config);
-
-                                echo set_input_form2('textarea', 'location', ucwords(lang('location', $translation)), $data, $errors, false);
-
-                                $config = new \stdClass();
-                                $config->default = 'checked';
-                                echo set_input_form2('switch', 'status', ucwords(lang('status', $translation)), $data, $errors, false, $config);
-                            @endphp
-
-                            <div class="ln_solid"></div>
-
-                            <div class="form-group">
-                                <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
-                                    <button type="submit" class="btn btn-success"><i class="fa fa-save"></i>&nbsp;
-                                        @if (isset($data))
-                                            {{ ucwords(lang('save', $translation)) }}
-                                        @else
-                                            {{ ucwords(lang('submit', $translation)) }}
-                                        @endif
-                                    </button>
-                                    <a href="{{ route('admin.department.list') }}" class="btn btn-danger"><i
-                                            class="fa fa-times"></i>&nbsp;
-                                        @if (isset($data))
-                                            {{ ucwords(lang('close', $translation)) }}
-                                        @else
-                                            {{ ucwords(lang('cancel', $translation)) }}
-                                        @endif
-                                    </a>
-                                </div>
-                            </div>
-
-                        </form>
+                            @endforeach
                     </div>
+
+                    {{-- @endforeach --}}
+                    <div class="ln_solid"></div>
+                    <div class="form-group">
+                        <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
+                            <button type="submit" class="btn btn-success"><i class="fa fa-save"></i>&nbsp;
+                                @if (isset($data))
+                                    {{ ucwords(lang('save', $translation)) }}
+                                @else
+                                    {{ ucwords(lang('submit', $translation)) }}
+                                @endif
+                            </button>
+                            <a href="{{ route('admin.department.list') }}" class="btn btn-danger"><i
+                                    class="fa fa-times"></i>&nbsp;
+                                @if (isset($data))
+                                    {{ ucwords(lang('close', $translation)) }}
+                                @else
+                                    {{ ucwords(lang('cancel', $translation)) }}
+                                @endif
+                            </a>
+                        </div>
+                    </div>
+
+                    </form>
                 </div>
             </div>
         </div>
+    </div>
     </div>
 @endsection
 
@@ -133,23 +110,7 @@
         // Initialize Select2
         $('.select2').select2();
     </script>
-    <script>
-		jQuery(document).ready(function(){
-			jQuery('#divisions').change(function(){
-				let div_id=jQuery(this).val();
-                // alert(div_id);
 
-				jQuery.ajax({
-					url: '{{ $link_get_data }}',
-					type:'post',
-					data:'div_id='+div_id+'&_token={{csrf_token()}}',
-					success:function(result){
-						jQuery('#branches').html(result)
-					}
-				});
-			});
 
-		});
 
-		</script>
 @endsection

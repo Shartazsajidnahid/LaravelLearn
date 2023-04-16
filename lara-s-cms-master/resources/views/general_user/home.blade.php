@@ -54,7 +54,7 @@
                             src="{{ asset('uploads/employees/' . $user['profile_image']) }}" width="200" height="200">
                     </div>
 
-                    <a href="Home.html"> {{ $user['name'] }} </a>
+                    <a href="{{ route('general.home') }}"> {{ $user['name'] }} </a>
                     <p class="">{{ $user['email'] }}</p>
                     <p class="">{{ $user['func_destination'] }} <span> |&nbsp; </span>{{ $user['destination'] }}</p>
                     <p class="">{{ $user['mobile'] }}</p>
@@ -237,18 +237,12 @@
             <div class="u-align-left u-border-3 u-border-grey-75 u-container-style u-group u-group-1"
                 style="height: 100%; overflow-y: scroll;">
                 <div class="u-container-layout u-container-layout-2">
-                    <h3 class="u-align-center u-text  u-text-default-lg u-text-default-xl u-text-4 font-weight: bold"
-                        style="color:#9900ff;font-weight: bold; text-style: none;">Top 10 Depositor</h3>
-                    <p>Name1 | BRANCH 1</p>
-                    <p>Name2 | BRANCH 2</p>
-                    <p>Name3 | BRANCH 3</p>
-                    <p>Name4 | BRANCH 4</p>
-                    <p>Name5 | BRANCH 5</p>
-                    <p>Name6 | BRANCH 6</p>
-                    <p>Name7 | BRANCH 3</p>
-                    <p>Name8 | BRANCH 8</p>
-                    <p>Name9 | BRANCH 8</p>
-                    <p>Name9 | BRANCH 10</p>
+                    <h4 class="u-align-center u-text  u-text-default-lg u-text-default-xl u-text-4 font-weight: bold"
+                        style="color:#9900ff;font-weight: bold; text-style: none;">Top 10 Depositor</h4>
+
+                    @foreach ($top_employees as $item)
+                        <p>{{ $item['name'] }}</p>
+                    @endforeach
                 </div>
             </div>
         </div>
@@ -259,7 +253,7 @@
                     <h3 class="u-align-center u-text  u-text-16"
                         style="color:#9900ff;font-weight: bold; text-style: none;">Top 10 <br>Branch</h3>
                     @foreach ($top_branches as $item)
-                        <p></p>
+
                         <a href="{{ route('general.team', ['home' => 'sys_branches', 'id' =>  $item['id']]) }}">
                             {{ $item['name'] }}
                         </a>

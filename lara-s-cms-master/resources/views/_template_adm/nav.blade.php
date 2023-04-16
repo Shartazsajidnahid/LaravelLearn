@@ -57,17 +57,7 @@
 
                     </ul>
                 </li>
-                <li>
-                    <a href="{{route('admin.showmenu')  }}">
-                        <span>Show Menu</span>
-                    </a>
-                </li>
 
-                <li>
-                    <a href="{{route('admin.addmenu')  }}">
-                        <span>Add Menu</span>
-                    </a>
-                </li>
             </ul>
         </nav>
     </div>

@@ -286,10 +286,37 @@
                         $menu_active = 'current-page';
                         // }
                     @endphp
-                    {{-- Exchange rates --}}
-                    <li><a href="{{ route('admin.top_branch.create') }}">
+                    {{-- top 10 branch --}}
+                    <li><a href="{{ route('admin.top_branch.list') }}">
                             {{-- <i class="fa fa-money"  aria-hidden="true"></i> --}}
                             {{ ucwords(lang(' top 10 branch', $translation)) }}</a>
+                    </li>
+
+                    @php
+                        $priv_admin++;
+                        $menu_active = '';
+                        // if(Helper::is_menu_active('/system/dictionary/')){
+                        $menu_active = 'current-page';
+                        // }
+                    @endphp
+
+                    {{-- top 10 depositor --}}
+                    <li><a href="{{ route('admin.top_depositor.create') }}">
+                            {{-- <i class="fa fa-money"  aria-hidden="true"></i> --}}
+                            {{ ucwords(lang(' top 10 depositor', $translation)) }}</a>
+                    </li>
+
+                    @php
+                        $priv_admin++;
+                        $menu_active = '';
+                        // if(Helper::is_menu_active('/system/dictionary/')){
+                        $menu_active = 'current-page';
+                        // }
+                    @endphp
+                    {{-- CHO --}}
+                    <li><a href="{{ route('admin.cho.list') }}">
+                            {{-- <i class="fa fa-money"  aria-hidden="true"></i> --}}
+                            {{ ucwords(lang(' CHO', $translation)) }}</a>
                     </li>
                 </ul>
             </li>

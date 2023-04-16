@@ -136,8 +136,5 @@
                 @endforeach
             </div> --}}
         </section>
-
-
-
     </body>
 @endsection
