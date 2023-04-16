@@ -264,7 +264,7 @@ class BannerController extends Controller
         if ($data->save()) {
             // SUCCESS
             return redirect()
-                ->route('admin.banner.edit', $id)
+                ->route('admin.banner.list', $id)
                 ->with('success', lang('Successfully updated #item', $this->translation, ['#item' => $this->item]));
         }
 

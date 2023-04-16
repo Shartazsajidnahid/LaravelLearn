@@ -136,12 +136,7 @@ class EmployeeController extends Controller
             $employee_user->employee = $employee->id;
             $employee_user->save();
 
-            // LOGGING
-            $log = new SysLog();
-            $log->subject = Session::get('admin')->id;
-            $log->action = 4;
-            $log->object = $data->id;
-            $log->save();
+
         }
         return redirect()->route('employees.index')->with('success','Employee has been created successfully.');
     }

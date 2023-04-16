@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Controllers\Admin\system\FilesController;
 use App\Http\Controllers\Admin\system\EmployeeController;
 use App\Http\Controllers\Admin\TopBranchController;
+use App\Http\Controllers\Admin\TopDepositorController;
 use Carbon\Carbon;
 
 // MODELS
@@ -21,7 +22,9 @@ use App\Models\Applink;
 use App\Models\Exchange_rate;
 use App\Models\system\Division_admin;
 use App\Models\TopBranch;
+use App\Models\TopDepositor;
 use App\Models\ArchiveTopBranch;
+use App\Models\ArchiveTopDepositor;
 
 
 class Sub_branch {
@@ -89,6 +92,18 @@ class HomeController extends Controller
         return $branches;
     }
 
+    function getTopDepositors(){
+
+        if(TopDepositor::exists()){
+            $data = TopDepositor::all();
+        }
+        else{
+            $data = ArchiveTopDepositor::latest()->take(10)->get();
+        }
+        $topEmployees = (new TopDepositorController)->getTopDepositorWithName($data);
+        return $topEmployees;
+    }
+
     public function general_home()
     {
         // USER INFO
@@ -119,7 +134,10 @@ class HomeController extends Controller
         // TOP BRANCHES
         $top_branches = $this->getTopBranches();
 
-        return view('general_user.home', compact('user', 'banners', 'news', 'applinks', 'exchange_rate', 'top_branches'));
+        // TOP Employees
+        $top_employees = $this->getTopDepositors();
+
+        return view('general_user.home', compact('user', 'banners', 'news', 'applinks', 'exchange_rate', 'top_branches', 'top_employees'));
     }
     private function getIDname($home){
         $office = '';

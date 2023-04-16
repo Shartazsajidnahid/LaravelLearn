@@ -332,7 +332,7 @@ class BranchController extends Controller
 
             // SUCCESS
             return redirect()
-                ->route('admin.branch.edit', $id)
+                ->route('admin.branch.list', $id)
                 ->with('success', lang('Successfully updated #item : #name', $this->translation, ['#item' => $this->item, '#name' => $name]));
         }
 

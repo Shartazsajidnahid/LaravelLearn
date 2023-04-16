@@ -45,15 +45,10 @@ class FilesController extends Controller
     }
 
     public function categorize($types, $files){
-        // dd($data);
+
         $newdata = array();
         foreach( $types as $data ) {
-            // $newarr = files::where('file_type', $value->id)->get();
-            // $newdata[] = $newarr;
 
-            // $newarr = Arr::where($files, function ($value, $key) {
-            //     return $value->file_type == $data->id;
-            // });
             $newarr = array();
             foreach($files as $value){
                 if($value->file_type==$data->id){
@@ -62,11 +57,6 @@ class FilesController extends Controller
             }
             $newdata[] = $newarr;
         }
-
-        // dd($newdata);
-        // $newdata = Arr::where($myArray, function ($value, $key) {
-        //     return $value['type'] == 1;
-        // });
 
         return $newdata;
     }
@@ -339,15 +329,11 @@ class FilesController extends Controller
         else{
             $data->status = 0;
         }
-
-
-
-
         // UPDATE THE DATA
         if ($data->save()) {
             // SUCCESS
             return redirect()
-                ->route('admin.file.edit', $id)
+                ->route('admin.file.list', $id)
                 ->with('success', lang('Successfully updated #item', $this->translation, ['#item' => $this->item]));
         }
 

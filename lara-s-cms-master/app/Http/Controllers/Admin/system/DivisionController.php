@@ -214,7 +214,7 @@ class DivisionController extends Controller
 
             // SUCCESS
             return redirect()
-                ->route('admin.division.edit', $id)
+                ->route('admin.division.list', $id)
                 ->with('success', lang('Successfully updated #item : #name', $this->translation, ['#item' => $this->item, '#name' => $name]));
         }
 
