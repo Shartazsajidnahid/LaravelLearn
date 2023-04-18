@@ -55,16 +55,7 @@
                                     Designation
                                 </label>
                                 <div class="col-md-6 col-sm-6 col-xs-12">
-                                    <select class="form-control select2" name="designation">
-
-
-                                        <option value="1" selected>
-                                            MD
-                                        </option>
-                                        <option value="2">
-                                            DMD
-                                        </option>
-                                    </select>
+                                    <input type="text" class="form-control" name="designation" aria-label="designation">
                                 </div>
                             </div>
                             <div class="form-group vinput_main_branch">

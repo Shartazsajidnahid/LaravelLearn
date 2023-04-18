@@ -45,33 +45,7 @@
                                     Designation
                                 </label>
                                 <div class="col-md-6 col-sm-6 col-xs-12">
-                                    {{-- <select class="form-control select2" name="designation">
-                                        @if ($cho->designation == 1)
-                                            <option value="1" selected>
-                                                MD
-                                            </option>
-                                            <option value="2">
-                                                DMD
-                                            </option>
-                                        @else
-                                            <option value="1">
-                                                MD
-                                            </option>
-                                            <option value="2" selected>
-                                                DMD
-                                            </option>
-                                        @endif
-                                    </select> --}}
-
-                                    <select class="form-control select2" name="designation">
-
-                                        <option value="1" {{($cho->designation==1)?"selected":""}}>
-                                            MD
-                                        </option>
-                                        <option value="2"  {{($cho->designation==2)?"selected":""}}>
-                                            DMD
-                                        </option>
-                                    </select>
+                                    <input type="text" class="form-control" name="designation" aria-label="designation" value="{{ $cho->designation }}">
                                 </div>
                             </div>
                             <div class="form-group vinput_main_branch">
@@ -107,7 +81,7 @@
                                 <div class="col-md-6 col-sm-6 col-xs-12">
                                     {{-- <div style="float:left;text-align: center; margin:10px "> --}}
 
-                                    <select multiple name="selected[]" size="10" class="select2">
+                                    <select multiple id="select1" name="selected[]" size="10" class="select2">
                                         @foreach ($branches as $cntrl)
                                             <option value="{{ $cntrl->id }}" {{in_array($cntrl->id, $jsonBranch)?"selected":""}}>
                                                 {{ $cntrl->name }}
@@ -116,8 +90,6 @@
                                             <br>
                                         @endforeach
                                     </select>
-                                    {{-- </div> --}}
-                                    {{-- </div> --}}
                                 </div>
 
                             </div>

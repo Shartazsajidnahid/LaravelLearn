@@ -56,24 +56,6 @@
                                 echo set_input_form2('switch', 'status', ucwords(lang('status', $translation)), $data, $errors, false, $config);
                             @endphp
 
-
-                            <div class="form-group">
-                                <div class="col-lg-6" style="float:none;margin:auto;">
-                                    <label for="inputState">Select Group Type</label>
-
-                                <select class="form-control" name="group_type">
-                                    <option value="admin">
-                                        ADMIN
-                                    </option>
-                                    <option value="general">
-                                        GENERAL
-                                    </option>
-
-
-                                </select>
-                                 </div>
-
-                            </div>
                             {{-- Division --}}
                             <div class="form-group">
                                 <label class="control-label col-md-3 col-sm-3 col-xs-12" for="division">{{ ucwords(lang('division', $translation)) }} <span class="required">*</span></label>

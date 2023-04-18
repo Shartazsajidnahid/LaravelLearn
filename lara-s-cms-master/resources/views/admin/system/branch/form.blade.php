@@ -51,7 +51,7 @@
                                 {{-- <div class="form-group  vinput_parent_branch_id"> --}}
                                 Sub-branch?&nbsp;&nbsp;&nbsp;Yes <input type="radio" onclick="javascript:yesnoCheck();"
                                     name="yesno" id="yesCheck" value="subBranchyes"> No <input type="radio"
-                                    onclick="javascript:yesnoCheck();" name="yesno" id="noCheck" value="subBranchno"><br>
+                                    onclick="javascript:yesnoCheck();" name="yesno" id="noCheck" value="subBranchno" checked><br>
 
                             </div>
 

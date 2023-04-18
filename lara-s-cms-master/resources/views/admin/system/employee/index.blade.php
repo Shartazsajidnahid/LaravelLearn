@@ -56,15 +56,8 @@
                                   <th>UserName</th>
                                   <th>Designation</th>
                                   <th>Funct_Designation</th>
-                                  {{-- <th>Branch</th>
-                                  <th>Department</th>
-                                  <th>Unit</th> --}}
                                   <th>Mobile</th>
                                   <th>OficePhone</th>
-                                  {{-- <th>IP_Phone</th>
-                                  <th>PabxPhone</th>
-                                  <th>DOB</th>
-                                  <th>Gender</th> --}}
                                   <th>Email</th>
                                   <th>Password</th>
                                   <th class="text-center">Action</th>

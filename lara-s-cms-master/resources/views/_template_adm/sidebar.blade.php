@@ -189,7 +189,8 @@
 
 
             {{-- filesystem --}}
-            <li><a id="menu-language"><i class="fa fa-file" aria-hidden="true"></i>
+            @if (Helper::authorizing('File', 'View List')['status'] == 'true')
+                <li><a id="menu-language"><i class="fa fa-file" aria-hidden="true"></i>
                     {{ ucwords(lang('filesystem', $translation)) }} <span class="fa fa-chevron-down"></span></a>
                 <ul class="nav child_menu">
                     @php
@@ -216,6 +217,8 @@
 
                 </ul>
             </li>
+            @endif
+
 
 
             {{-- filesystem --}}
