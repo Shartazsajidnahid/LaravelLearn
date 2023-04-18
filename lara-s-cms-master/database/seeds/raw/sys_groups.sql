@@ -1,6 +1,9 @@
 INSERT INTO `sys_groups` (`id`, `name`, `type`,  `status`, `created_at`, `updated_at`, `deleted_at`) VALUES
 	(1, 'Super Administrator', 'admin',  1, '2019-09-17 10:09:35', '2019-09-17 10:09:36', NULL);
 
+INSERT INTO `sys_groups` (`id`, `name`, `type`,  `status`, `created_at`, `updated_at`, `deleted_at`) VALUES
+	(2, 'General Users', 'general',  1, '2019-09-17 10:09:35', '2019-09-17 10:09:36', NULL);
+
 INSERT INTO `sys_rules` (`id`, `module_id`, `name`, `description`, `status`, `created_at`, `updated_at`, `deleted_at`)
 VALUES
 	(null, 4, 'Add New', NULL, 1, '2020-08-09 16:51:34', '2020-08-09 16:51:34', NULL),

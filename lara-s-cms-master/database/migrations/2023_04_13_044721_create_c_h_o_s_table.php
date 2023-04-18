@@ -18,7 +18,7 @@ class CreateCHOSTable extends Migration
             $table->string('name');
             $table->string('email')->unique();
             $table->integer('mobile');
-            $table->integer('designation');
+            $table->string('designation');
             $table->string('profile_image');
             $table->json('branches')->nullable();
             $table->timestamps();
