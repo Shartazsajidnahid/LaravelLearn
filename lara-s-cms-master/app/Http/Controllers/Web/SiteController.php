@@ -22,9 +22,11 @@ class SiteController extends Controller
     {
         return redirect()->route('web.home');
     }
-    
+
     public function home()
     {
+        return redirect()->route('admin.home');
+
         $page_menu = 'home';
 
         $banners = Banner::where('status', 1)->orderBy('ordinal')->get();

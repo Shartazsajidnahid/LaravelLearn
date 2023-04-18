@@ -35,7 +35,6 @@ class Helper extends TheHelper
 
         // get access from session
         $access = Session::get('access');
-
         $granted = false;
         foreach ($access as $item) {
             if ($item->module_name == $module_name && $item->rule_name == $rule_name) {
@@ -226,11 +225,11 @@ class Helper extends TheHelper
 
     /**
      * Validate & generate unique slug
-     * 
+     *
      * @param String $table_name required | table name
      * @param String $slug required | input text
      * @param String $table_name optional | field name in table
-     * 
+     *
      * @return String unique slug
      */
     public static function check_slug($table_name, $slug, $field_name = 'slug')

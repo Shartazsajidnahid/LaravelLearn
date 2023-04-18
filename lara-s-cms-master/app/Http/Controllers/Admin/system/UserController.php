@@ -80,6 +80,7 @@ class UserController extends Controller
             ->leftJoin('sys_branches as c', 'c.id', 'b.branch')
             ->leftJoin('sys_divisions as d', 'd.id', 'c.division_id')
             ->where('sys_users.id', '>', 1)
+            ->where('sys_user_group.group', '>', 2)
             ->groupBy(
                 'sys_users.id',
                 'sys_users.username',
@@ -147,7 +148,7 @@ class UserController extends Controller
         }
 
         $usergroups = SysGroup::where('status', 1)
-            ->where('id', '>', 1)
+            ->where('id', '>', 2)
             ->get();
 
         return view('admin.system.user.form', compact('usergroups'));

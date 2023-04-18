@@ -151,6 +151,7 @@ class UsergroupController extends Controller
         $params_child = ['id', 'name', 'module_id', 'description'];
         $rules = Helper::generate_parent_child_data($rules, 'module', $params_child);
 
+
         // GET DATA (DIVISIONS)
         $divisions = SysBranch::select('sys_branches.*', 'sys_divisions.name as division_name')
             ->leftJoin('sys_divisions', 'sys_branches.division_id', '=', 'sys_divisions.id')
@@ -173,6 +174,7 @@ class UsergroupController extends Controller
 
     public function do_create(Request $request)
     {
+        // dd($request);
         // AUTHORIZING...
         $authorize = Helper::authorizing($this->module, 'Add New');
         if ($authorize['status'] != 'true') {
@@ -208,7 +210,7 @@ class UsergroupController extends Controller
         $data = new SysGroup();
         $data->name = $name;
         $data->status = $status;
-        $data->type = $request->group_type;
+        $data->type = "admin";
 
         if ($data->save()) {
             /* set usergroup's access */

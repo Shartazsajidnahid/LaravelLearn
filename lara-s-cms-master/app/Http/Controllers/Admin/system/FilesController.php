@@ -63,8 +63,11 @@ class FilesController extends Controller
 
     public function list()
     {
-        // $location = public_path("uploads/files");
-        // dd($location);
+        // AUTHORIZING...
+        $authorize = Helper::authorizing($this->module, 'View List');
+        if ($authorize['status'] != 'true') {
+            return back()->with('error', $authorize['message']);
+        }
         $allfiles = files::all();
         $filetypes = filetype::all();
         $data = $this->getDatawithfiletype($allfiles);
@@ -75,11 +78,11 @@ class FilesController extends Controller
 
     public function create()
     {
-        // // AUTHORIZING...
-        // $authorize = Helper::authorizing($this->module, 'Add New');
-        // if ($authorize['status'] != 'true') {
-        //     return back()->with('error', $authorize['message']);
-        // }
+        // AUTHORIZING...
+        $authorize = Helper::authorizing($this->module, 'Add New');
+        if ($authorize['status'] != 'true') {
+            return back()->with('error', $authorize['message']);
+        }
 
         $filetypes = filetype::all();
 
@@ -88,6 +91,12 @@ class FilesController extends Controller
 
     public function do_create(Request $request)
     {
+
+        // AUTHORIZING...
+        $authorize = Helper::authorizing($this->module, 'Add New');
+        if ($authorize['status'] != 'true') {
+            return back()->with('error', $authorize['message']);
+        }
         // SET THIS OBJECT/ITEM NAME BASED ON TRANSLATION
         $this->item = ucwords(lang($this->item, $this->translation));
 
@@ -206,7 +215,11 @@ class FilesController extends Controller
 
     public function edit($id)
     {
-
+        // AUTHORIZING...
+        $authorize = Helper::authorizing($this->module, 'View Details');
+        if ($authorize['status'] != 'true') {
+            return back()->with('error', $authorize['message']);
+        }
         // SET THIS OBJECT/ITEM NAME BASED ON TRANSLATION
         $this->item = ucwords(lang($this->item, $this->translation));
 
@@ -234,6 +247,11 @@ class FilesController extends Controller
 
     public function do_edit($id, Request $request)
     {
+        // AUTHORIZING...
+        $authorize = Helper::authorizing($this->module, 'Edit');
+        if ($authorize['status'] != 'true') {
+            return back()->with('error', $authorize['message']);
+        }
 
         // SET THIS OBJECT/ITEM NAME BASED ON TRANSLATION
         $this->item = ucwords(lang($this->item, $this->translation));
@@ -389,6 +407,11 @@ class FilesController extends Controller
 
     public function delete(Request $request)
     {
+        // AUTHORIZING...
+        $authorize = Helper::authorizing($this->module, 'Delete');
+        if ($authorize['status'] != 'true') {
+            return back()->with('error', $authorize['message']);
+        }
         // SET THIS OBJECT/ITEM NAME BASED ON TRANSLATION
         $this->item = ucwords(lang($this->item, $this->translation));
 

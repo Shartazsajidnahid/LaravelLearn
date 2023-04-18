@@ -25,6 +25,7 @@ use App\Models\TopBranch;
 use App\Models\TopDepositor;
 use App\Models\ArchiveTopBranch;
 use App\Models\ArchiveTopDepositor;
+use App\Models\CHO;
 
 
 class Sub_branch {
@@ -168,7 +169,6 @@ class HomeController extends Controller
 
     public function general_team($home,$id)
     {
-
         //get breanch, dept or unit
         $office = DB::table($home)
             ->where('id', '=', $id)
@@ -186,16 +186,42 @@ class HomeController extends Controller
         return view('general_user.team', compact('data', 'filetypes', 'employees', 'office'));
     }
 
+    function choWithBranch($cho){
+        $newarr = array('name'=>$cho->name, 'designation'=>$cho->designation, 'profile_image'=>$cho->profile_image);
+        $jsonBranches = json_decode($cho->branches);
+
+        $branches = [];
+        foreach($jsonBranches as $item){
+            $oneBranch = SysBranch::findOrFail($item);
+            $branches[] = $oneBranch;
+        }
+
+        $branches = array_chunk($branches, ceil(count($branches)/2));
+        $newarr['branches'] = $branches;
+        return $newarr;
+    }
+
     public function general_aboutus()
     {
-        return view('general_user.about-us');
+        // get MD and branches
+        $md_id = 1;
+        $md_record = CHO::findOrFail($md_id);
+        $md = $this->choWithBranch($md_record);
+        // dd($md);
+
+        $dmds_record = CHO::where('id', '!=', $md_id)->get();
+        $dmds = [];
+        foreach($dmds_record as $item){
+            $dmds[] = $this->choWithBranch($item);
+        }
+        // dd($dmds);
+        return view('general_user.about-us', compact('md','dmds'));
     }
 
     public function general_allbrance()
     {
         $branches = [];
         foreach( range('a', 'z') as $cur_char ){
-        //   $responses = DB::select('select * from sys_branches where name like \'' . $cur_char . '%\''); //and Branch, not Head Office
           $responses = DB::table('sys_branches')
             ->where('name', 'like',  $cur_char.'%')
             ->get();
@@ -236,7 +262,6 @@ class HomeController extends Controller
     {
         $branches = [];
         foreach( range('a', 'z') as $cur_char ){
-        //   $responses = DB::select('select * from sys_branches where name like \'' . $cur_char . '%\''); //and Branch, not Head Office
           $responses = DB::table('sys_branches')
             ->where('name', 'like',  $cur_char.'%')
             ->where('parent_id', '=', 0 )
@@ -245,18 +270,14 @@ class HomeController extends Controller
           $resType = new ResponseType($cur_char, $responses);
           array_push($branches, $resType);
         }
-        // dd($branches);
         return view('general_user.sub_branch', ['branches'=>$branches], ['title'=> 'Branches']);
     }
 
     public function general_division()
     {
-        // $mytime = Carbon::now();
-        // dd( $mytime->toDateString());
-        // dd( $mytime->toDateTimeString());
+
         $branches = [];
         foreach( range('a', 'z') as $cur_char ){
-        //   $responses = DB::select('select * from sys_branches where name like \'' . $cur_char . '%\''); //and Branch, not Head Office
           $responses = DB::table('sys_branches')
             ->where('name', 'like',  $cur_char.'%')
             ->where('division_id', '=', 2 )
@@ -265,7 +286,6 @@ class HomeController extends Controller
           $resType = new ResponseType($cur_char, $responses);
           array_push($branches, $resType);
         }
-        // dd($branches);
         return view('general_user.sub_branch', ['branches'=>$branches], ['title'=> 'Divisions']);
     }
 
@@ -276,7 +296,6 @@ class HomeController extends Controller
         foreach( range('a', 'z') as $cur_char ){
           $temp_branches = [];
           $responses = DB::select('select * from sys_branches where name like \'' . $cur_char . '%\''); //and Head Office
-
 
           //Get the departments
           foreach($responses as $branch){
@@ -309,14 +328,13 @@ class HomeController extends Controller
         return view('general_user.alldivision', ['branches'=>$branches]);
     }
 
-    public function cho_index()
+    public function general_allfiles()
     {
-        return view('admin.system.cho.form');
-    }
+        $filetypes = filetype::all();
+        $files = files::all();
+        $data = (new FilesController)->categorize($filetypes, $files);
+        return view('general_user.allfiles', compact('data', 'filetypes'));
 
-    public function cho_create()
-    {
-        return view('admin.system.cho.form');
     }
 
 }

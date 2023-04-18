@@ -41,26 +41,14 @@ class CHOController extends Controller
         $cho->designation = $request->input('designation');
         $cho->branches = $jsonD;
 
-        $count = CHO::where('designation', $cho->designation )->count();
-
-        if($cho->designation == 1){
-            if($count >= 1){
-                return back()
-                ->withInput()
-                ->with('error', lang('already one MD is available', $this->translation, ['#item' => ucwords(lang('cho', $this->translation))]));
-            }
-        }
-
         if($request->hasfile('profile_image'))
         {
-
             $file = $request->file('profile_image');
             $extention = $file->getClientOriginalExtension();
             $filename = time().'.'.$extention;
             $file->move('uploads/cho/', $filename);
             $cho->profile_image = $filename;
         }
-
 
         $cho->save();
         return redirect()->route('admin.cho.list')->with('success','cho has been created successfully.');
@@ -72,27 +60,38 @@ class CHOController extends Controller
         $cho = CHO::findOrFail($id);
         $selected = $cho->branches;
         $jsonBranch = json_decode($selected);
-        // dd($jsonD);
-        // if (in_array(4, $jsonBranch)) {
-        //     dd('yes');
-        // }
-        // dd('no');
         $branches = SysBranch::all();
         return view('admin.cho.edit', compact('cho', 'branches', 'jsonBranch'));
     }
 
     public function update($id, Request $request)
     {
+        $selected = $request->input('selected');
+        $jsonD = json_encode($selected);
+
+
         $cho = CHO::findOrFail($id);
-        $cho->currency = $request->input('currency');
-        $cho->tt_buy = $request->input('tt_buy');
-        $cho->tt_sell = $request->input('tt_sell');
+        $cho->name = $request->input('name');
+        $cho->email = $request->input('email');
+        $cho->mobile = $request->input('mobile');
+        $cho->designation = $request->input('designation');
+        $cho->branches = $jsonD;
 
-        $cho->update();
-
-        // SAVE THE DATA
-
-        return redirect()->route('admin.cho.list')->with('success','cho has been Updated successfully.');
+        if($request->hasfile('profile_image'))
+        {
+            $destination = 'uploads/cho/'.$cho->profile_image;
+            if(File::exists($destination))
+            {
+                File::delete($destination);
+            }
+            $file = $request->file('profile_image');
+            $extention = $file->getClientOriginalExtension();
+            $filename = time().'.'.$extention;
+            $file->move('uploads/cho/', $filename);
+            $cho->profile_image = $filename;
+        }
+        $cho->save();
+        return redirect()->route('admin.cho.list')->with('success','cho has been updated successfully.');
     }
 
 
