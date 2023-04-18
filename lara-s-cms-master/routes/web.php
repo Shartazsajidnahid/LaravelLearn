@@ -42,6 +42,7 @@ Route::middleware([CheckGeneralUser::class])->group(function(){
     Route::get('/aboutus', [HomeController::class, 'general_aboutus']);
     Route::get('/allbrance', [HomeController::class, 'general_allbrance']);
     Route::get('/alldivision', [HomeController::class, 'general_alldivision']);
+    Route::get('/allfiles', [HomeController::class, 'general_allfiles'])->name('general.allfiles');
 });
 
 // WEBSITE
@@ -320,12 +321,7 @@ Route::group([
         // Route::get('/general', 'system\HomeController@index2')->name('admin.demo');
 
 
-        //Menu
-        Route::get('/showmenu', 'MenuController@getMenu')->name('admin.showmenu');
-        Route::get('/addmenu', 'MenuController@list')->name('admin.addmenu');
-        Route::post('/createmenu', 'MenuController@do_create')->name('admin.createmenu');
-        Route::get('/addcontroller', 'MenuController@add_controller')->name('admin.addcontroller');
-        Route::post('/createcontroller', 'MenuController@create_controller')->name('admin.createcontroller');
+
 
         // BANNER
         Route::group(['prefix' => 'banner'], function () {
