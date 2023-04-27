@@ -51,14 +51,14 @@
 
                                         <div class="form-group col-md-6">
                                             <label for="inputState">Name</label>
-                                            <input type="text" class="form-control" placeholder="First name"
-                                                name="name" aria-label="First name">
+                                            <input type="text" class="form-control" name="name"
+                                                aria-label="First name">
                                         </div>
 
                                         <div class="form-group col-md-6">
-                                            <label for="inputState">userName</label>
-                                            <input type="text" class="form-control" placeholder="User name"
-                                                name="user_name" aria-label="Last name">
+                                            <label for="inputState">Username</label>
+                                            <input type="text" class="form-control" name="user_name"
+                                                aria-label="Last name">
                                         </div>
                                     </div>
 
@@ -91,8 +91,8 @@
                                         </div>
                                         <div class="form-group col-md-6">
                                             <label for="inputState">Unit</label>
-                                            <select class="form-control select2" name="unit_id" id="units">
-
+                                            <select class="form-control select2" name="unit_id" id="units" value=0>
+                                                <option value="0" selected></option>
                                             </select>
                                         </div>
                                     </div>
@@ -101,7 +101,7 @@
                                         <div class="form-group col-md-6">
                                             <label for="inputState">Designation</label>
                                             <select class="form-control select2" name="designation_id">
-                                                <option>Select Designation</option>
+                                                <option value='0'> Select Designation</option>
                                                 @foreach ($designations as $cntrl)
                                                     <option value="{{ $cntrl->id }}">
                                                         {{ $cntrl->designation }}
@@ -113,7 +113,7 @@
                                         <div class="form-group col-md-6">
                                             <label for="inputState">Functional Designation</label>
                                             <select class="form-control select2" name="func_designation_id">
-                                                <option>Select Functional Designation</option>
+                                                <option value='0'>Select Functional Designation</option>
                                                 @foreach ($func_designations as $cntrl)
                                                     <option value="{{ $cntrl->id }}">
                                                         {{ $cntrl->designation }}
@@ -123,10 +123,12 @@
                                         </div>
                                     </div>
                                     <div class="form-row">
-                                        <div class="form-group col-md-6" col-md-6>
+                                        <div class="form-group col-md-6">
                                             <label for="inputState">Gender</label>
-                                            <input type="text" class="form-control" placeholder="Gender" name="gender"
-                                                aria-label="First name">
+                                            <select class="form-control" name="gender">
+                                                <option value="1">Male</option>
+                                                <option value="2">Female</option>
+                                            </select>
                                         </div>
                                         <div class="form-group col-md-6">
                                             <label for="inputState">DOB</label>

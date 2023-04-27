@@ -55,15 +55,15 @@
                                                 <a href="{{ route('general.team', ['home' => 'sys_branches', 'id' => $br->id]) }}">
                                                     <b>{{ $br->name }}</b>
                                                 </a>
-                                                <a class="mx-2" data-toggle="collapse" href="#{{ $br->name }}" role="button">
+                                                <a class="mx-2" data-toggle="collapse" href="#{{ $br->href }}" role="button">
                                                     <span class="fa fa-angle-down"></span>
                                                 </a>
 
                                                 {{-- </p> --}}
-                                            <div class="collapse" id="{{ $br->name }}">
+                                            <div class="collapse" id="{{ $br->href }}">
                                                 <div class="card card-body">
                                                     @foreach ($br->sub_branches as $sub_br)
-                                                        <div class="container mt-3">
+                                                        <div class="container mt-1">
                                                             <a href="{{ route('general.team', ['home' => 'sys_branches', 'id' => $sub_br->id]) }}"
                                                                 target="_blank">
                                                                 <b>{{ $sub_br->name }}</b>

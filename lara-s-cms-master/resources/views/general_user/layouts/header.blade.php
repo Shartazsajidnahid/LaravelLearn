@@ -38,6 +38,9 @@
                         <a class="u-button-style u-nav-link u-text-active-palette-1-base u-text-body-alt-color u-text-hover-palette-2-base" href="{{asset('alldivision')}}" style="padding: 10px 20px;font-weight: bold">All Divisions</a>
                     </li>
                     <li class="u-nav-item">
+                        <a class="u-button-style u-nav-link u-text-active-palette-1-base u-text-body-alt-color u-text-hover-palette-2-base" href="{{ URL::route('general.allfiles')}}" style="padding: 10px 20px;font-weight: bold">All Files</a>
+                    </li>
+                    <li class="u-nav-item">
                         <a class="u-button-style u-nav-link u-text-active-palette-1-base u-text-body-alt-color u-text-hover-palette-2-base danger" href="{{ URL::route('general.logout')}}" style="padding: 10px 20px;font-weight: bold">Logout</a>
                     </li>
                 </ul>

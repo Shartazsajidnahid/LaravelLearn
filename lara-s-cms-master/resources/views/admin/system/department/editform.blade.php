@@ -92,13 +92,20 @@
                             </div>
 
                             <div class="form-group vinput_main_branch">
-                                <label class="control-label col-md-3 col-sm-3 col-xs-12">
+                                {{-- <label class="control-label col-md-3 col-sm-3 col-xs-12">
                                     Status
-                                </label>
-                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                </label> --}}
+                                {{-- <div class="col-md-6 col-sm-6 col-xs-12">
                                     <input class="form-check-input" type="checkbox" role="switch"
                                         id="flexSwitchCheckChecked" checked>
-                                </div>
+                                </div> --}}
+
+                                @php
+                                    $config = new \stdClass();
+                                    $config->default = 'checked';
+                                    echo set_input_form2('switch', 'status', ucwords(lang('status', $translation)), $data, $errors, false, $config);
+
+                                @endphp
 
                             </div>
 

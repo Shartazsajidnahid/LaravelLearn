@@ -221,7 +221,7 @@
 
 
 
-            {{-- filesystem --}}
+            {{-- Portal home --}}
             <li><a id="menu-language"><i class="fa fa-home" aria-hidden="true"></i>
                     {{ ucwords(lang('Portal Home', $translation)) }} <span class="fa fa-chevron-down"></span></a>
                 <ul class="nav child_menu">
@@ -266,10 +266,13 @@
                     @endphp
 
                     {{-- Applinks --}}
-                    <li><a href="{{ route('admin.applink.list') }}">
+                    @if (Helper::authorizing('Applink', 'View List')['status'] == 'true')
+                        <li><a href="{{ route('admin.applink.list') }}">
                             {{-- <i class="fa fa-link" aria-hidden="true"></i> --}}
                             {{ ucwords(lang(' applink', $translation)) }}</a>
-                    </li>
+                        </li>
+                    @endif
+
                     @php
                         $priv_admin++;
                         $menu_active = '';
@@ -278,10 +281,13 @@
                         // }
                     @endphp
                     {{-- Exchange rates --}}
-                    <li><a href="{{ route('admin.exchange_rates.list') }}">
+                    @if (Helper::authorizing('ExchangeRate', 'View List')['status'] == 'true')
+                        <li><a href="{{ route('admin.exchange_rates.list') }}">
                             {{-- <i class="fa fa-money"  aria-hidden="true"></i> --}}
                             {{ ucwords(lang(' exchange rate', $translation)) }}</a>
-                    </li>
+                        </li>
+                    @endif
+
                     @php
                         $priv_admin++;
                         $menu_active = '';
@@ -290,10 +296,14 @@
                         // }
                     @endphp
                     {{-- top 10 branch --}}
-                    <li><a href="{{ route('admin.top_branch.list') }}">
+                    {{-- Exchange rates --}}
+                    @if (Helper::authorizing('TopBranch', 'View List')['status'] == 'true')
+                        <li><a href="{{ route('admin.top_branch.list') }}">
                             {{-- <i class="fa fa-money"  aria-hidden="true"></i> --}}
                             {{ ucwords(lang(' top 10 branch', $translation)) }}</a>
-                    </li>
+                        </li>
+                    @endif
+
 
                     @php
                         $priv_admin++;
@@ -304,10 +314,14 @@
                     @endphp
 
                     {{-- top 10 depositor --}}
-                    <li><a href="{{ route('admin.top_depositor.create') }}">
+                    @if (Helper::authorizing('TopDepositor', 'View List')['status'] == 'true')
+                        <li><a href="{{ route('admin.top_depositor.create') }}">
                             {{-- <i class="fa fa-money"  aria-hidden="true"></i> --}}
                             {{ ucwords(lang(' top 10 depositor', $translation)) }}</a>
-                    </li>
+                        </li>
+                    @endif
+
+
 
                     @php
                         $priv_admin++;
@@ -317,10 +331,13 @@
                         // }
                     @endphp
                     {{-- CHO --}}
-                    <li><a href="{{ route('admin.cho.list') }}">
+                    @if (Helper::authorizing('CHO', 'View List')['status'] == 'true')
+                        <li><a href="{{ route('admin.cho.list') }}">
                             {{-- <i class="fa fa-money"  aria-hidden="true"></i> --}}
                             {{ ucwords(lang(' CHO', $translation)) }}</a>
-                    </li>
+                        </li>
+                    @endif
+
                 </ul>
             </li>
 

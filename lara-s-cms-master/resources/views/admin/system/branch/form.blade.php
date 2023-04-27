@@ -74,13 +74,6 @@
 
 
                             @php
-                                // $config = new \stdClass();
-                                // $config->placeholder = ucwords(lang('please choose one', $translation));
-                                // $config->defined_data = $branches;
-                                // $config->field_value = 'id';
-                                // $config->field_text = 'name';
-                                // echo set_input_form2('select2', 'parent_branch_id', ucwords(lang('main branch', $translation)), $data, $errors, true, $config);
-
                                 $config = new \stdClass();
                                 $config->attributes = 'autocomplete="off"';
                                 echo set_input_form2('text', 'name', ucwords(lang('name', $translation)), $data, $errors, true, $config);
