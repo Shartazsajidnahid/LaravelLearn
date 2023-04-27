@@ -45,10 +45,10 @@ class SysDepartmentController extends Controller
     public function list()
     {
         // AUTHORIZING...
-        // $authorize = Helper::authorizing($this->module, 'View List');
-        // if ($authorize['status'] != 'true') {
-        //     return back()->with('error', $authorize['message']);
-        // }
+        $authorize = Helper::authorizing($this->module, 'View List');
+        if ($authorize['status'] != 'true') {
+            return back()->with('error', $authorize['message']);
+        }
 
 
         // GET THE DATA
@@ -59,6 +59,11 @@ class SysDepartmentController extends Controller
 
     public function create()
     {
+        // AUTHORIZING...
+        $authorize = Helper::authorizing($this->module, 'Add New');
+        if ($authorize['status'] != 'true') {
+            return back()->with('error', $authorize['message']);
+        }
         $branches = SysBranch::where('status', 1)->get();
         $divisions = SysDivision::where('status', 1)->orderBy('name', 'asc')->get();
         return view('admin.system.department.form', compact( 'branches', 'divisions'));
@@ -66,7 +71,11 @@ class SysDepartmentController extends Controller
 
     public function do_create(Request $request)
     {
-
+        // AUTHORIZING...
+        $authorize = Helper::authorizing($this->module, 'Add New');
+        if ($authorize['status'] != 'true') {
+            return back()->with('error', $authorize['message']);
+        }
 
         // LARAVEL VALIDATION
         $validation = [
@@ -149,10 +158,10 @@ class SysDepartmentController extends Controller
     public function edit($id)
     {
            // AUTHORIZING...
-        //    $authorize = Helper::authorizing($this->module, 'View Details');
-        //    if ($authorize['status'] != 'true') {
-        //        return back()->with('error', $authorize['message']);
-        //    }
+           $authorize = Helper::authorizing($this->module, 'View Details');
+           if ($authorize['status'] != 'true') {
+               return back()->with('error', $authorize['message']);
+           }
 
            // SET THIS OBJECT/ITEM NAME BASED ON TRANSLATION
         //    $this->item = ucwords(lang($this->item, $this->translation));
@@ -186,13 +195,13 @@ class SysDepartmentController extends Controller
     public function do_edit($id, Request $request)
     {
         // AUTHORIZING...
-        // $authorize = Helper::authorizing($this->module, 'Edit');
-        // if ($authorize['status'] != 'true') {
-        //     return back()->with('error', $authorize['message']);
-        // }
+        $authorize = Helper::authorizing($this->module, 'Edit');
+        if ($authorize['status'] != 'true') {
+            return back()->with('error', $authorize['message']);
+        }
 
         // SET THIS OBJECT/ITEM NAME BASED ON TRANSLATION
-        // $this->item = ucwords(lang($this->item, $this->translation));
+        $this->item = ucwords(lang($this->item, $this->translation));
 
         // dd($request);
 
@@ -263,6 +272,8 @@ class SysDepartmentController extends Controller
         $data->name = $name;
         $data->location = $location;
         $data->phone = $phone;
+        $data->status = (int) $request->status;
+        // dd($data);
 
         if ($data->save()) {
             // logging
@@ -287,10 +298,10 @@ class SysDepartmentController extends Controller
     public function delete(Request $request)
     {
         // // AUTHORIZING...
-        // $authorize = Helper::authorizing($this->module, 'Delete');
-        // if ($authorize['status'] != 'true') {
-        //     return back()->with('error', $authorize['message']);
-        // }
+        $authorize = Helper::authorizing($this->module, 'Delete');
+        if ($authorize['status'] != 'true') {
+            return back()->with('error', $authorize['message']);
+        }
 
         // // SET THIS OBJECT/ITEM NAME BASED ON TRANSLATION
         // $this->item = ucwords(lang($this->item, $this->translation));

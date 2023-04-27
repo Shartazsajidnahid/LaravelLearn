@@ -51,10 +51,10 @@ class SysUnitController extends Controller
     public function list()
     {
         // AUTHORIZING...
-        // $authorize = Helper::authorizing($this->module, 'View List');
-        // if ($authorize['status'] != 'true') {
-        //     return back()->with('error', $authorize['message']);
-        // }
+        $authorize = Helper::authorizing($this->module, 'View List');
+        if ($authorize['status'] != 'true') {
+            return back()->with('error', $authorize['message']);
+        }
 
 
         // GET THE DATA
@@ -65,6 +65,12 @@ class SysUnitController extends Controller
 
     public function create()
     {
+        // AUTHORIZING...
+        $authorize = Helper::authorizing($this->module, 'Add New');
+        if ($authorize['status'] != 'true') {
+            return back()->with('error', $authorize['message']);
+        }
+
         $divisions = SysDivision::where('status', 1)->get();
         return view('admin.system.unit.form', compact( 'divisions'));
     }
@@ -72,7 +78,11 @@ class SysUnitController extends Controller
     public function do_create(Request $request)
     {
 
-
+        // AUTHORIZING...
+        $authorize = Helper::authorizing($this->module, 'Add New');
+        if ($authorize['status'] != 'true') {
+            return back()->with('error', $authorize['message']);
+        }
         // LARAVEL VALIDATION
         $validation = [
             'department_id' => 'required|integer',
@@ -153,14 +163,14 @@ class SysUnitController extends Controller
 
     public function edit($id)
     {
-           // AUTHORIZING...
-        //    $authorize = Helper::authorizing($this->module, 'View Details');
-        //    if ($authorize['status'] != 'true') {
-        //        return back()->with('error', $authorize['message']);
-        //    }
+        //    AUTHORIZING...
+           $authorize = Helper::authorizing($this->module, 'View Details');
+           if ($authorize['status'] != 'true') {
+               return back()->with('error', $authorize['message']);
+           }
 
            // SET THIS OBJECT/ITEM NAME BASED ON TRANSLATION
-        //    $this->item = ucwords(lang($this->item, $this->translation));
+           $this->item = ucwords(lang($this->item, $this->translation));
 
            // CHECK OBJECT ID
            if ((int) $id < 1) {
@@ -192,13 +202,13 @@ class SysUnitController extends Controller
     public function do_edit($id, Request $request)
     {
         // AUTHORIZING...
-        // $authorize = Helper::authorizing($this->module, 'Edit');
-        // if ($authorize['status'] != 'true') {
-        //     return back()->with('error', $authorize['message']);
-        // }
+        $authorize = Helper::authorizing($this->module, 'Edit');
+        if ($authorize['status'] != 'true') {
+            return back()->with('error', $authorize['message']);
+        }
 
         // SET THIS OBJECT/ITEM NAME BASED ON TRANSLATION
-        // $this->item = ucwords(lang($this->item, $this->translation));
+        $this->item = ucwords(lang($this->item, $this->translation));
 
         // dd($request);
 
@@ -293,13 +303,13 @@ class SysUnitController extends Controller
     public function delete(Request $request)
     {
         // // AUTHORIZING...
-        // $authorize = Helper::authorizing($this->module, 'Delete');
-        // if ($authorize['status'] != 'true') {
-        //     return back()->with('error', $authorize['message']);
-        // }
+        $authorize = Helper::authorizing($this->module, 'Delete');
+        if ($authorize['status'] != 'true') {
+            return back()->with('error', $authorize['message']);
+        }
 
         // // SET THIS OBJECT/ITEM NAME BASED ON TRANSLATION
-        // $this->item = ucwords(lang($this->item, $this->translation));
+        $this->item = ucwords(lang($this->item, $this->translation));
 
         $id = $request->id;
 

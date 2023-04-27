@@ -24,10 +24,10 @@ class DesignationController extends Controller
     public function list()
     {
         // AUTHORIZING...
-        // $authorize = Helper::authorizing($this->module, 'View List');
-        // if ($authorize['status'] != 'true') {
-        //     return back()->with('error', $authorize['message']);
-        // }
+        $authorize = Helper::authorizing($this->module, 'View List');
+        if ($authorize['status'] != 'true') {
+            return back()->with('error', $authorize['message']);
+        }
 
         // GET THE DATA
         $data = Designation::all();
@@ -38,10 +38,10 @@ class DesignationController extends Controller
     public function create()
     {
         // AUTHORIZING...
-        // $authorize = Helper::authorizing($this->module, 'Add New');
-        // if ($authorize['status'] != 'true') {
-        //     return back()->with('error', $authorize['message']);
-        // }
+        $authorize = Helper::authorizing($this->module, 'Add New');
+        if ($authorize['status'] != 'true') {
+            return back()->with('error', $authorize['message']);
+        }
 
         return view('admin.system.designation.form');
     }
@@ -49,10 +49,10 @@ class DesignationController extends Controller
     public function do_create(Request $request)
     {
         // AUTHORIZING...
-        // $authorize = Helper::authorizing($this->module, 'Add New');
-        // if ($authorize['status'] != 'true') {
-        //     return back()->with('error', $authorize['message']);
-        // }
+        $authorize = Helper::authorizing($this->module, 'Add New');
+        if ($authorize['status'] != 'true') {
+            return back()->with('error', $authorize['message']);
+        }
 
 
         // HELPER VALIDATION FOR PREVENT SQL INJECTION & XSS ATTACK
@@ -214,10 +214,10 @@ class DesignationController extends Controller
     public function delete(Request $request)
     {
         // AUTHORIZING...
-        // $authorize = Helper::authorizing($this->module, 'Delete');
-        // if ($authorize['status'] != 'true') {
-        //     return back()->with('error', $authorize['message']);
-        // }
+        $authorize = Helper::authorizing($this->module, 'Delete');
+        if ($authorize['status'] != 'true') {
+            return back()->with('error', $authorize['message']);
+        }
 
         // SET THIS OBJECT/ITEM NAME BASED ON TRANSLATION
         $this->item = ucwords(lang($this->item, $this->translation));

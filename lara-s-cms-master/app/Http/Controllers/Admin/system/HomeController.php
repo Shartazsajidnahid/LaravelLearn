@@ -32,10 +32,12 @@ class Sub_branch {
     public $id;
     public $name;
     public $sub_branches;
+    public $href;
     function __construct($id, $name, $sub_branches) {
         $this->id = $id;
         $this->name = $name;
         $this->sub_branches = $sub_branches;
+$this->href = str_replace(' ', '', $name);
     }
 }
 
@@ -43,10 +45,12 @@ class Depts {
     public $id;
     public $name;
     public $units;
+    public $href;
     function __construct($id, $name, $units) {
         $this->id = $id;
         $this->name = $name;
         $this->units = $units;
+        $this->href = str_replace(' ', '', $name);
     }
 }
 
@@ -54,10 +58,12 @@ class Unit {
     public $id;
     public $name;
     public $units;
+    public $href;
     function __construct($id, $name, $units) {
         $this->id = $id;
         $this->name = $name;
         $this->units = $units;
+$this->href = str_replace(' ', '', $name);
     }
 }
 
@@ -220,16 +226,22 @@ class HomeController extends Controller
 
     public function general_allbrance()
     {
+        $branchID = 2;
         $branches = [];
         foreach( range('a', 'z') as $cur_char ){
           $responses = DB::table('sys_branches')
             ->where('name', 'like',  $cur_char.'%')
+            ->where('division_id', '=', $branchID )
+            ->where('status', '=', 1 )
             ->get();
           $sub_branches = [];
           foreach($responses as $branch){
               $br_id = $branch->id;
               if($branch->parent_id == 0){
-                $sub_br = DB::select('select * from sys_branches where parent_id='.$br_id);
+                $sub_br = DB::table('sys_branches')
+                ->where('parent_id', '=', $br_id )
+                ->where('status', '=', 1 )
+                ->get();
                 $temp = new Sub_branch($branch->id,$branch->name, $sub_br);
                 array_push($sub_branches, $temp);
               }
@@ -249,6 +261,7 @@ class HomeController extends Controller
           $responses = DB::table('sys_branches')
             ->where('name', 'like',  $cur_char.'%')
             ->where('parent_id', '!=', 0 )
+            ->where('status', '=', 1 )
             ->get();
 
           $resType = new ResponseType($cur_char, $responses);
@@ -260,11 +273,14 @@ class HomeController extends Controller
 
     public function general_branch()
     {
+        $branchID = 2;
         $branches = [];
         foreach( range('a', 'z') as $cur_char ){
           $responses = DB::table('sys_branches')
             ->where('name', 'like',  $cur_char.'%')
+            ->where('division_id', '=', $branchID )
             ->where('parent_id', '=', 0 )
+            ->where('status', '=', 1 )
             ->get();
 
           $resType = new ResponseType($cur_char, $responses);
@@ -275,12 +291,12 @@ class HomeController extends Controller
 
     public function general_division()
     {
-
+        $headofficeID = 1;
         $branches = [];
         foreach( range('a', 'z') as $cur_char ){
           $responses = DB::table('sys_branches')
             ->where('name', 'like',  $cur_char.'%')
-            ->where('division_id', '=', 2 )
+            ->where('division_id', '=', $headofficeID )
             ->get();
 
           $resType = new ResponseType($cur_char, $responses);
@@ -292,22 +308,34 @@ class HomeController extends Controller
 
     public function general_alldivision()
     {
+        $headofficeID = 1;
         $branches = [];
         foreach( range('a', 'z') as $cur_char ){
           $temp_branches = [];
-          $responses = DB::select('select * from sys_branches where name like \'' . $cur_char . '%\''); //and Head Office
+          $responses = DB::table('sys_branches')
+          ->where('name', 'like',  $cur_char.'%')
+          ->where('division_id', '=', $headofficeID )
+          ->where('status', '=', 1 )
+          ->get();
 
           //Get the departments
           foreach($responses as $branch){
               $br_id = $branch->id;
-              $sub_depts = DB::select('select * from sys_departments where branch_id='.$br_id);
+              $sub_depts = DB::table('sys_departments')
+                ->where('branch_id', '=', $br_id )
+                ->where('status', '=', 1 )
+                ->get();
 
               //Get the units
               $units = [];
               unset($depts);
               $depts = [];
                 foreach($sub_depts as $dept){
-                    $units = DB::select('select * from sys_units where department_id='.$dept->id);
+                    $units = DB::table('sys_units')
+                        ->where('department_id', '=', $dept->id )
+                        ->where('status', '=', 1 )
+                        ->get();
+                    // $units = DB::select('select * from sys_units where department_id='.$dept->id);
 
                     unset($temp_dept);
 

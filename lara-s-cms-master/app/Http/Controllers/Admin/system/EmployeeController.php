@@ -5,6 +5,7 @@ use Illuminate\Http\Request;
 
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Database\QueryException;
 
 
 use App\Models\system\SysDivision;
@@ -73,13 +74,13 @@ class EmployeeController extends Controller
 
     public function store(Request $request)
     {
+        // dd( $request->input('unit_id'));
         $request->validate([
 
-            'branch_id' => 'required|string' ,
-            'department_id' => 'required|string' ,
-            'unit_id' => 'required|string' ,
-            'email' => 'required|email' ,
-            '*' => 'required',
+            'branch_id' => 'required' ,
+            'user_name' => 'required' ,
+            'name' => 'required' ,
+            'designation_id' => 'required' ,
         ]);
         $employee = new Employee;
         $employee->name = $request->input('name');
@@ -92,16 +93,20 @@ class EmployeeController extends Controller
 
         $employee->designation_id = $request->input('designation_id');
         $employee->func_designation_id  = $request->input('func_designation_id');
+        if($request->input('gender')==1){
+            $employee->gender= "Male";
+        }
+        else{
+            $employee->gender= "Female";
+        }
 
-        // dd($request->input('joinning_date'));
-        $employee->gender= $request->input('gender');
         $employee->dob = $request->input('dob');
         $employee->mobile= $request->input('mobile');
         $employee->pabx_phone = $request->input('pabx_phone');
         $employee->office_phone = $request->input('office_phone');
         $employee->ip_phone = $request->input('ip_phone');
         $employee->email = $request->input('email');
-        $employee->password = $request->input('password');
+        $employee->password = Helper::hashing_this($request->input('password'));
         $employee->joinning_date = $request->input('joinning_date');
 
         if($request->hasfile('profile_image'))
@@ -112,33 +117,45 @@ class EmployeeController extends Controller
             $file->move('uploads/employees/', $filename);
             $employee->profile_image = $filename;
         }
+        try {
+            if(!$employee->save()){
 
-        $employee->save();
+                // SAVE THE DATA
+                $data = new SysUser();
+                $data->name = $employee->name;
+                $data->username = $employee->user_name;
+                $data->email = $employee->email;
+                $data->password = Helper::hashing_this($request->input('password'));
+                $data->status = 1;
 
-        // SAVE THE DATA
-        $data = new SysUser();
-        $data->name = $employee->name;
-        $data->username = $employee->user_name;
-        $data->email = $employee->email;
-        $data->password = Helper::hashing_this($request->input('password'));
-        $data->status = 1;
+                if ($data->save()) {
+                    // SET USERGROUP
+                    $group = new SysUserGroup();
+                    $group->user = $data->id;
+                    $group->group = 2;
+                    $group->save();
 
-        if ($data->save()) {
-            // SET USERGROUP
-            $group = new SysUserGroup();
-            $group->user = $data->id;
-            $group->group = 2;
-            $group->save();
+                    // Employee_User
+                    $employee_user = new Employee_User();
+                    $employee_user->user = $data->id;
+                    $employee_user->employee = $employee->id;
+                    $employee_user->save();
+                    return redirect()->route('employees.index')->with('success','Employee has been created successfully.');
 
-            // Employee_User
-            $employee_user = new Employee_User();
-            $employee_user->user = $data->id;
-            $employee_user->employee = $employee->id;
-            $employee_user->save();
+                }
+            }
+
+       } catch (QueryException $e) {
+            // FAILED
+           return back()
+           ->withInput()
+           ->with('error', lang('Oops, failed to add a new #item. Please try again.', $this->translation, ['#item' => "Employee"]));
+
+       }
 
 
-        }
-        return redirect()->route('employees.index')->with('success','Employee has been created successfully.');
+
+
     }
 
     public function show($id)
@@ -194,10 +211,22 @@ class EmployeeController extends Controller
             $employee->profile_image = $filename;
         }
 
-        // dd($id);
 
-        $employee->update();
-        return redirect()->route('employees.index')->with('success','Employee has been created successfully.');
+        // dd($id);
+        try {
+            if( $employee->update()){
+                return redirect()->route('employees.index')->with('success','Employee has been created successfully.');
+            }
+
+       } catch (QueryException $e) {
+            // FAILED
+            return back()
+            ->withInput()
+            ->with('error', lang('#item could not be updated', $this->translation, ['#item' => "Employee"]));
+
+       }
+
+
     }
 
     public function destroy($id)

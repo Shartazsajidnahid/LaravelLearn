@@ -12,8 +12,15 @@ use App\Models\system\SysBranch;
 use App\Models\TopDepositor;
 use App\Models\ArchiveTopDepositor;
 
+// LIBRARIES
+use App\Libraries\Helper;
+
 class TopDepositorController extends Controller
 {
+    // SET THIS MODULE
+    private $module = 'TopDepositor';
+    // SET THIS OBJECT/ITEM NAME
+    private $item = 'topDepositor';
 
     public function getTopDepositorWithName($employees){
         $data = array();
@@ -42,6 +49,11 @@ class TopDepositorController extends Controller
 
     public function index()
     {
+        // AUTHORIZING...
+        $authorize = Helper::authorizing($this->module, 'View List');
+        if ($authorize['status'] != 'true') {
+            return back()->with('error', $authorize['message']);
+        }
         $employees = TopDepositor::all();
         $data =$this->getTopBranchWithName( $employees);
         // dd($data);
@@ -50,7 +62,11 @@ class TopDepositorController extends Controller
 
     public function create()
     {
-
+        // AUTHORIZING...
+        $authorize = Helper::authorizing($this->module, 'Add New');
+        if ($authorize['status'] != 'true') {
+            return back()->with('error', $authorize['message']);
+        }
         //TODO: have to send only branch
         $data = Employee::all();
         $employees = $this->branch_with_null($data);
@@ -106,6 +122,11 @@ class TopDepositorController extends Controller
 
     public function store(Request $request)
     {
+        // AUTHORIZING...
+        $authorize = Helper::authorizing($this->module, 'Add New');
+        if ($authorize['status'] != 'true') {
+            return back()->with('error', $authorize['message']);
+        }
         // LARAVEL VALIDATION
         $validation = [
             'depositor_1' => 'required|not_in:0',

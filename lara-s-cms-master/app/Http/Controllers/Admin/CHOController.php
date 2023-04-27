@@ -5,16 +5,30 @@ use Illuminate\Support\Facades\File;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
+use Illuminate\Database\QueryException;
+
 use Yajra\Datatables\Datatables;
 use App\Models\CHO;
 use App\Models\system\SysBranch;
 
+// LIBRARIES
+use App\Libraries\Helper;
+
 
 class CHOController extends Controller
 {
+    // SET THIS MODULE
+    private $module = 'CHO';
+    // SET THIS OBJECT/ITEM NAME
+    private $item = 'cho';
+
     public function index()
     {
-
+    // AUTHORIZING...
+    $authorize = Helper::authorizing($this->module, 'View List');
+    if ($authorize['status'] != 'true') {
+        return back()->with('error', $authorize['message']);
+    }
         $cho = CHO::all();
         // dd($applink);
         return view('admin.cho.index', compact('cho'));
@@ -22,12 +36,22 @@ class CHOController extends Controller
 
     public function create()
     {
+        // AUTHORIZING...
+        $authorize = Helper::authorizing($this->module, 'Add New');
+        if ($authorize['status'] != 'true') {
+            return back()->with('error', $authorize['message']);
+        }
         $branches = SysBranch::all();
         return view('admin.cho.create', compact('branches'));
     }
 
     public function store(Request $request)
     {
+        // AUTHORIZING...
+        $authorize = Helper::authorizing($this->module, 'Add New');
+        if ($authorize['status'] != 'true') {
+            return back()->with('error', $authorize['message']);
+        }
         $selected = $request->input('selected');
 
         // dd(json_encode($selected, JSON_PRETTY_PRINT));
@@ -50,13 +74,28 @@ class CHOController extends Controller
             $cho->profile_image = $filename;
         }
 
-        $cho->save();
-        return redirect()->route('admin.cho.list')->with('success','cho has been created successfully.');
+        try {
+            if( $cho->save() ){
+            // SUCCESS
+            return redirect()->route('admin.cho.list')->with('success','cho has been created successfully.');
+            }
+       } catch (QueryException $e) {
+            // FAILED
+           return back()
+           ->withInput()
+           ->with('error', lang('Oops, failed to add a new #item. Please try again.', $this->translation, ['#item' => $this->item]));
+
+       }
     }
 
 
     public function edit($id)
     {
+        // AUTHORIZING...
+        $authorize = Helper::authorizing($this->module, 'View Details');
+        if ($authorize['status'] != 'true') {
+            return back()->with('error', $authorize['message']);
+        }
         $cho = CHO::findOrFail($id);
         $selected = $cho->branches;
         $jsonBranch = json_decode($selected);
@@ -66,6 +105,11 @@ class CHOController extends Controller
 
     public function update($id, Request $request)
     {
+        // AUTHORIZING...
+        $authorize = Helper::authorizing($this->module, 'Edit');
+        if ($authorize['status'] != 'true') {
+            return back()->with('error', $authorize['message']);
+        }
         $selected = $request->input('selected');
         $jsonD = json_encode($selected);
 
@@ -90,13 +134,28 @@ class CHOController extends Controller
             $file->move('uploads/cho/', $filename);
             $cho->profile_image = $filename;
         }
-        $cho->save();
-        return redirect()->route('admin.cho.list')->with('success','cho has been updated successfully.');
+        try {
+            if( $cho->update() ){
+            // SUCCESS
+            return redirect()->route('admin.cho.list')->with('success','cho has been created successfully.');
+            }
+       } catch (QueryException $e) {
+            // FAILED
+           return back()
+           ->withInput()
+           ->with('error', lang('Oops, failed to add a new #item. Please try again.', $this->translation, ['#item' => $this->item]));
+
+       }
     }
 
 
     public function destroy($id)
     {
+        // AUTHORIZING...
+        $authorize = Helper::authorizing($this->module, 'Delete');
+        if ($authorize['status'] != 'true') {
+            return back()->with('error', $authorize['message']);
+        }
         $cho = CHO::findOrFail($id);
 
         $cho->delete();

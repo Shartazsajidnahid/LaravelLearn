@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Database\QueryException;
 
 // LIBRARIES
 use App\Libraries\Helper;
@@ -17,17 +18,17 @@ use App\Models\Functional_designation;
 class FunctionalDesignationController extends Controller
 {
     // SET THIS MODULE
-    private $module = 'Functional Designation';
+    private $module = 'Designation';
     // SET THIS OBJECT/ITEM NAME
-    private $item = 'functionaldesignation';
+    private $item = 'designation';
 
     public function list()
     {
         // AUTHORIZING...
-        // $authorize = Helper::authorizing($this->module, 'View List');
-        // if ($authorize['status'] != 'true') {
-        //     return back()->with('error', $authorize['message']);
-        // }
+        $authorize = Helper::authorizing($this->module, 'View List');
+        if ($authorize['status'] != 'true') {
+            return back()->with('error', $authorize['message']);
+        }
 
         // GET THE DATA
         $data = Functional_designation::all();
@@ -39,17 +40,21 @@ class FunctionalDesignationController extends Controller
     public function create()
     {
         // AUTHORIZING...
-        // $authorize = Helper::authorizing($this->module, 'Add New');
-        // if ($authorize['status'] != 'true') {
-        //     return back()->with('error', $authorize['message']);
-        // }
+        $authorize = Helper::authorizing($this->module, 'Add New');
+        if ($authorize['status'] != 'true') {
+            return back()->with('error', $authorize['message']);
+        }
 
         return view('admin.system.functional_designation.form');
     }
 
     public function do_create(Request $request)
     {
-
+        // AUTHORIZING...
+        $authorize = Helper::authorizing($this->module, 'Add New');
+        if ($authorize['status'] != 'true') {
+            return back()->with('error', $authorize['message']);
+        }
         // HELPER VALIDATION FOR PREVENT SQL INJECTION & XSS ATTACK
         $func_designation_id = (int) $request->func_designation_id;
         if ($func_designation_id < 1) {
@@ -72,25 +77,32 @@ class FunctionalDesignationController extends Controller
         $data->designation = $designation;
         $data->role_status = $role_status;
 
+        // dd("hey");
 
-        if ($data->save()) {
-            // LOGGING
-            $log = new SysLog();
-            $log->subject = Session::get('admin')->id;
-            $log->action = 13;
-            $log->object = $data->id;
-            $log->save();
 
-            // SUCCESS
-            return redirect()
-                ->route('admin.functional_designation.list')
-                ->with('success', lang('Successfully added a new #item : #designation', $this->translation, ['#item' => $this->item, '#designation' => $designation]));
-        }
+        try {
+             if($data->save()){
+                // LOGGING
+             $log = new SysLog();
+             $log->subject = Session::get('admin')->id;
+             $log->action = 13;
+             $log->object = $data->id;
+             $log->save();
 
-        // FAILED
-        return back()
+             // SUCCESS
+             return redirect()
+                 ->route('admin.functional_designation.list')
+                 ->with('success', lang('Successfully added a new #item : #designation', $this->translation, ['#item' => $this->item, '#designation' => $designation]));
+
+             }
+        } catch (QueryException $e) {
+             // FAILED
+            return back()
             ->withInput()
             ->with('error', lang('Oops, failed to add a new #item. Please try again.', $this->translation, ['#item' => $this->item]));
+
+        }
+
 
     }
 
@@ -129,7 +141,11 @@ class FunctionalDesignationController extends Controller
 
     public function do_edit($id, Request $request)
     {
-
+        // AUTHORIZING...
+        $authorize = Helper::authorizing($this->module, 'Edit');
+        if ($authorize['status'] != 'true') {
+            return back()->with('error', $authorize['message']);
+        }
         // CHECK OBJECT ID
         if ((int) $id < 1) {
             // INVALID OBJECT ID
@@ -169,8 +185,10 @@ class FunctionalDesignationController extends Controller
         $data->designation = $designation;
         $data->role_status = $role_status;
 
-        if ($data->save()) {
-            // LOGGING
+
+        try {
+            if($data->save()){
+               // LOGGING
             $log = new SysLog();
             $log->subject = Session::get('admin')->id;
             $log->action = 10;
@@ -179,23 +197,26 @@ class FunctionalDesignationController extends Controller
 
             // SUCCESS
             return redirect()
-                ->route('admin.functional_designation.edit', $id)
-                ->with('success', lang('Successfully updated #item : #name', $this->translation, ['#item' => $this->item, '#name' => $designation]));
-        }
+                ->route('admin.functional_designation.list')
+                ->with('success', lang('Successfully added a new #item : #designation', $this->translation, ['#item' => $this->item, '#designation' => $designation]));
 
-        // FAILED
-        return back()
-            ->withInput()
-            ->with('error', lang('Oops, failed to update #item. Please try again.', $this->translation, ['#item' => $this->item]));
-    }
+            }
+       } catch (QueryException $e) {
+            // FAILED
+           return back()
+           ->withInput()
+           ->with('error', lang('Oops, failed to add a new #item. Please try again.', $this->translation, ['#item' => $this->item]));
+
+       }
+ }
 
     public function delete(Request $request)
     {
         // AUTHORIZING...
-        // $authorize = Helper::authorizing($this->module, 'Delete');
-        // if ($authorize['status'] != 'true') {
-        //     return back()->with('error', $authorize['message']);
-        // }
+        $authorize = Helper::authorizing($this->module, 'Delete');
+        if ($authorize['status'] != 'true') {
+            return back()->with('error', $authorize['message']);
+        }
 
         // SET THIS OBJECT/ITEM NAME BASED ON TRANSLATION
         $this->item = ucwords(lang($this->item, $this->translation));

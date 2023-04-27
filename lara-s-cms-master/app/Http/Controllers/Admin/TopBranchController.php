@@ -11,8 +11,15 @@ use App\Models\Exchange_rate;
 use App\Models\system\SysBranch;
 use App\Models\TopBranch;
 
+// LIBRARIES
+use App\Libraries\Helper;
+
 class TopBranchController extends Controller
 {
+    // SET THIS MODULE
+    private $module = 'TopBranch';
+    // SET THIS OBJECT/ITEM NAME
+    private $item = 'topBranch';
 
     private function oneRecordwith_Rank($value, $top_branch){
         $newarr = array('id'=>$value->id, 'rank'=> $top_branch->rank, 'name' =>$value->name, 'created_at' => $top_branch->created_at);
@@ -31,6 +38,11 @@ class TopBranchController extends Controller
 
     public function index()
     {
+        // AUTHORIZING...
+        $authorize = Helper::authorizing($this->module, 'View List');
+        if ($authorize['status'] != 'true') {
+            return back()->with('error', $authorize['message']);
+        }
         $branches = TopBranch::all();
         $data =$this->getTopBranchWithName( $branches);
         // dd($data);
@@ -39,7 +51,11 @@ class TopBranchController extends Controller
 
     public function create()
     {
-
+        // AUTHORIZING...
+        $authorize = Helper::authorizing($this->module, 'Add New');
+        if ($authorize['status'] != 'true') {
+            return back()->with('error', $authorize['message']);
+        }
         //TODO: have to send only branch
         $data = SysBranch::all();
         $branches = $this->branch_with_null($data);
@@ -60,15 +76,6 @@ class TopBranchController extends Controller
         return $newdata;
     }
 
-    // public function branchArray($allRequest){
-    //     foreach($allRequest as $request){
-    //         $data[]=[
-            //     'rank' => $request->rank,
-            //     'branch_id' => $request->branch_id
-            // ]
-    //     }
-    //     return $data;
-    // }
 
     private function saveRecord($branch_id, $rank, $created_at, $table_name){
 
@@ -104,6 +111,11 @@ class TopBranchController extends Controller
 
     public function store(Request $request)
     {
+        // AUTHORIZING...
+        $authorize = Helper::authorizing($this->module, 'Add New');
+        if ($authorize['status'] != 'true') {
+            return back()->with('error', $authorize['message']);
+        }
         // LARAVEL VALIDATION
         $validation = [
             'branch_1' => 'required|not_in:0',
