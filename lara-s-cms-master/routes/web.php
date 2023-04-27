@@ -116,7 +116,7 @@ Route::group([
 
             // PROFILE
             Route::get('profile', 'UserController@profile')->name('admin.profile');
-            Route::post('edit-profile', 'UserController@profile_edit')->name('admin.employees');
+            Route::post('edit-profile', 'UserController@profile_edit')->name('admin.profile.edit');
 
             // SYSTEM
             Route::group(['prefix' => 'system'], function () {
