@@ -21,22 +21,22 @@ class CreateEmployeesTable extends Migration
 
             $table->bigInteger('division_id')->index('FK_sys_divisions');
             $table->bigInteger('branch_id')->index('FK_sys_branches');
-            $table->bigInteger('department_id')->index('FK_sys_departments');
-            $table->bigInteger('unit_id')->index('FK_sys_units');
+            $table->bigInteger('department_id')->index('FK_sys_departments')->nullable();
+            $table->bigInteger('unit_id')->index('FK_sys_units')->nullable();
 
             $table->bigInteger('designation_id')->index('FK_designations');
-            $table->bigInteger('func_designation_id')->index('FK_functional_designations');
+            $table->bigInteger('func_designation_id')->index('FK_functional_designations')->nullable();
 
-            $table->string('gender');
-            $table->date('dob');
-            $table->integer('mobile');
-            $table->integer('pabx_phone');
-            $table->string('email')->unique();
-            $table->integer('office_phone');
-            $table->integer('ip_phone');
+            $table->string('gender')->nullable();
+            $table->date('dob')->nullable();
+            $table->integer('mobile')->nullable();
+            $table->integer('pabx_phone')->nullable();
+            $table->string('email')->nullable();
+            $table->integer('office_phone')->nullable();
+            $table->integer('ip_phone')->nullable();
             $table->string('password');
-            $table->string('profile_image');
-            $table->date('joinning_date');
+            $table->string('profile_image')->nullable();
+            $table->date('joinning_date')->nullable();
             $table->timestamps();
         });
     }
