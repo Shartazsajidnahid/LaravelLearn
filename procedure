@@ -1,0 +1,49 @@
+-- Active: 1684654973437@@127.0.0.1@3306@cms
+CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_update_emp_info`(IN `employeeId` VARCHAR(30))
+    DETERMINISTIC
+BEGIN
+
+    DECLARE v_empId VARCHAR(30);
+    DECLARE v_branchName VARCHAR(100);
+    DECLARE v_deptName VARCHAR(100);
+    DECLARE v_unitName VARCHAR(100);
+    DECLARE v_empDesignation VARCHAR(100);
+    DECLARE v_empFuncDesignation VARCHAR(30);
+
+
+    DECLARE finished INT default 0;
+    DECLARE result CURSOR FOR
+        select EMPLOYEE_ID, BRANCH_NAME, DEPARTMENT_NAME, UNIT_NAME, EMP_DESIGNATION, FUNCTIONAL_DESIGNTION
+        from EMP_INFO_PADMAPORTAL
+        where EMPLOYEE_ID = employeeId limit 1;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET finished = 1;
+
+    open result;
+    result_loop:
+    LOOP
+        FETCH result INTO v_empId, v_branchName,v_deptName,v_unitName,v_empDesignation,v_empFuncDesignation;
+        IF finished = 1 THEN
+            LEAVE result_loop;
+        END IF;
+
+        UPDATE employees A
+        set A.branch_id=(select id
+                         from sys_branches
+                         where name = v_branchName limit 1),
+            department_id=(select id
+                           from sys_departments
+                           where name = v_deptName limit 1),
+            unit_id=(select id
+                     from sys_units
+                     where name = v_unitName limit 1),
+            designation_id=(select id
+                            from designations
+                            where designation = v_empDesignation limit 1),
+            func_designation_id=(select id
+                                 from functional_designations
+                                 where designation = v_empFuncDesignation limit 1)
+        where user_name = v_empId;
+    END LOOP result_loop;
+    close result;
+
+END
