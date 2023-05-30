@@ -5,7 +5,7 @@
     $contents = json_decode($data->content);
 
     $keyword = '';
-    if(isset($_GET['q'])){
+    if (isset($_GET['q'])) {
         $keyword = $_GET['q'];
     }
 @endphp
@@ -17,7 +17,7 @@
         .video-container {
             overflow: hidden;
             position: relative;
-            width:100%;
+            width: 100%;
             margin-top: 10px;
         }
 
@@ -38,16 +38,55 @@
 @endsection
 
 @section('script-head')
-    <script type="text/javascript" src="https://platform-api.sharethis.com/js/sharethis.js#property=5f006f1710009800120b8d5b&product=inline-share-buttons" async="async"></script>
+    <script type="text/javascript"
+        src="https://platform-api.sharethis.com/js/sharethis.js#property=5f006f1710009800120b8d5b&product=inline-share-buttons"
+        async="async"></script>
 @endsection
 
 @section('content')
+    <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #500485; height: 80px">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="{{ url('http://127.0.0.1:8000/general') }}" title="Home">
+                <img src="{{ asset('images/logowhite.png') }}" width="120" height="77">
+            </a>
+
+
+
+            <form class="d-flex">
+                <div class="collapse navbar-collapse d-flex" id="navbarSupportedContent">
+                    <ul class="navbar-nav mb-4 mb-lg-0">
+                        <li class="nav-item">
+                            <a class="nav-link " aria-current="page" href="{{ url('http://127.0.0.1:8000/general') }}"
+                                style="padding-right: 27px ;font-weight: 600; color: white">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url('http://127.0.0.1:8000/allbrance') }}"
+                                style="padding-right: 27px ;font-weight: 600; color: white">All Branches</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url('http://127.0.0.1:8000/alldivision') }}"
+                                style="padding-right: 27px ;font-weight: 600; color: white">All Divisions</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url('http://127.0.0.1:8000/allemployees') }}"
+                                style="padding-right: 27px ;font-weight: 600; color: white">All Employees</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url('http://127.0.0.1:8000/allfiles') }}"
+                                style="padding-right: 80px ;font-weight: 600; color: white">All Files</a>
+                        </li>
+                    </ul>
+                </div>
+              </form>
+        </div>
+    </nav>
+
     <div class="container">
 
         <!-- Page Heading/Breadcrumbs -->
         <h1 class="mt-4 mb-3">
             {{ $pagetitle }}
-            @if (!empty($data->author))    
+            @if (!empty($data->author))
                 <small>by <a href="{{ route('web.blog') }}?author={{ $data->author }}">{{ $data->author }}</a></small>
             @endif
         </h1>
@@ -76,7 +115,7 @@
                 <!-- Date/Time -->
                 <p>
                     Posted on {{ date('F j, Y', strtotime($data->posted_at)) }}<br>
-                    <div class="sharethis-inline-share-buttons"></div>
+                <div class="sharethis-inline-share-buttons"></div>
                 </p>
 
                 <hr>
@@ -105,7 +144,8 @@
                                     <div class="row">
                                         <div class="col">
                                             <center>
-                                                <img src="{{ asset($item->image) }}" class="img-fluid" alt="{{ $item->image }}">
+                                                <img src="{{ asset($item->image) }}" class="img-fluid"
+                                                    alt="{{ $item->image }}">
                                             </center>
                                         </div>
                                     </div>
@@ -115,7 +155,8 @@
                                     <div class="row">
                                         <div class="col">
                                             <center>
-                                                <img src="{{ asset($item->image) }}" class="img-fluid" alt="{{ $item->image }}">
+                                                <img src="{{ asset($item->image) }}" class="img-fluid"
+                                                    alt="{{ $item->image }}">
                                             </center>
                                         </div>
                                     </div>
@@ -133,9 +174,12 @@
                             $param = explode('?v=', $video_value);
                         @endphp
                         <p>
-                            <div class="video-container">
-                                <iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/{{ $param[1] }}" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-                            </div>
+                        <div class="video-container">
+                            <iframe width="560" height="315"
+                                src="https://www.youtube-nocookie.com/embed/{{ $param[1] }}" frameborder="0"
+                                allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+                                allowfullscreen></iframe>
+                        </div>
                         </p>
                     @elseif ($item->type == 'video & text')
                         <div class="row">
@@ -153,7 +197,11 @@
                                     <div class="row">
                                         <div class="col">
                                             <div class="video-container">
-                                                <iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/{{ $param[1] }}" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                                                <iframe width="560" height="315"
+                                                    src="https://www.youtube-nocookie.com/embed/{{ $param[1] }}"
+                                                    frameborder="0"
+                                                    allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+                                                    allowfullscreen></iframe>
                                             </div>
                                         </div>
                                     </div>
@@ -163,7 +211,11 @@
                                     <div class="row">
                                         <div class="col">
                                             <div class="video-container">
-                                                <iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/{{ $param[1] }}" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                                                <iframe width="560" height="315"
+                                                    src="https://www.youtube-nocookie.com/embed/{{ $param[1] }}"
+                                                    frameborder="0"
+                                                    allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+                                                    allowfullscreen></iframe>
                                             </div>
                                         </div>
                                     </div>
@@ -197,7 +249,8 @@
                     <h5 class="card-header">Search</h5>
                     <div class="card-body">
                         <div class="input-group">
-                            <input type="text" id="keyword" class="form-control" placeholder="Search for..." value="{{ $keyword }}">
+                            <input type="text" id="keyword" class="form-control" placeholder="Search for..."
+                                value="{{ $keyword }}">
                             <span class="input-group-append">
                                 <button class="btn btn-secondary" type="button" onclick="search_page()">Go!</button>
                             </span>
@@ -277,12 +330,12 @@
     <script>
         function search_page() {
             var keyword = $('#keyword').val();
-            if(keyword == ''){
+            if (keyword == '') {
                 $('#keyword').focus();
                 alert('Please input your keyword first');
                 return false;
             }
-            var uri = "{{ route('web.blog') }}?q="+keyword;
+            var uri = "{{ route('web.blog') }}?q=" + keyword;
             window.location.href = uri;
         }
 

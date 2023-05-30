@@ -45,7 +45,7 @@
                             </div>
                             <div class="card-footer text-muted">
                                 Posted on {{ date('F j, Y', strtotime($item->posted_at)) }}
-                                @if (!empty($item->author))    
+                                @if (!empty($item->author))
                                     by <a href="{{ route('web.blog') }}?author={{ $item->author }}">{{ $item->author }}</a>
                                 @endif
                             </div>
