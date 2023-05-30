@@ -10,6 +10,10 @@ use App\Http\Controllers\Admin\TopBranchController;
 use App\Http\Controllers\Admin\TopDepositorController;
 use Carbon\Carbon;
 
+use Illuminate\Support\Facades\File;
+
+use Illuminate\Http\Request;
+
 // MODELS
 use App\Models\filetype;
 use App\Models\files;
@@ -26,6 +30,7 @@ use App\Models\TopDepositor;
 use App\Models\ArchiveTopBranch;
 use App\Models\ArchiveTopDepositor;
 use App\Models\CHO;
+use App\Models\Article;
 
 
 class Sub_branch {
@@ -37,7 +42,8 @@ class Sub_branch {
         $this->id = $id;
         $this->name = $name;
         $this->sub_branches = $sub_branches;
-$this->href = str_replace(' ', '', $name);
+        $nospace = str_replace(' ', '', $name);
+        $this->href = preg_replace('/[^A-Za-z0-9\-]/', '', $nospace);
     }
 }
 
@@ -50,7 +56,8 @@ class Depts {
         $this->id = $id;
         $this->name = $name;
         $this->units = $units;
-        $this->href = str_replace(' ', '', $name);
+        $nospace = str_replace(' ', '', $name);
+        $this->href = preg_replace('/[^A-Za-z0-9\-]/', '', $nospace);
     }
 }
 
@@ -63,7 +70,8 @@ class Unit {
         $this->id = $id;
         $this->name = $name;
         $this->units = $units;
-$this->href = str_replace(' ', '', $name);
+        $nospace = str_replace(' ', '', $name);
+        $this->href = preg_replace('/[^A-Za-z0-9\-]/', '', $nospace);
     }
 }
 
@@ -117,23 +125,27 @@ class HomeController extends Controller
         $admin = Session::get('admin');
         $employee_user = Employee_User::where('user', $admin->id)->first();
 
-        $user_raw = Employee::where('id', $employee_user->employee)->first();
-        $user = (new EmployeeController)->oneRecordwith_names($user_raw);
+        $user = Employee::where('id', $employee_user->employee)->first();
+        // $user = (new EmployeeController)->oneRecordwith_names($user_raw);
 
         // BANNERS
         $query = Banner::whereNotNull('id');
         $banners = $query->orderBy('ordinal')->get();
 
         // NEWS
-        $news = Topic::select("*")
-        ->where([
-            ["status", "=", 1],
-            ["description", "!=", null]
-        ])
-        ->get();
+        // $news = Topic::select("*")
+        // ->where([
+        //     ["status", "=", 1],
+        //     ["description", "!=", null]
+        // ])
+        // ->get();
+
+        $articles = Article::all();
+
 
         // APPLINKS
-        $applinks = Applink::all();
+        $applinks_up = Applink::where('up' , 1)->get();
+        $applinks_down = Applink::where('up', 2)->get();
 
         // EXCHANGE RATES
         $exchange_rate = Exchange_rate::all();
@@ -144,7 +156,7 @@ class HomeController extends Controller
         // TOP Employees
         $top_employees = $this->getTopDepositors();
 
-        return view('general_user.home', compact('user', 'banners', 'news', 'applinks', 'exchange_rate', 'top_branches', 'top_employees'));
+        return view('general_user.home', compact('user', 'banners', 'articles', 'applinks_up', 'applinks_down', 'exchange_rate', 'top_branches', 'top_employees'));
     }
     private function getIDname($home){
         $office = '';
@@ -157,8 +169,13 @@ class HomeController extends Controller
     private function getEmployees($home,$id){
         $office = $this->getIDname($home);
 
-        $employees = DB::table('employees')
+        // GET THE DATA
+        $employees = Employee::select(
+            'employees.*'
+        )
+            ->leftJoin('designations', 'employees.designation_id', '=', 'designations.id')
             ->where($office, '=', $id)
+            ->orderBy('designations.seniority_order', 'ASC')
             ->get();
         return $employees;
     }
@@ -181,47 +198,77 @@ class HomeController extends Controller
             ->first();
 
         //get employees
-        $user_raw = $this->getEmployees($home,$id);
-        // $user_raw = Employee::where('id', $employee_user->employee)->first();
-        $employees = (new EmployeeController)->getDatawithNames($user_raw);
+        $employees = $this->getEmployees($home,$id);
 
-        // $allfiles = files::all();
         $filetypes = filetype::all();
         $data = (new FilesController)->categorize($filetypes, $this->getFiles($home,$id));
 
         return view('general_user.team', compact('data', 'filetypes', 'employees', 'office'));
     }
 
-    function choWithBranch($cho){
-        $newarr = array('name'=>$cho->name, 'designation'=>$cho->designation, 'profile_image'=>$cho->profile_image);
-        $jsonBranches = json_decode($cho->branches);
+    function choWithBranch($value){
+        $cho = Employee::where('user_name', $value->user_id)->first();
+        $newarr = array('name'=>$cho->name, 'profile_image'=>$cho->profile_image, 'user_name'=>$cho->user_name);
+
+        if($value->position == 1){
+            $newarr['position'] = "MD";
+        }
+        else if($value->position == 2){
+            $newarr['position'] = $newarr['position'] = "DMD";
+        }
+
+        $jsonBranches = json_decode($value->branches);
 
         $branches = [];
         foreach($jsonBranches as $item){
-            $oneBranch = SysBranch::findOrFail($item);
-            $branches[] = $oneBranch;
+
+            $oneBranch = SysBranch::find($item);
+
+            if(!empty($oneBranch)){
+                $branches[] = $oneBranch;
+            }
         }
 
-        $branches = array_chunk($branches, ceil(count($branches)/2));
+        if($value->position == 1)
+            $branches = array_chunk($branches, ceil(count($branches)/2));
         $newarr['branches'] = $branches;
+
         return $newarr;
     }
 
     public function general_aboutus()
     {
-        // get MD and branches
-        $md_id = 1;
-        $md_record = CHO::findOrFail($md_id);
-        $md = $this->choWithBranch($md_record);
-        // dd($md);
 
-        $dmds_record = CHO::where('id', '!=', $md_id)->get();
-        $dmds = [];
-        foreach($dmds_record as $item){
-            $dmds[] = $this->choWithBranch($item);
-        }
-        // dd($dmds);
-        return view('general_user.about-us', compact('md','dmds'));
+        try {
+             // get MD and branches
+            $md_id = 1;
+            $dmd_id = 2;
+            $md_record = CHO::where('position', $md_id)->first();
+
+            if($md_record){
+                $md = $this->choWithBranch($md_record);
+            }
+            else{
+                $md = [];
+            }
+
+
+            $dmds_record = CHO::where('position', $dmd_id)->get();
+            $dmds = [];
+            foreach($dmds_record as $item){
+                $dmds[] = $this->choWithBranch($item);
+            }
+            // dd($dmds);
+            return view('general_user.about-us', compact('md','dmds'));
+
+       } catch (QueryException $e) {
+            // FAILED
+           return back()
+           ->withInput()
+           ->with('error');
+
+       }
+
     }
 
     public function general_allbrance()
@@ -359,10 +406,140 @@ class HomeController extends Controller
     public function general_allfiles()
     {
         $filetypes = filetype::all();
-        $files = files::all();
-        $data = (new FilesController)->categorize($filetypes, $files);
-        return view('general_user.allfiles', compact('data', 'filetypes'));
+        $files = files::select(
+            'files.*',
+            'sys_branches.name as branch',
+            'sys_departments.name as department',
+            'sys_units.name as unit',
 
+        )
+            ->leftJoin('division_admins', 'files.division_admin_id', '=', 'division_admins.id')
+            ->leftJoin('sys_branches', 'division_admins.branch_id', '=', 'sys_branches.id')
+            ->leftJoin('sys_departments', 'division_admins.department_id', '=', 'sys_departments.id')
+            ->leftJoin('sys_units', 'division_admins.unit_id', '=', 'sys_units.id')
+            ->get();
+
+        // dd($files);
+        // $data = (new FilesController)->categorize($filetypes, $files);
+        // dd($data);
+        return view('general_user.allfiles', compact('files', 'filetypes'));
+
+    }
+
+    public function general_allemployees()
+    {
+        $allemployees = Employee::select(
+            'employees.*',
+            'sys_branches.name as branch',
+            'sys_departments.name as department',
+            'sys_units.name as unit',
+            'designations.designation as designation',
+            'functional_designations.designation as functional_designation',
+
+        )
+
+            ->leftJoin('sys_branches', 'employees.branch_id', '=', 'sys_branches.id')
+            ->leftJoin('sys_departments', 'employees.department_id', '=', 'sys_departments.id')
+            ->leftJoin('sys_units', 'employees.unit_id', '=', 'sys_units.id')
+            ->leftJoin('designations', 'employees.designation_id', '=', 'designations.id')
+            ->leftJoin('functional_designations', 'employees.func_designation_id', '=', 'functional_designations.id')
+            ->orderBy('designations.seniority_order', 'DESC')
+            ->get();
+
+        // dd($allemployees);
+        return view('general_user.allemployees', compact('allemployees'));
+
+    }
+
+    public function general_all_div_info()
+    {
+        $branches = SysBranch::select(
+            'sys_branches.name as name',
+            'sys_branches.location as location',
+            'sys_branches.phone as phone',
+        )
+        ->get();
+        return view('general_user.all_branch_dept_unit', compact('branches' ));
+
+    }
+
+
+
+    public function update_image(Request $request, $id)
+    {
+        $employee = Employee::findOrFail($id);
+
+        if($request->hasfile('profile_image'))
+        {
+            $destination = 'uploads/employees/'.$employee->profile_image;
+            if(File::exists($destination))
+            {
+                File::delete($destination);
+            }
+            $file = $request->file('profile_image');
+            $extention = $file->getClientOriginalExtension();
+            $filename = time().'.'.$extention;
+            $file->move('uploads/employees/' . $employee->user_name . '/', $filename);
+            $employee->profile_image = $filename;
+        }
+
+        try {
+            if( $employee->update()){
+                return back();
+            }
+
+       } catch (QueryException $e) {
+            // FAILED
+            return back()
+            ->withInput()
+            ->with('error', lang('#item could not be updated', $this->translation, ['#item' => "Employee"]));
+
+       }
+    }
+
+    public function get_data(Request $request)
+    {
+        // dd($request->input('filetype'));
+        $filetype = (int) $request->input('filetype');
+        // dd("hapi hapi hapi");
+        if($filetype==0){
+            $data = files::select(
+                'files.*',
+                'sys_branches.name as branch',
+                'sys_departments.name as department',
+                'sys_units.name as unit',
+            )
+                ->leftJoin('division_admins', 'files.division_admin_id', '=', 'division_admins.id')
+                ->leftJoin('sys_branches', 'division_admins.branch_id', '=', 'sys_branches.id')
+                ->leftJoin('sys_departments', 'division_admins.department_id', '=', 'sys_departments.id')
+                ->leftJoin('sys_units', 'division_admins.unit_id', '=', 'sys_units.id')
+                ->get();
+        }
+        else{
+            $data = files::select(
+                'files.*',
+                'sys_branches.name as branch',
+                'sys_departments.name as department',
+                'sys_units.name as unit',
+            )
+                ->leftJoin('division_admins', 'files.division_admin_id', '=', 'division_admins.id')
+                ->leftJoin('sys_branches', 'division_admins.branch_id', '=', 'sys_branches.id')
+                ->leftJoin('sys_departments', 'division_admins.department_id', '=', 'sys_departments.id')
+                ->leftJoin('sys_units', 'division_admins.unit_id', '=', 'sys_units.id')
+                ->where('files.file_type', '=', $filetype)
+                ->get();
+
+        }
+
+
+
+        // SUCCESS
+        $response = [
+            'status' => 'true',
+            'message' => 'Successfully get data list',
+            'data' => $data
+        ];
+        return response()->json($response, 200);
     }
 
 }

@@ -169,7 +169,6 @@ class UserController extends Controller
         $validation = [
             'name' => 'required',
             'username' => 'required|unique:sys_users,username',
-            'email' => 'required|email|unique:sys_users,email',
             'password' => 'required|confirmed',
             'usergroup' => 'required|integer'
         ];
@@ -180,7 +179,6 @@ class UserController extends Controller
         $names = [
             'name' => ucwords(lang('name', $this->translation)),
             'username' => ucwords(lang('username', $this->translation)),
-            'email' => ucwords(lang('email', $this->translation)),
             'password' => ucwords(lang('password', $this->translation)),
             'usergroup' => ucwords(lang('usergroup', $this->translation))
         ];
@@ -199,12 +197,7 @@ class UserController extends Controller
                 ->withInput()
                 ->with('error', lang('Invalid format for #item', $this->translation, ['#item' => ucwords(lang('username', $this->translation))]));
         }
-        $email = Helper::validate_input_email($request->email);
-        if (!$email) {
-            return back()
-                ->withInput()
-                ->with('error', lang('Invalid format for #item', $this->translation, ['#item' => ucwords(lang('email', $this->translation))]));
-        }
+
         $usergroup = (int) $request->usergroup;
         if ($usergroup < 1) {
             return back()
@@ -217,7 +210,7 @@ class UserController extends Controller
         $data = new SysUser();
         $data->name = $name;
         $data->username = $username;
-        $data->email = $email;
+        $data->email = $request->email;
         $data->password = Helper::hashing_this($request->input('password'));
         $data->status = $status;
 
@@ -317,7 +310,6 @@ class UserController extends Controller
         // LARAVEL VALIDATION
         $validation = [
             'name' => 'required',
-            'email' => 'required|email',
             'usergroup' => 'required|integer'
         ];
         // IF PASSWORD IS CHANGED
@@ -329,7 +321,6 @@ class UserController extends Controller
         ];
         $names = [
             'name' => ucwords(lang('name', $this->translation)),
-            'email' => ucwords(lang('email', $this->translation)),
             'password' => ucwords(lang('password', $this->translation)),
             'usergroup' => ucwords(lang('usergroup', $this->translation))
         ];
@@ -342,12 +333,7 @@ class UserController extends Controller
                 ->withInput()
                 ->with('error', lang('Invalid format for #item', $this->translation, ['#item' => ucwords(lang('name', $this->translation))]));
         }
-        $email = Helper::validate_input_email($request->email);
-        if (!$email) {
-            return back()
-                ->withInput()
-                ->with('error', lang('Invalid format for #item', $this->translation, ['#item' => ucwords(lang('email', $this->translation))]));
-        }
+
         $usergroup = (int) $request->usergroup;
         if ($usergroup < 1) {
             return back()
@@ -369,7 +355,7 @@ class UserController extends Controller
 
         // UPDATE THE DATA
         $data->name = $name;
-        $data->email = $email;
+        $data->email = $request->email;
         $data->status = $status;
         // IF PASSWORD IS CHANGED
         if ($request->input('password')) {
@@ -533,7 +519,7 @@ class UserController extends Controller
         if (($division_id < 1) || ($branch_id < 1) ||  ($assign_to < 1)) {
             return back()
                 ->withInput()
-                ->with('error', lang('#item must be chosen at least one', $this->translation, ['#item' => ucwords(lang('all fields', $this->translation))]));
+                ->with('error', lang('#item must be chosen at least one', $this->translation, ['#item' => ucwords(lang('Branch', $this->translation))]));
         }
 
 
@@ -737,8 +723,7 @@ class UserController extends Controller
     {
         // LARAVEL VALIDATION
         $validation = [
-            'name' => 'required',
-            'email' => 'required|email'
+            'name' => 'required'
         ];
         // IF PASSWORD IS CHANGED
         $changepass = false;
@@ -753,7 +738,6 @@ class UserController extends Controller
         ];
         $names      = [
             'name' => ucwords(lang('name', $this->translation)),
-            'email' => ucwords(lang('email', $this->translation)),
             'current_pass' => ucwords(lang('current #item', $this->translation, ['#item' => ucwords(lang('password', $this->translation))])),
             'password' => ucwords(lang('new #item', $this->translation, ['#item' => ucwords(lang('password', $this->translation))])),
         ];
@@ -766,19 +750,13 @@ class UserController extends Controller
                 ->withInput()
                 ->with('error', lang('Invalid format for #item', $this->translation, ['#item' => ucwords(lang('name', $this->translation))]));
         }
-        $email = Helper::validate_input_email($request->email);
-        if (!$email) {
-            return back()
-                ->withInput()
-                ->with('error', lang('Invalid format for #item', $this->translation, ['#item' => ucwords(lang('email', $this->translation))]));
-        }
 
         // GET DATA BASED ON SESSION
         $data = SysUser::find(Session::get('admin')->id);
 
         // UPDATE THE DATA
         $data->name = $name;
-        $data->email = $email;
+        $data->email = $request->email;
 
         // IF PASSWORD IS CHANGED
         if ($changepass) {

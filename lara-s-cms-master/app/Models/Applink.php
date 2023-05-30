@@ -8,6 +8,6 @@ class Applink extends Model
 {
     protected $table = 'applinks';
 
-    protected $fillable = ['name','link','image'];
+    protected $fillable = ['name','link','image', 'up'];
 
 }

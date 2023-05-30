@@ -10,7 +10,10 @@ use Illuminate\Database\QueryException;
 use Yajra\Datatables\Datatables;
 use App\Models\CHO;
 use App\Models\system\SysBranch;
+use App\Models\Employee;
 
+
+use App\Functions\EmployeeFunction;
 // LIBRARIES
 use App\Libraries\Helper;
 
@@ -29,20 +32,47 @@ class CHOController extends Controller
     if ($authorize['status'] != 'true') {
         return back()->with('error', $authorize['message']);
     }
-        $cho = CHO::all();
+
+
+        $cho = CHO::select(
+            'cho.id',
+            'cho.position',
+            'employees.name as name',
+
+        )
+            ->leftJoin('employees', 'cho.user_id', '=', 'employees.user_name')
+            ->orderBy('cho.position')
+            ->get();
         // dd($applink);
         return view('admin.cho.index', compact('cho'));
     }
 
-    public function create()
+    public function create(Request $request)
     {
         // AUTHORIZING...
         $authorize = Helper::authorizing($this->module, 'Add New');
         if ($authorize['status'] != 'true') {
             return back()->with('error', $authorize['message']);
         }
+
+        $data['employee'] = $this->filterResult($request);
+        $data['employeeList'] = EmployeeFunction::allEmployees();
+
         $branches = SysBranch::all();
-        return view('admin.cho.create', compact('branches'));
+        return view('admin.cho.create', compact('branches', 'data'));
+    }
+
+    private function filterResult($request)
+    {
+        $filterData = Employee::query();
+
+        if ($request->filled('user_name')) {
+            $filterData->where('user_name', $request->user_name);
+        }
+        if ($request->filled('branch_id')) {
+            $filterData->where('branch_id', $request->branch_id);
+        }
+        return $filterData->paginate(10);
     }
 
     public function store(Request $request)
@@ -52,27 +82,16 @@ class CHOController extends Controller
         if ($authorize['status'] != 'true') {
             return back()->with('error', $authorize['message']);
         }
-        $selected = $request->input('selected');
 
-        // dd(json_encode($selected, JSON_PRETTY_PRINT));
+        $selected = $request->input('selected');
         $jsonD = json_encode($selected);
-        // dd(json_decode($jsonD));
 
         $cho = new CHO;
-        $cho->name = $request->input('name');
-        $cho->email = $request->input('email');
-        $cho->mobile = $request->input('mobile');
-        $cho->designation = $request->input('designation');
+        $cho->user_id =  $request->input('user_name');
+        $cho->position =  (int) $request->input('position');
         $cho->branches = $jsonD;
 
-        if($request->hasfile('profile_image'))
-        {
-            $file = $request->file('profile_image');
-            $extention = $file->getClientOriginalExtension();
-            $filename = time().'.'.$extention;
-            $file->move('uploads/cho/', $filename);
-            $cho->profile_image = $filename;
-        }
+        // dd($cho);
 
         try {
             if( $cho->save() ){
@@ -84,23 +103,47 @@ class CHOController extends Controller
            return back()
            ->withInput()
            ->with('error', lang('Oops, failed to add a new #item. Please try again.', $this->translation, ['#item' => $this->item]));
-
        }
     }
 
 
-    public function edit($id)
+    public function edit($id, Request $request)
     {
         // AUTHORIZING...
         $authorize = Helper::authorizing($this->module, 'View Details');
         if ($authorize['status'] != 'true') {
             return back()->with('error', $authorize['message']);
         }
-        $cho = CHO::findOrFail($id);
+        // $cho = CHO::findOrFail($id);
+
+        $cho = CHO::select(
+            'cho.id',
+            'cho.user_id',
+            'cho.position',
+            'cho.branches',
+            'employees.name as name',
+            'employees.email as email',
+            'designations.designation as designation',
+            'functional_designations.designation as functional_designation'
+
+        )
+            ->leftJoin('employees', 'cho.user_id', '=', 'employees.user_name')
+            ->leftJoin('designations', 'employees.designation_id', '=', 'designations.id')
+            ->leftJoin('functional_designations', 'employees.func_designation_id', '=', 'functional_designations.id')
+            ->where('cho.id', $id)
+            ->first();
+
+        // dd($cho);
+
         $selected = $cho->branches;
         $jsonBranch = json_decode($selected);
+        // dd($jsonBranch);
+
+        $data['employee'] = $this->filterResult($request);
+        $data['employeeList'] = EmployeeFunction::allEmployees();
+
         $branches = SysBranch::all();
-        return view('admin.cho.edit', compact('cho', 'branches', 'jsonBranch'));
+        return view('admin.cho.edit', compact('cho', 'branches', 'jsonBranch', 'data'));
     }
 
     public function update($id, Request $request)
@@ -113,27 +156,12 @@ class CHOController extends Controller
         $selected = $request->input('selected');
         $jsonD = json_encode($selected);
 
-
         $cho = CHO::findOrFail($id);
-        $cho->name = $request->input('name');
-        $cho->email = $request->input('email');
-        $cho->mobile = $request->input('mobile');
-        $cho->designation = $request->input('designation');
+        $cho->user_id =  $request->input('user_name');
+        $cho->position =  (int) $request->input('position');
         $cho->branches = $jsonD;
 
-        if($request->hasfile('profile_image'))
-        {
-            $destination = 'uploads/cho/'.$cho->profile_image;
-            if(File::exists($destination))
-            {
-                File::delete($destination);
-            }
-            $file = $request->file('profile_image');
-            $extention = $file->getClientOriginalExtension();
-            $filename = time().'.'.$extention;
-            $file->move('uploads/cho/', $filename);
-            $cho->profile_image = $filename;
-        }
+
         try {
             if( $cho->update() ){
             // SUCCESS

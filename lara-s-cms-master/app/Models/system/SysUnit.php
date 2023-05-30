@@ -23,6 +23,6 @@ class SysUnit extends Model
      * @var array
      */
     protected $fillable = [
-        'department_id', 'name', 'location', 'phone', 'status', 'ordinal', 'created_at', 'updated_at', 'deleted_at'
+        'department_id', 'department_name', 'name', 'hr_unit_id', 'location', 'phone', 'status', 'ordinal', 'created_at', 'updated_at', 'deleted_at'
     ];
 }

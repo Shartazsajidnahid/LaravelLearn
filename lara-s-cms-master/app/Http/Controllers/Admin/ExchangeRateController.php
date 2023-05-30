@@ -28,7 +28,7 @@ class ExchangeRateController extends Controller
     if ($authorize['status'] != 'true') {
         return back()->with('error', $authorize['message']);
     }
-        $links = exchange_rate::all();
+        $links = exchange_rate::paginate(10);
         // dd($applink);
         return view('admin.exchange_rate.index', compact('links'));
     }

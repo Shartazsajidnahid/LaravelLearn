@@ -203,7 +203,6 @@ class SysDepartmentController extends Controller
         // SET THIS OBJECT/ITEM NAME BASED ON TRANSLATION
         $this->item = ucwords(lang($this->item, $this->translation));
 
-        // dd($request);
 
         // CHECK OBJECT ID
         if ((int) $id < 1) {
@@ -213,19 +212,6 @@ class SysDepartmentController extends Controller
                 ->with('error', lang('#item ID is invalid, please recheck your link again', $this->translation, ['#item' => $this->item]));
         }
 
-        // // LARAVEL VALIDATION
-        // $validation = [
-        //     'branch_id' => 'required|integer',
-        //     'name' => 'required'
-        // ];
-        // $message = [
-        //     'required' => ':attribute ' . lang('field is required', $this->translation)
-        // ];
-        // $names = [
-        //     'branch_id' => ucwords(lang('division', $this->translation)),
-        //     'name' => ucwords(lang('name', $this->translation))
-        // ];
-        // $this->validate($request, $validation, $message, $names);
 
         // HELPER VALIDATION FOR PREVENT SQL INJECTION & XSS ATTACK
         $branch_id = (int) $request->branch_id;
@@ -247,15 +233,9 @@ class SysDepartmentController extends Controller
         $phone = $request->phone;
         if ($phone) {
             $valid_phone = Helper::validate_phone($request->phone, '62', '0');
-            // if ($valid_phone['status'] != 'true') {
-            //     return back()
-            //         ->withInput()
-            //         ->with('error', $valid_phone['message']);
-            // }
             $phone = $valid_phone['data'];
         }
-        // $status = (int) $request->status;
-        // dd("hey");
+
         // GET THE DATA BASED ON ID
         $data = SysDepartment::find($id);
 
@@ -631,11 +611,8 @@ class SysDepartmentController extends Controller
     public function get_branches(Request $request){
 
         $div_id=$request->post('div_id');
-
-        echo $div_id;
-		// $state=DB::table('sysBranch')->where('division_id',$div_id)->orderBy('state','asc')->get();
         $branches = SysBranch::where('division_id', $div_id)->orderBy('name', 'asc')->get();
-		// $html='<option value="">Select Branch</option>';
+
         $html = '<option>choose one</option>';
 		foreach($branches as $list){
             // if($list->id == 4){
@@ -648,9 +625,6 @@ class SysDepartmentController extends Controller
 		}
 		echo $html;
 
-
-        // $branches = SysBranch::where('division_id', $id)->orderBy('name', 'asc')->get();
-        // return response()->json(['branches'=>$branches]);
     }
 
 }

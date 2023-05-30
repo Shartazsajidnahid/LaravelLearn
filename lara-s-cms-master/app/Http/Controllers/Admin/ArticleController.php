@@ -24,6 +24,13 @@ class ArticleController extends Controller
     // SET THIS OBJECT/ITEM NAME
     private $item = 'article';
 
+
+    public function show($slug)
+    {
+        $article = Article::where('slug', $slug)->firstOrFail();
+        return view('web.blog', ['article' => $article]);
+    }
+
     public function list()
     {
         // AUTHORIZING...
@@ -31,16 +38,33 @@ class ArticleController extends Controller
         if ($authorize['status'] != 'true') {
             return back()->with('error', $authorize['message']);
         }
+        $query = Article::select(
+            'articles.id',
+            'articles.title',
+            'articles.slug',
+            'articles.thumbnail',
+            'articles.keywords',
+            'articles.content',
+            'articles.status',
+            'articles.created_at',
+            'articles.updated_at',
+            'articles.deleted_at',
+            DB::raw('GROUP_CONCAT(topics.name SEPARATOR " | ") AS topics')
+        )
+            ->leftJoin('article_topic', 'articles.id', 'article_topic.article_id')
+            ->leftJoin('topics', 'article_topic.topic_id', 'topics.id')
+            ->groupBy(
+                'articles.id'
+            );
+
 
         // FOR DISPLAY ACTIVE DATA
         $data = true;
 
         return view('admin.article.list', compact('data'));
     }
-
     public function get_data(Datatables $datatables, Request $request)
     {
-        dd("check");
         // AUTHORIZING...
         $authorize = Helper::authorizing($this->module, 'View List');
         if ($authorize['status'] != 'true') {
@@ -67,9 +91,18 @@ class ArticleController extends Controller
             ->leftJoin('article_topic', 'articles.id', 'article_topic.article_id')
             ->leftJoin('topics', 'article_topic.topic_id', 'topics.id')
             ->groupBy(
-                'articles.id'
+                'articles.id',
+                'articles.title',
+                'articles.slug',
+                'articles.thumbnail',
+                'articles.keywords',
+                'articles.content',
+                'articles.status',
+                'articles.created_at',
+                'articles.updated_at',
+                'articles.deleted_at'
             );
-            dd($query);
+
         return $datatables->eloquent($query)
             ->addColumn('item_status', function ($data) {
                 if ($data->status != 1) {
@@ -181,7 +214,7 @@ class ArticleController extends Controller
             $data->posted_at = Helper::convert_datepicker($posted_at);
         }
 
-        $data->status = (int) $request->status;
+        $data->status = (int)$request->status;
 
         // PROCESSING IMAGE
         $dir_path = 'uploads/article/';
@@ -314,7 +347,7 @@ class ArticleController extends Controller
         $this->item = ucwords(lang($this->item, $this->translation));
 
         // CHECK OBJECT ID
-        if ((int) $id < 1) {
+        if ((int)$id < 1) {
             // INVALID OBJECT ID
             return redirect()
                 ->route('admin.article.list')
@@ -376,7 +409,7 @@ class ArticleController extends Controller
         $this->item = ucwords(lang($this->item, $this->translation));
 
         // CHECK OBJECT ID
-        if ((int) $id < 1) {
+        if ((int)$id < 1) {
             // INVALID OBJECT ID
             return redirect()
                 ->route('admin.article.list')
@@ -445,7 +478,7 @@ class ArticleController extends Controller
             $data->posted_at = Helper::convert_datepicker($posted_at);
         }
 
-        $data->status = (int) $request->status;
+        $data->status = (int)$request->status;
 
         // if upload new image for THUMBNAIL
         if ($request->thumbnail) {
@@ -623,7 +656,7 @@ class ArticleController extends Controller
         $id = $request->id;
 
         // CHECK OBJECT ID
-        if ((int) $id < 1) {
+        if ((int)$id < 1) {
             // INVALID OBJECT ID
             return redirect()
                 ->route('admin.article.list')
@@ -666,7 +699,7 @@ class ArticleController extends Controller
         $this->item = ucwords(lang($this->item, $this->translation));
 
         // CHECK OBJECT ID
-        if ((int) $id < 1) {
+        if ((int)$id < 1) {
             // INVALID OBJECT ID
             return redirect()
                 ->route('admin.article.list')
@@ -712,7 +745,7 @@ class ArticleController extends Controller
         $this->item = ucwords(lang($this->item, $this->translation));
 
         // CHECK OBJECT ID
-        if ((int) $id < 1) {
+        if ((int)$id < 1) {
             // INVALID OBJECT ID
             return redirect()
                 ->route('admin.article.list')

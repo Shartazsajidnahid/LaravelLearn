@@ -26,7 +26,7 @@ class ApplinkController extends Controller
         if ($authorize['status'] != 'true') {
             return back()->with('error', $authorize['message']);
         }
-        $links = Applink::all();
+        $links = Applink::paginate(10);
         // dd($applink);
         return view('admin.applink.index', compact('links'));
     }
@@ -66,6 +66,7 @@ class ApplinkController extends Controller
         $applink = new Applink;
         $applink->name = $request->input('name');
         $applink->link = $request->input('link');
+        $applink->up = $request->input('up');
 
         // dd($applink);
 
@@ -87,6 +88,7 @@ class ApplinkController extends Controller
             }
        } catch (QueryException $e) {
             // FAILED
+            dd($e);
            return back()
            ->withInput()
            ->with('error', lang('Oops, failed to add a new #item. Please try again.', $this->translation, ['#item' => $this->item]));
@@ -103,15 +105,15 @@ class ApplinkController extends Controller
          if ($authorize['status'] != 'true') {
              return back()->with('error', $authorize['message']);
          }
-         return view('admin.applink.create');
         $applink = Applink::findOrFail($id);
         $destination = 'uploads/applinks/'.$applink->image;
         if(File::exists($destination))
         {
             File::delete($destination);
         }
+
         $applink->delete();
-        return redirect()->route('admin.applink.list')->with('success','Applinks has been created successfully.');
+        return redirect()->route('admin.applink.list')->with('success','Applinks has been deleted successfully.');
     }
 
 }

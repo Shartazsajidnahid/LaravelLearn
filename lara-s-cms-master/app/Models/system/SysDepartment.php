@@ -24,6 +24,6 @@ class SysDepartment extends Model
      * @var array
      */
     protected $fillable = [
-        'branch_id', 'name', 'location', 'phone', 'status', 'ordinal', 'created_at', 'updated_at', 'deleted_at'
+        'branch_id', 'branch_name', 'name', 'hr_department_id', 'location', 'phone', 'status', 'ordinal', 'created_at', 'updated_at', 'deleted_at'
     ];
 }

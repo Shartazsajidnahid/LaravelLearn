@@ -72,7 +72,7 @@ class UsergroupController extends Controller
             ->leftJoin('sys_group_branch as b', 'b.group', 'sys_groups.id')
             ->leftJoin('sys_branches as c', 'c.id', 'b.branch')
             ->leftJoin('sys_divisions as d', 'd.id', 'c.division_id')
-            ->where('sys_groups.id', '>', 1)
+            ->where('sys_groups.id', '>', 2)
             ->groupBy('sys_groups.id', 'sys_groups.name', 'sys_groups.status', 'sys_groups.created_at', 'sys_groups.updated_at');
 
         // GET ONLY ALLOWED DIVISIONS

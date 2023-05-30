@@ -9,5 +9,5 @@ class CHO extends Model
     //
     protected $table = 'cho';
 
-    protected $fillable = ['name','mobile','email', 'designation', 'branches', 'profile_image', ];
+    protected $fillable = ['user_id','position', 'branches' ];
 }

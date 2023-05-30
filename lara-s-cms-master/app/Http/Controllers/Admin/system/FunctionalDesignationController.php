@@ -31,7 +31,7 @@ class FunctionalDesignationController extends Controller
         }
 
         // GET THE DATA
-        $data = Functional_designation::all();
+        $data = Functional_designation::paginate(10);
         // dd($data);
 
         return view('admin.system.functional_designation.list', compact('data'));

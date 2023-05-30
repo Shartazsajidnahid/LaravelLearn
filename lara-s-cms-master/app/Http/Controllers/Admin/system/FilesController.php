@@ -17,6 +17,7 @@ use App\Libraries\Helper;
 use App\Models\filetype;
 use App\Models\files;
 use App\Models\system\Division_admin;
+use App\Models\system\SysDivision;
 
 class FilesController extends Controller
 {
@@ -85,8 +86,19 @@ class FilesController extends Controller
         }
 
         $filetypes = filetype::all();
+        $divisions = SysDivision::all();
+        $adm = Session::get('admin');
 
-        return view('admin.file.form', compact('filetypes'));
+        if ((DB::table('division_admins')->where('admin_id', $adm->id)->exists()) &&
+            (DB::table('division_admins')->where('admin_id', $adm->id)->first()->assign_to != 5)){
+
+            $adminid = 0;
+        }
+        else{
+            $adminid = 1;
+        }
+
+        return view('admin.file.form', compact('filetypes', 'divisions', 'adminid'));
     }
 
     public function do_create(Request $request)
@@ -129,12 +141,9 @@ class FilesController extends Controller
                 ->withInput()
                 ->with('error', lang('Invalid format for #item', $this->translation, ['#item' => ucwords(lang('name', $this->translation))]));
         }
-        // dd($request->status);
-        // dd($request->file('file'));
 
         //find division_admin_id
         $admin = Session::get('admin');
-
 
         if($request->file('file')) {
 
@@ -157,8 +166,6 @@ class FilesController extends Controller
                 File::makeDirectory($path);
             }
 
-
-
             $location = 'uploads/files/'.$admin->name.'-'.$admin->id.'/'.$type[0];
             // dd($location);
 
@@ -178,8 +185,6 @@ class FilesController extends Controller
                 ->with('error', lang('one #item must be chosen', $this->translation, ['#item' => ucwords(lang('file', $this->translation))]));
         }
 
-        // dd($admin);
-
         // SAVE THE DATA
         $data = new files();
         $data->name = $name;
@@ -195,10 +200,37 @@ class FilesController extends Controller
             $data->status = 0;
         }
 
-        $division_admin = DB::table('division_admins')->where('admin_id', $admin->id)->first();
+        if ((DB::table('division_admins')->where('admin_id', $admin->id)->exists()) &&
+            (DB::table('division_admins')->where('admin_id', $admin->id)->first()->assign_to != 5)){
+
+            $div_admin = DB::table('division_admins')->where('admin_id', $admin->id)->first();
+            $division_admin = $div_admin->id;
+        }
+        else{
+            $divAdmin = new Division_admin();
+            $divAdmin->admin_id = $admin->id;
+            $divAdmin->division_id = (int) $request->division_id;
+            $divAdmin->branch_id = (int) $request->branch_id;
+            $divAdmin->department_id = (int) $request->department_id;
+            $divAdmin->unit_id = (int) $request->unit_id;
+            $divAdmin->assign_to = 5;
+
+            // SAVE THE DATA
+            try {
+                $divAdmin->save();
+                $division_admin = $divAdmin->id;
+           } catch (QueryException $e) {
+                // FAILED
+                return back()
+                ->withInput()
+                ->with('error', lang('Oops, failed to add a new #item. Please try again.', $this->translation, ['#item' => 'file']));
+           }
+
+        }
+
 
         if($division_admin){
-            $data->division_admin_id = $division_admin->id;
+            $data->division_admin_id = $division_admin;
             // SAVE THE DATA
             if ($data->save()) {
                 // SUCCESS
@@ -284,8 +316,6 @@ class FilesController extends Controller
                 ->withInput()
                 ->with('error', lang('Invalid format for #item', $this->translation, ['#item' => ucwords(lang('name', $this->translation))]));
         }
-        // dd($request->status);
-        // dd($request->file('file'));
 
         //find division_admin_id
         $admin = Session::get('admin');

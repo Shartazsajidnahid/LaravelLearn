@@ -30,7 +30,7 @@ class DesignationController extends Controller
         }
 
         // GET THE DATA
-        $data = Designation::all();
+        $data = Designation::paginate(10);
 
         return view('admin.system.designation.list', compact('data'));
     }

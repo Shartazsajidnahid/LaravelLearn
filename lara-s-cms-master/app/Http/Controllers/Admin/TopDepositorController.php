@@ -157,16 +157,16 @@ class TopDepositorController extends Controller
             'depositor_9' => ucwords(lang('depositor_9', $this->translation)),
             'depositor_10' => ucwords(lang('depositor_10', $this->translation)),
         ];
-        // $this->validate($request, $validation, $message, $names);
+        $this->validate($request, $validation, $message, $names);
 
         $data = $request->all();
         array_splice($data, 0, 1);
         $unique = array_unique($data);
-        // if ( count($data) != count($unique) ) {
-        //     return back()
-        //         ->withInput()
-        //         ->with('error', lang('all selected branches must be unique', $this->translation, ['#item' => ucwords(lang('department', $this->translation))]));
-        // }
+        if ( count($data) != count($unique) ) {
+            return back()
+                ->withInput()
+                ->with('error', lang('all selected branches must be unique', $this->translation, ['#item' => ucwords(lang('department', $this->translation))]));
+        }
 
         $top_depositor = TopDepositor::all();
 

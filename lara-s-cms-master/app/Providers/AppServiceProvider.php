@@ -29,5 +29,6 @@ class AppServiceProvider extends ServiceProvider
     {
         // add this code for fixing error migration
         Schema::defaultStringLength(191);
+
     }
 }
