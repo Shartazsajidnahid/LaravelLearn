@@ -45,7 +45,7 @@
                     </div>
                     <div class="x_content">
 
-                        <table class="table table-striped table-bordered">
+                        <table class="table table-bordered">
                             <thead>
                                 <tr class="table table-bordered">
                                   <th>Name</th>
@@ -72,16 +72,21 @@
                                   </td>
 
                                     <td class="text-center">
-                                        <form action="{{ route('admin.applink.delete', $applinks->id)}}" method="post" style="display: inline-block">
-                                            @csrf
 
-                                            <button class="btn btn-danger btn-sm" type="submit">Delete</button>
+
+                                          <form action="{{ route('admin.applink.delete', $applinks->id) }}" method="POST" onsubmit="return confirm('{{ lang('Are you sure to delete this #item?', $translation, ['#item'=>'rate item']) }}');" style="display: inline">
+                                            {{ csrf_field() }}
+                                            <input type="hidden" name="id" value="{{ $applinks->id }}">
+                                            <button type="submit" class="btn btn-xs btn-danger" title="{{ ucwords(lang('delete', $translation)) }}">
+                                              <i class="fa fa-trash"></i>&nbsp; {{ ucwords(lang('delete', $translation)) }}
+                                            </button>
                                           </form>
                                     </td>
                                 </tr>
                                 @endforeach
                             </tbody>
                           </table>
+                          {!! $links->links() !!}
                     </div>
                 </div>
             </div>

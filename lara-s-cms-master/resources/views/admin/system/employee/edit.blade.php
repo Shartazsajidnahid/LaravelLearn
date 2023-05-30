@@ -42,9 +42,8 @@
 
                             <div class="card-body">
 
-                                <form method="post" action="{{ route('employees.update',$employee->id) }}" enctype="multipart/form-data">
+                                <form method="post" action="{{ route('admin.employees.update',$employee->id) }}" enctype="multipart/form-data">
                                     @csrf
-                                    @method('PATCH')
                                     <div class="form-row">
 
                                         <div class="form-group col-md-6">
@@ -63,19 +62,26 @@
                                     <div class="form-row">
                                         <div class="form-group col-md-6">
                                             <label for="inputState">Office</label>
-                                            <select class="form-control select2" name="division_id" id="divisions"  value="{{ $employee->division_id }}">
-                                                <option></option>
+                                            <select class="form-control select2" name="division_id" id="divisions"  >
+
                                                 @foreach ($divisions as $cntrl)
-                                                    <option value="{{ $cntrl->id }}">
+
+                                                    <option value="{{ $cntrl->id }}" {{$employee->division_id==$cntrl->id?"selected":""}}>
                                                         {{ $cntrl->name }}
                                                     </option>
                                                 @endforeach
+
                                             </select>
                                         </div>
                                         <div class="form-group col-md-6">
                                             <label for="inputState">Branch</label>
                                             <select class="form-control select2" name="branch_id" id="branches" value="{{ $employee->branch_id }}">
+                                                @foreach ($branches as $cntrl)
 
+                                                <option value="{{ $cntrl->id }}" {{$employee->branch_id==$cntrl->id?"selected":""}}>
+                                                    {{ $cntrl->name }}
+                                                </option>
+                                            @endforeach
                                             </select>
                                         </div>
                                     </div>
@@ -99,10 +105,11 @@
 
                                         <div class="form-group col-md-6">
                                             <label for="inputState">Designation</label>
-                                            <select class="form-control select2" name="designation_id" value="{{ $employee->designation_id }}">
-                                                <option></option>
+                                            <select class="form-control select2" name="designation_id" >
+                                                <option ></option>
                                                 @foreach ($designations as $cntrl)
-                                                    <option value="{{ $cntrl->id }}">
+
+                                                    <option value="{{ $cntrl->id }}" {{$employee->designation_id==$cntrl->id?"selected":""}}>
                                                         {{ $cntrl->designation }}
                                                     </option>
                                                 @endforeach
@@ -112,20 +119,24 @@
                                         <div class="form-group col-md-6">
                                             <label for="inputState">Functional Designation</label>
                                             <select class="form-control select2" name="func_designation_id">
-                                                <option value="{{ $employee->func_designation_id }}" default></option>
+                                                <option ></option>
                                                 @foreach ($func_designations as $cntrl)
-                                                    <option value="{{ $cntrl->id }}">
+
+                                                    <option value="{{ $cntrl->id }}" {{$employee->func_designation_id==$cntrl->id?"selected":""}}>
                                                         {{ $cntrl->designation }}
                                                     </option>
+
                                                 @endforeach
                                             </select>
                                         </div>
                                     </div>
                                     <div class="form-row">
-                                        <div class="form-group col-md-6" col-md-6>
+                                        <div class="form-group col-md-6">
                                             <label for="inputState">Gender</label>
-                                            <input type="text" class="form-control" placeholder="Gender" name="gender"  value="{{ $employee->gender }}"
-                                                aria-label="First name">
+                                            <select class="form-control" name="gender">
+                                                <option value="1" {{$employee->gender=="Male"?"selected":""}}>Male</option>
+                                                <option value="2" {{$employee->gender=="Female"?"selected":""}}>Female</option>
+                                            </select>
                                         </div>
                                         <div class="form-group col-md-6">
                                             <label for="inputState">DOB</label>
@@ -165,7 +176,7 @@
                                         </div>
                                         <div class="form-group col-md-6">
                                             <label for="inputState">Password</label>
-                                            <input type="text" class="form-control" name="password" value="{{ $employee->password }}"
+                                            <input type="password" class="form-control" name="password"
                                                 aria-label="Last name">
                                         </div>
                                     </div>
@@ -184,7 +195,19 @@
                                         </div>
                                     </div>
                                     <br>
-                                    <button type="submit" class="btn btn-danger">Update User</button>
+
+                                    <div class="form-row">
+                                        <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
+                                            <button type="submit" class="btn btn-success"><i class="fa fa-save"></i>&nbsp;
+                                                {{ ucwords(lang('update', $translation)) }}
+                                            </button>
+                                            <a href="{{ route('admin.employees.list') }}" class="btn btn-danger"><i
+                                                    class="fa fa-times"></i>&nbsp;
+                                                {{ ucwords(lang('cancel', $translation)) }}
+                                            </a>
+                                        </div>
+
+                                    </div>
                                 </form>
 
                             </div>

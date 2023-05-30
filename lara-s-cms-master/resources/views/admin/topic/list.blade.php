@@ -1,7 +1,7 @@
 @extends('_template_adm.master')
 
 @php
-  $this_object = ucwords(lang('topic', $translation));
+  $this_object = ucwords(lang('news topic', $translation));
 
   if(isset($data)){
     $pagetitle = $this_object;
@@ -33,7 +33,7 @@
               <i class="fa fa-plus-circle"></i>&nbsp; {{ ucwords(lang('add new', $translation)) }}
             </a>
           </div>
-        </div>  
+        </div>
       @endif
     </div>
 

@@ -52,7 +52,19 @@
                                 </label>
                                 <div class="col-md-6 col-sm-6 col-xs-12">
                                     <input type="file" class="form-control"
-                                name="image" aria-label="First name">
+                                name="image" >
+                                </div>
+                            </div>
+
+                            <div class="form-group vinput_main_branch">
+                                <label for="parent branch" class="control-label col-md-3 col-sm-3 col-xs-12">
+                                    Up/Down
+                                </label>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                    <select class="form-control select2" name="up">
+                                        <option value="1">UP</option>
+                                        <option value="2">DOWN</option>
+                                    </select>
                                 </div>
                             </div>
                             <div class="control-label col-md-3 col-sm-3 col-xs-12">

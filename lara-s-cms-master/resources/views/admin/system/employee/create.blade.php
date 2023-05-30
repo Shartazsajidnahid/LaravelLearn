@@ -43,9 +43,8 @@
                             <div class="card-body">
 
 
-                                <form method="post" action="{{ route('employees.store') }}" enctype="multipart/form-data">
+                                <form method="post" action="{{ route('admin.employees.store') }}" enctype="multipart/form-data">
                                     @csrf
-
 
                                     <div class="form-row">
 
@@ -91,8 +90,8 @@
                                         </div>
                                         <div class="form-group col-md-6">
                                             <label for="inputState">Unit</label>
-                                            <select class="form-control select2" name="unit_id" id="units" value=0>
-                                                <option value="0" selected></option>
+                                            <select class="form-control select2" name="unit_id" id="units" >
+
                                             </select>
                                         </div>
                                     </div>
@@ -101,7 +100,7 @@
                                         <div class="form-group col-md-6">
                                             <label for="inputState">Designation</label>
                                             <select class="form-control select2" name="designation_id">
-                                                <option value='0'> Select Designation</option>
+                                                <option > Select Designation</option>
                                                 @foreach ($designations as $cntrl)
                                                     <option value="{{ $cntrl->id }}">
                                                         {{ $cntrl->designation }}
@@ -113,7 +112,7 @@
                                         <div class="form-group col-md-6">
                                             <label for="inputState">Functional Designation</label>
                                             <select class="form-control select2" name="func_designation_id">
-                                                <option value='0'>Select Functional Designation</option>
+                                                <option value=null>Select Functional Designation</option>
                                                 @foreach ($func_designations as $cntrl)
                                                     <option value="{{ $cntrl->id }}">
                                                         {{ $cntrl->designation }}
@@ -164,12 +163,11 @@
                                         <div class="form-group col-md-6">
                                             <label for="inputState">Email</label>
                                             <input type="email" class="form-control" name="email"
-                                                aria-label="First name">
+                                                >
                                         </div>
                                         <div class="form-group col-md-6">
                                             <label for="inputState">Password</label>
-                                            <input type="text" class="form-control" name="password"
-                                                aria-label="Last name">
+                                            <input type="password" class="form-control" name="password">
                                         </div>
                                     </div>
                                     <div class="form-row">

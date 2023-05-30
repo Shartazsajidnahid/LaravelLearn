@@ -15,7 +15,7 @@
 @extends('_template_adm.master')
 
 @php
-    $pagetitle = ucwords(lang('article', $translation)); 
+    $pagetitle = ucwords(lang('News', $translation));
     if(isset($data)){
         $pagetitle .= ' ('.ucwords(lang('edit', $translation)).')';
         $link = route('admin.article.do_edit', $data->id);
@@ -70,7 +70,7 @@
                                 }else{
                                     echo set_input_form2('image', 'thumbnail', ucwords(lang('thumbnail', $translation)), $data, $errors, true, $config);
                                 }
-                                
+
                                 $config = new \stdClass();
                                 $config->info_text = '<i class="fa fa-info-circle"></i>&nbsp; '.lang('separate with commas', $translation);
                                 echo set_input_form2('tags', 'keywords', ucwords(lang('keywords', $translation)), $data, $errors, false, $config);
@@ -157,12 +157,12 @@
                                     </span>
                                 </div>
                             </div>
-                            
+
                             <div class="ln_solid"></div>
 
                             <div class="form-group">
                                 <div class="col-lg-12 text-center">
-                                    <button type="submit" class="btn btn-success btn-lg"><i class="fa fa-save"></i>&nbsp; 
+                                    <button type="submit" class="btn btn-success btn-lg"><i class="fa fa-save"></i>&nbsp;
                                         @if (isset($data))
                                             {{ ucwords(lang('save changes', $translation)) }}
                                         @else
@@ -170,7 +170,7 @@
                                         @endif
                                     </button>
                                     &nbsp;&nbsp;
-                                    <a href="{{ route('admin.article.list') }}" class="btn btn-danger btn-lg"><i class="fa fa-times"></i>&nbsp; 
+                                    <a href="{{ route('admin.article.list') }}" class="btn btn-danger btn-lg"><i class="fa fa-times"></i>&nbsp;
                                         @if (isset($data))
                                             {{ ucwords(lang('close', $translation)) }}
                                         @else
@@ -250,9 +250,9 @@
                         @endphp
                         var pb_text = encodeURI("{{ $pb_text }}");
                         // SET JSON OBJECT DATA
-                        var the_data = { 
-                            section: "{{ $value->section }}", 
-                            text: pb_text 
+                        var the_data = {
+                            section: "{{ $value->section }}",
+                            text: pb_text
                         };
                         add_content_element('text', true, {{ $key }}, the_data);
                     @elseif ($value->type == 'image')
@@ -261,9 +261,9 @@
                         @endphp
                         var pb_image = encodeURI("{{ $pb_image }}");
                         // SET JSON OBJECT DATA
-                        var the_data = { 
-                            section: "{{ $value->section }}", 
-                            image: pb_image 
+                        var the_data = {
+                            section: "{{ $value->section }}",
+                            image: pb_image
                         };
                         add_content_element('image', true, {{ $key }}, the_data);
                     @elseif ($value->type == 'image & text')
@@ -275,8 +275,8 @@
                         var pb_image = encodeURI("{{ $pb_image }}");
                         var pb_text = encodeURI("{{ $pb_text }}");
                         // SET JSON OBJECT DATA
-                        var the_data = { 
-                            section: "{{ $value->section }}", 
+                        var the_data = {
+                            section: "{{ $value->section }}",
                             image: pb_image,
                             text: pb_text,
                             text_position: "{{ $value->text_position }}"
@@ -288,9 +288,9 @@
                         @endphp
                         var pb_video = encodeURI("{{ $pb_video }}");
                         // SET JSON OBJECT DATA
-                        var the_data = { 
-                            section: "{{ $value->section }}", 
-                            video: pb_video 
+                        var the_data = {
+                            section: "{{ $value->section }}",
+                            video: pb_video
                         };
                         add_content_element('video', true, {{ $key }}, the_data);
                     @elseif ($value->type == 'video & text')
@@ -302,8 +302,8 @@
                         var pb_video = encodeURI("{{ $pb_video }}");
                         var pb_text = encodeURI("{{ $pb_text }}");
                         // SET JSON OBJECT DATA
-                        var the_data = { 
-                            section: "{{ $value->section }}", 
+                        var the_data = {
+                            section: "{{ $value->section }}",
                             video: pb_video,
                             text: pb_text,
                             text_position: "{{ $value->text_position }}"
@@ -316,9 +316,9 @@
                         @endphp
                         var pb_text = encodeURI("{{ $pb_text }}");
                         // SET JSON OBJECT DATA
-                        var the_data = { 
-                            section: "{{ $value->section }}", 
-                            text: pb_text 
+                        var the_data = {
+                            section: "{{ $value->section }}",
+                            text: pb_text
                         };
                         add_content_element('plain text', true, {{ $key }}, the_data);
                     @endif

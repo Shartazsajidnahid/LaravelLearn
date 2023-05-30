@@ -109,13 +109,18 @@
 
                             </div>
 
-                            <div class="form-group vinput_main_branch">
-                                <label class="control-label col-md-3 col-sm-3 col-xs-12">
 
-                                </label>
-                                <div class="col-md-6 col-sm-6 col-xs-12">
-                                    <button type="submit" class="btn btn-primary">Submit</button>
+                            <div class="form-group">
+                                <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
+                                    <button type="submit" class="btn btn-success"><i class="fa fa-save"></i>&nbsp;
+                                        {{ ucwords(lang('submit', $translation)) }}
+                                    </button>
+                                    <a href="{{ route('admin.department.list') }}" class="btn btn-danger"><i
+                                            class="fa fa-times"></i>&nbsp;
+                                        {{ ucwords(lang('cancel', $translation)) }}
+                                    </a>
                                 </div>
+
                             </div>
                         </form>
                     </div>

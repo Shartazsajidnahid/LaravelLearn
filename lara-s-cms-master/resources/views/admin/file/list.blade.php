@@ -112,7 +112,6 @@
         </div>
     </div>
 
-    <div class="haha" id="haha"></div>
 @endsection
 
 @section('css')

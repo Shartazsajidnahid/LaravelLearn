@@ -2,6 +2,10 @@
 
 @php
     $pagetitle = ucwords(lang('file', $translation));
+
+    $link_get_data = route('admin.department.get_branches');
+    $link_get_data_dept = route('admin.unit.get_depts');
+    $link_get_data_unit = route('admin.unit.get_units');
     if (isset($data)) {
         $pagetitle .= ' (' . ucwords(lang('edit', $translation)) . ')';
         $link = route('admin.file.do_edit', $data->id);
@@ -37,7 +41,8 @@
                     </div>
                     <div class="x_content">
                         <br />
-                        <form class="form-horizontal form-label-left" action="{{ $link }}" method="POST"enctype="multipart/form-data">
+                        <form class="form-horizontal form-label-left" action="{{ $link }}"
+                            method="POST"enctype="multipart/form-data">
                             {{ csrf_field() }}
 
                             @php
@@ -61,6 +66,62 @@
                                     <input type="file" name="file" class="form-control">
                                 </div>
                             </div>
+                            @if (!isset($data))
+
+
+                                @if ($adminid == 1)
+                                    <div class="form-group vinput_main_branch">
+                                        <label for="parent branch" class="control-label col-md-3 col-sm-3 col-xs-12">
+                                            Office
+                                        </label>
+                                        <div class="col-md-6 col-sm-6 col-xs-12">
+                                            <select class="form-control select2" name="division_id" id="divisions">
+                                                <option>Select Office</option>
+                                                @foreach ($divisions as $cntrl)
+                                                    <option value="{{ $cntrl->id }}"
+                                                        onclick="javascript:choosebranch();">
+                                                        {{ $cntrl->name }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group vinput_main_branch">
+                                        <label for="parent branch" class="control-label col-md-3 col-sm-3 col-xs-12">
+                                            Branch
+                                        </label>
+                                        <div class="col-md-6 col-sm-6 col-xs-12">
+                                            <select class="form-control select2" name="branch_id" id="branches">
+
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group vinput_main_branch">
+                                        <label for="parent dept" class="control-label col-md-3 col-sm-3 col-xs-12">
+                                            Department
+                                        </label>
+                                        <div class="col-md-6 col-sm-6 col-xs-12">
+                                            <select class="form-control select2" name="department_id" id="depts">
+
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group vinput_main_branch">
+                                        <label class="control-label col-md-3 col-sm-3 col-xs-12">
+                                            Unit
+                                        </label>
+                                        <div class="col-md-6 col-sm-6 col-xs-12">
+                                            <select class="form-control select2" name="unit_id" id="units">
+
+                                            </select>
+                                        </div>
+                                    </div>
+                                @endif
+                            @endif
+
                             @php
                                 $config = new \stdClass();
                                 $config->default = 'checked';
@@ -100,10 +161,59 @@
 @section('css')
     <!-- Switchery -->
     @include('_form_element.switchery.css')
+    <!-- Select2 -->
+    @include('_form_element.select2.css')
 @endsection
 
 @section('script')
     <!-- Switchery -->
     @include('_form_element.switchery.script')
+    <!-- Select2 -->
+    @include('_form_element.select2.script')
+    <script>
+        jQuery(document).ready(function() {
+            jQuery('#divisions').change(function() {
+                let div_id = jQuery(this).val();
+                // alert(div_id);
 
+                jQuery.ajax({
+                    url: '{{ $link_get_data }}',
+                    type: 'post',
+                    data: 'div_id=' + div_id + '&_token={{ csrf_token() }}',
+                    success: function(result) {
+                        jQuery('#branches').html(result)
+                    }
+                });
+            });
+
+            jQuery('#branches').change(function() {
+                let sid = jQuery(this).val();
+                jQuery.ajax({
+                    url: '{{ $link_get_data_dept }}',
+                    type: 'post',
+                    data: 'sid=' + sid + '&_token={{ csrf_token() }}',
+                    success: function(result) {
+                        jQuery('#depts').html(result)
+                    }
+                });
+            });
+
+            jQuery('#depts').change(function() {
+                let sid = jQuery(this).val();
+                jQuery.ajax({
+                    url: '{{ $link_get_data_unit }}',
+                    type: 'post',
+                    data: 'sid=' + sid + '&_token={{ csrf_token() }}',
+                    success: function(result) {
+                        jQuery('#units').html(result)
+                    }
+                });
+            });
+
+        });
+    </script>
+    <script>
+        // Initialize Select2
+        $('.select2').select2();
+    </script>
 @endsection

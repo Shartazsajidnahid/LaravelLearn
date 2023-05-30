@@ -1,7 +1,7 @@
 @extends('_template_adm.master')
 
 @php
-    $pagetitle = ucwords(lang('topic', $translation)); 
+    $pagetitle = ucwords(lang('news topic', $translation));
     if(isset($data)){
         $pagetitle .= ' ('.ucwords(lang('edit', $translation)).')';
         $link = route('admin.topic.do_edit', $data->id);
@@ -49,12 +49,12 @@
                                 $config->default = 'checked';
                                 echo set_input_form2('switch', 'status', ucwords(lang('status', $translation)), $data, $errors, false, $config);
                             @endphp
-                            
+
                             <div class="ln_solid"></div>
 
                             <div class="form-group">
                                 <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
-                                    <button type="submit" class="btn btn-success"><i class="fa fa-save"></i>&nbsp; 
+                                    <button type="submit" class="btn btn-success"><i class="fa fa-save"></i>&nbsp;
                                         @if (isset($data))
                                             {{ ucwords(lang('save', $translation)) }}
                                         @else

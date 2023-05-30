@@ -2,7 +2,7 @@
 
 @php
 if(isset($data)){
-  $pagetitle = ucwords(lang('article', $translation));
+  $pagetitle = ucwords(lang('News', $translation));
   $link_get_data = route('admin.article.get_data');
 }else{
   $pagetitle = ucwords(lang('deleted', $translation)) . ' ' . ucwords(lang('article', $translation));

@@ -27,39 +27,52 @@
                     </div>
                     <div class="x_content">
 
-                        <form class="form-horizontal form-label-left"   action="{{ route('admin.exchange_rates.update',$exchange_rate->id) }}"  method="POST" enctype="multipart/form-data">
+                        <form class="form-horizontal form-label-left"
+                            action="{{ route('admin.exchange_rates.update', $exchange_rate->id) }}" method="POST"
+                            enctype="multipart/form-data">
                             @csrf
 
                             <div class="form-group vinput_main_branch">
-                                <label  class="control-label col-md-3 col-sm-3 col-xs-12">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12">
                                     Currency
                                 </label>
                                 <div class="col-md-6 col-sm-6 col-xs-12">
-                                    <input type="text" class="form-control"
-                                name="currency" value="{{ $exchange_rate->currency }}" aria-label="First name">
+                                    <input type="text" class="form-control" name="currency"
+                                        value="{{ $exchange_rate->currency }}" aria-label="First name">
                                 </div>
                             </div>
                             <div class="form-group vinput_main_branch">
-                                <label  class="control-label col-md-3 col-sm-3 col-xs-12">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12">
                                     TT(Buy)
                                 </label>
                                 <div class="col-md-6 col-sm-6 col-xs-12">
-                                    <input type="number"  step="0.01" class="form-control"
-                                name="tt_buy"  value="{{ $exchange_rate->tt_buy }}" >
+                                    <input type="number" step="0.01" class="form-control" name="tt_buy"
+                                        value="{{ $exchange_rate->tt_buy }}">
                                 </div>
                             </div>
                             <div class="form-group vinput_main_branch">
-                                <label  class="control-label col-md-3 col-sm-3 col-xs-12">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12">
                                     TT(Sell)
                                 </label>
                                 <div class="col-md-6 col-sm-6 col-xs-12">
-                                    <input type="number"  step="0.01" class="form-control"
-                                name="tt_sell" aria-label="First name"  value="{{ $exchange_rate->tt_sell }}">
+                                    <input type="number" step="0.01" class="form-control" name="tt_sell"
+                                        aria-label="First name" value="{{ $exchange_rate->tt_sell }}">
                                 </div>
                             </div>
-                            <div class="control-label col-md-3 col-sm-3 col-xs-12">
-                            <button  type="submit" class="btn btn-danger">Update</button>
+
+                            <div class="form-group">
+                                <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
+                                    <button type="submit" class="btn btn-success"><i class="fa fa-save"></i>&nbsp;
+                                        {{ ucwords(lang('submit', $translation)) }}
+                                    </button>
+                                    <a href="{{ route('admin.exchange_rates.list') }}" class="btn btn-danger"><i
+                                            class="fa fa-times"></i>&nbsp;
+                                        {{ ucwords(lang('cancel', $translation)) }}
+                                    </a>
+                                </div>
+
                             </div>
+
 
 
                             {{-- <center>

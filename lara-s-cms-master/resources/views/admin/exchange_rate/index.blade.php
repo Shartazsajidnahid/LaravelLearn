@@ -46,7 +46,7 @@
                     </div>
                     <div class="x_content">
 
-                        <table  class="table table-striped table-bordered">
+                        <table  class="table table-bordered">
                             <thead>
                                 <tr class="table table-bordered">
                                   <th>Currency</th>
@@ -65,20 +65,9 @@
                             <tbody class="sorted_table">
                                 @foreach($links as $exchange_rates)
                                 <tr>
-                                    {{-- <td>{{$applinks->id}}</td> --}}
                                     <td>{{$exchange_rates->currency}}</td>
                                     <td>{{$exchange_rates->tt_buy}}</td>
                                     <td>{{$exchange_rates->tt_sell}}</td>
-
-{{--
-                                    <td>
-                                        <a href="{{ route('admin.exchange_rates.edit', $exchange_rates->id)}}"   class="btn btn-primary btn-sm">Edit</a>
-                                        <form action="{{ route('admin.exchange_rates.destroy', $exchange_rates->id)}}" method="post" style="display: inline-block">
-                                            @csrf
-
-                                            <button class="btn btn-danger btn-sm" type="submit">Delete</button>
-                                        </form>
-                                    </td> --}}
 
                                     <td>
                                         <a href="{{ route('admin.exchange_rates.edit', $exchange_rates->id) }}" class="btn btn-xs btn-primary" title="{{ ucwords(lang('edit', $translation)) }}">
@@ -96,6 +85,7 @@
                                 @endforeach
                             </tbody>
                           </table>
+                          {!! $links->links() !!}
                     </div>
                 </div>
             </div>

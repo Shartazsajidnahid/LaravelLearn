@@ -42,9 +42,7 @@
                             <thead>
                                 <tr class="table table-bordered">
                                     <th>Name</th>
-                                    <th>Designation</th>
-                                    <th>Phone</th>
-                                    <th>Email</th>
+                                    <th>Position</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
@@ -53,9 +51,7 @@
                                     <tr>
                                         {{-- <td>{{$applinks->id}}</td> --}}
                                         <td>{{ $item->name }}</td>
-                                        <td>{{ $item->designation }}</td>
-                                        <td>{{ $item->mobile }}</td>
-                                        <td>{{ $item->email }}</td>
+                                        <td>{{ $item->position==1? "MD" : "DMD" }}  </td>
                                         <td>
                                             <a href="{{ route('admin.cho.edit', $item->id) }}"
                                                 class="btn btn-xs btn-primary"

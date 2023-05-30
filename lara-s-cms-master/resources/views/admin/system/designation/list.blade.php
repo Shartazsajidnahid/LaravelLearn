@@ -60,7 +60,7 @@
           </div>
           <div class="x_content">
             <div class="table-responsive">
-              <table class="table table-striped table-bordered">
+              <table class="table table-bordered">
                 <thead>
                   <tr>
                     <th>{{ ucwords(lang('designation id', $translation)) }}</th>
@@ -135,6 +135,7 @@
                   </tbody>
                 @endif
               </table>
+              {!! $data->links() !!}
             </div>
           </div>
         </div>
@@ -148,9 +149,5 @@
 @endsection
 
 @section('script')
-  <script>
-    var AjaxSortingURL = '{{ route("admin.department.sorting") }}';
-  </script>
-  <!-- Sortable-Table -->
-  @include('_form_element.sortable_table.script')
+
 @endsection
