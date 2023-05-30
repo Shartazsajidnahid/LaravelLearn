@@ -11,38 +11,49 @@
 |
 */
 
+use App\Http\Controllers\Admin\system\EmployeeController;
 use App\Http\Controllers\Admin\system\HomeController;
+use App\Http\Controllers\DivisionInfoController;
 use App\Http\Controllers\Admin\system\AuthController;
 use App\Http\Controllers\Admin\ExchangeRateController;
 use App\Http\Controllers\Admin\CHOController;
 use App\Http\Controllers\Admin\TopBranchController;
 use App\Http\Controllers\Admin\TopDepositorController;
+use App\Http\Controllers\UpdateDataController;
+
 use App\Http\Middleware\CheckGeneralUser;
 
 
 // GENERAL USER
 // Route::group(['middleware' => 'check.generaluser'], function () {
-
 // });
 
 
 // Route::get('/employees', [Admin\system\HomeController::class, 'toEmployee']);
-Route::get('/employees', 'Admin\system\HomeController@toEmployee');
-Route::get('/alldivision', [HomeController::class, 'general_alldivision']);
+Route::get('Web/blog/{slug}', [ArticleController::class, 'show'])->name('web.blog.show');
+Route::get('/download-employees', [EmployeeController::class, 'downloadEmployees'])->name('download-employees');
 
-
-Route::middleware([CheckGeneralUser::class])->group(function(){
+Route::middleware([CheckGeneralUser::class])->group(function () {
     Route::get('/general', [HomeController::class, 'general_home'])->name('general.home');
     Route::get('/sub_branch', [HomeController::class, 'general_subbranch'])->name('general.sub_branch');
     Route::get('/branch', [HomeController::class, 'general_branch'])->name('general.branch');
     Route::get('/division', [HomeController::class, 'general_division'])->name('general.division');
     Route::get('/logout', [AuthController::class, 'logout'])->name('general.logout');
-    // Route::get('/logout', 'Admin\system\AuthController@logout')->name('general.logout');
-    Route::get('/team/{home}/{id}', [HomeController::class, 'general_team'])->name('general.team');;
-    Route::get('/aboutus', [HomeController::class, 'general_aboutus']);
-    Route::get('/allbrance', [HomeController::class, 'general_allbrance']);
-    Route::get('/alldivision', [HomeController::class, 'general_alldivision']);
+    Route::get('/team/{home}/{id}', [HomeController::class, 'general_team'])->name('general.team');
+    Route::get('/aboutus', [HomeController::class, 'general_aboutus'])->name('general.aboutus');;
+    Route::get('/allbrance', [HomeController::class, 'general_allbrance'])->name('general.allbrance');
+    Route::get('/alldivision', [HomeController::class, 'general_alldivision'])->name('general.alldivision');
     Route::get('/allfiles', [HomeController::class, 'general_allfiles'])->name('general.allfiles');
+    Route::get('/allemployees', [HomeController::class, 'general_allemployees'])->name('general.allemployees');
+    Route::get('/alldivinfo', [HomeController::class, 'general_all_div_info'])->name('general.alldivinfo');
+
+    Route::post('/update_image/{id}', [HomeController::class, 'update_image'])->name('employee.update_image');
+    Route::get('/get-data',  [HomeController::class, 'get_data'])->name('general.files.get_data');
+
+    Route::get('/get-data-divisions',  [DivisionInfoController::class, 'get_data'])->name('general.divisions.get_data');
+    Route::get('/download-data-divisions',  [DivisionInfoController::class, 'download_data'])->name('general.divisions.download_data');
+
+    Route::post('/update_info/{id}', [EmployeeController::class, 'update_info'])->name('employee.updateinfo');
 });
 
 // WEBSITE
@@ -87,7 +98,7 @@ Route::group(['namespace' => 'Web'], function () {
 
 // ADMIN
 Route::group([
-    'prefix' => env('ADMIN_DIR') ,
+    'prefix' => env('ADMIN_DIR'),
     'namespace' => 'Admin'
 ], function () {
     /**
@@ -125,6 +136,7 @@ Route::group([
                     Route::get('/', 'ConfigController@view')->name('admin.config');
                     Route::post('/update', 'ConfigController@update')->name('admin.config.update');
                 });
+                Route::get('/checkdata', [UpdateDataController::class, 'update_data'])->name('admin.update_data');
 
                 // DIVISION
                 Route::group(['prefix' => 'division'], function () {
@@ -140,7 +152,18 @@ Route::group([
                 });
 
                 //Employees
-                Route::resource('employees', EmployeeController::class);
+                Route::group(['prefix' => 'employees'], function () {
+                    Route::get('/', [EmployeeController::class, 'index'])->name('admin.employees.list');
+                    Route::get('/create', [EmployeeController::class, 'create'])->name('admin.employees.create');
+                    Route::post('/store', [EmployeeController::class, 'store'])->name('admin.employees.store');
+                    Route::get('/edit/{id}', [EmployeeController::class, 'edit'])->name('admin.employees.edit');
+                    Route::post('/update/{id}', [EmployeeController::class, 'update'])->name('admin.employees.update');
+                    Route::post('/destroy/{id}', [EmployeeController::class, 'destroy'])->name('admin.employees.destroy');
+                    Route::post('/update_image/{id}', [EmployeeController::class, 'update_image'])->name('employees.update_image');
+
+                    Route::post('/get-data', [EmployeeController::class, 'getCHOemployee'])->name('admin.employees.get_data');
+                });
+
 
                 // BRANCH
                 Route::group(['prefix' => 'branch'], function () {
@@ -173,8 +196,8 @@ Route::group([
                     Route::post('/sorting', 'SysDepartmentController@sorting')->name('admin.department.sorting');
                 });
 
-                 // Unit
-                 Route::group(['prefix' => 'unit'], function () {
+                // Unit
+                Route::group(['prefix' => 'unit'], function () {
                     Route::post('/get-depts', 'SysUnitController@get_depts')->name('admin.unit.get_depts');
                     Route::post('/get-units', 'SysUnitController@get_units')->name('admin.unit.get_units');
                     Route::get('/', 'SysUnitController@list')->name('admin.unit.list');
@@ -203,7 +226,7 @@ Route::group([
                     Route::post('/sorting', 'DesignationController@sorting')->name('admin.designation.sorting');
                 });
 
-                 // Functional_ Designation
+                // Functional_ Designation
                 Route::group(['prefix' => 'functional_designation'], function () {
                     Route::get('/', 'FunctionalDesignationController@list')->name('admin.functional_designation.list');
                     Route::get('/create', 'FunctionalDesignationController@create')->name('admin.functional_designation.create');
@@ -319,8 +342,6 @@ Route::group([
         // HOME
         Route::get('/', 'system\HomeController@index')->name('admin.home');
         // Route::get('/general', 'system\HomeController@index2')->name('admin.demo');
-
-
 
 
         // BANNER
