@@ -1,8 +1,6 @@
 @php
     // USE LIBRARIES
     use App\Libraries\Helper;
-
-    $link_get_data = route('general.files.get_data');
     $function_get_data = 'refresh_data();';
 
 @endphp
@@ -12,7 +10,7 @@
 
 <head>
     <meta charset="utf-8">
-    <title>Allfiles</title>
+    <title>AllEmployees</title>
     <meta name="description" content="Bootstrap.">
     <link href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet">
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
@@ -65,16 +63,13 @@
                     </li>
                     <li class="u-nav-item">
                         <a
-                            href="{{ URL::route('general.allemployees') }}" style="padding: 27px ;font-weight: 1000">All
-                            Employees</a>
+                            href="{{ URL::route('general.alldivinfo') }}" style="padding: 27px ;font-weight: 1000">All
+                            Info</a>
                     </li>
                     <li class="u-nav-item">
                         <a
                             href="{{ URL::route('general.allfiles') }}" style="padding: 27px ;font-weight: 1000">All
                             Files</a>
-                    </li>
-                    <li class="u-nav-item">
-                        <a class="u-nav-item" href="{{ URL::route('general.alldivinfo')}}" style="padding: 27px ;font-weight: 1000">All info</a>
                     </li>
                     <li class="u-nav-item">
                         <a class="u-button-style u-nav-link u-text-active-palette-1-base u-text-body-alt-color u-text-hover-palette-2-base danger"
@@ -90,7 +85,7 @@
     <div class="container">
         <div class="row">
             {{-- filter by: division --}}
-            <div class="col-md-3 col-sm-12 col-xs-12">
+            {{-- <div class="col-md-3 col-sm-12 col-xs-12">
                 <div class="control-group">
                     <div class="controls">
                         <div class="input-prepend input-group">
@@ -109,8 +104,10 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </div> --}}
+
             <br><br>
+
             <div class="row header" style="text-align:center;color:rgb(71, 14, 54)">
                 <h3></h3>
             </div>
@@ -118,25 +115,34 @@
             <table id="myTable" class="table table-striped table-bordered table-responsive table-hover">
                 <thead>
                     <tr>
-                        <th style="text-align: center">File</th>
+                        <th style="text-align: center">Name</th>
+                        <th style="text-align: center">EmployeeID</th>
+                        <th style="text-align: center">Designation</th>
+                        <th style="text-align: center">Functional Designation</th>
                         <th style="text-align: center">Branch</th>
                         <th style="text-align: center">Department</th>
                         <th style="text-align: center">Unit</th>
-                        <th style="text-align: center">Download Link</th>
+                        <th style="text-align: center">Mobile</th>
+                        <th style="text-align: center">Email</th>
+                        <th style="text-align: center">IP phone</th>
+
                     </tr>
                 </thead>
                 <tbody id="tableBody">
-                    @foreach ($files as $item)
+                    @foreach ($allemployees as $item)
                         <tr>
                             <td style="text-align: center">{{ $item->name?? '-' }}</td>
+                            <td style="text-align: center">{{ $item->user_name?? '-' }}</td>
+                            <td style="text-align: center">{{ $item->designation?? '-' }}</td>
+                            <td style="text-align: center">{{ $item->functional_designation?? '-' }}</td>
                             <td style="text-align: center">{{ $item->branch?? '-' }}</td>
                             <td style="text-align: center">{{ $item->department?? '-' }}</td>
                             <td style="text-align: center">{{ $item->unit?? '-' }}</td>
-                            <td class="u-table-cell" style="text-align: center"><a href="{{ $item->filepath }}" target="_blank">Download</a></td>
+                            <td style="text-align: center">{{ $item->mobile?? '-' }}</td>
+                            <td style="text-align: center">{{ $item->email?? '-' }}</td>
+                            <td style="text-align: center">{{ $item->ip_phone?? '-' }}</td>
                         </tr>
                     @endforeach
-
-
                 </tbody>
             </table>
         </div>
@@ -148,56 +154,6 @@
     });
 </script>
 
-<script>
 
-    jQuery(document).ready(function() {
-        jQuery('#filetype').change(function() {
-            let filetype = jQuery(this).val();
-
-            jQuery.ajax({
-                url: '{{ $link_get_data }}',
-                type: 'get',
-                data: {
-                    filetype: filetype,
-                },
-
-                success: function(response) {
-                    if (typeof response.status != 'undefined') {
-                        if (response.status == 'true') {
-                            var html = '';
-                            if (response.data == '') {
-                                html +=
-                                    '<tr><td colspan="6"><h2 class="text-center">{{ strtoupper(lang('no data available', $translation)) }}</h2></td></tr>';
-                            } else {
-                                $.each(response.data, function(index, value) {
-                                    html += '<tr>';
-                                    html += '<td style="text-align: center">' + value.name + '</td>';
-                                    html += '<td style="text-align: center">' + value.branch + '</td>';
-                                    html += '<td style="text-align: center">' + value.department + '</td>';
-                                    html += '<td style="text-align: center">' + value.unit + '</td>';
-                                    html += '<td style="text-align: center"><a href="' +  value.filepath  + '" target="_blank">Download</td>';
-                                    html += '</tr>';
-                                });
-                            }
-                            $('#tableBody').html(html);
-                        } else {
-                            alert(response.message);
-                        }
-                    } else {
-                        alert('Server not respond, please refresh your page');
-                    }
-                },
-                error: function(data, textStatus, errorThrown) {
-                    console.log(data);
-                    console.log(textStatus);
-                    console.log(errorThrown);
-                }
-
-            });
-        });
-
-
-    });
-</script>
 
 </html>

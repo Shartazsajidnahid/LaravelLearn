@@ -47,8 +47,8 @@
                 <div class="u-container-style u-group u-shape-rectangle u-group-2">
                     <div class="u-container-layout u-container-layout-2">
                         <h1 class="u-align-center u-text u-text-default u-text-4"> Member</h1>
-                        <img class="u-image u-image-default u-image-1" src="{{asset('images/divider1.gif')}}" alt=""
-                            data-image-width="640" data-image-height="400">
+                        <img class="u-image u-image-default u-image-1" src="{{ asset('images/divider1.gif') }}"
+                            alt="" data-image-width="640" data-image-height="400">
                     </div>
                 </div>
             </div>
@@ -61,16 +61,34 @@
 
                         @foreach ($employees as $item)
                             <div class="u-container-layout u-similar-container u-container-layout-1">
-                                <div alt="" >
+                                <div alt="">
+                                    @if ($item['profile_image'] == null || $item['profile_image'] == '')
+                                        @if ( $item['gender'] == "Male")
+                                            <img class="  u-image u-image-circle u-image-1 profilepic__image"
+                                            src="{{ asset('images/maledefault.jpg') }}"
+                                            width="500" height="500" />
+                                        @else
+                                            <img class="  u-image u-image-circle u-image-1 profilepic__image"
+                                            src="{{ asset('images/femaledefault.jpg') }}"
+                                            width="500" height="500" />
+                                        @endif
+                                    @else
+                                        <img class="  u-image u-image-circle u-image-1 profilepic__image"
+                                            src="{{ asset('uploads/employees/' . $item['user_name'] . '/' . $item['profile_image']) }}"
+                                            width="500" height="500" />
+                                    @endif
 
-                                    <img class="u-image u-image-circle u-image-1" src="{{ asset('uploads/employees/'.$item['profile_image']) }}" width="500" height="500">
                                 </div>
-                                <h5 class="u-align-left u-text u-text-1">Name: {{ $item['name']}}</h5>
-                                <p class="u-align-left u-text u-text-2">Designation: {{ $item['destination']}}</p>
-                                <p class="u-align-left u-text u-text-3">Functional Designation: {{ $item['func_destination']}}</p>
-                                <p class="u-align-left u-text u-text-4">E-Mail: {{ $item['email']}}</p>
-                                <p class="u-align-left u-text u-text-5">Mobile : {{ $item['mobile']}}</p>
-                                <p class="u-align-left u-text u-text-6">IP Phone: {{ $item['ip_phone']}}</p>
+                                <h5 class="u-align-left u-text u-text-1">{{ $item['name'] }}</h5>
+                                <p class="u-align-left u-text u-text-3">{{$item->user_name ?? ''}}</p>
+                                <p class="u-align-left u-text u-text-2" style="font-size: 14px;">{{$item->designation->designation ?? ''}}</p>
+                                <p class="u-align-left u-text u-text-3"style="font-size: 14px;">{{$item->funcDesignation->designation ?? ''}}</p>
+
+                                <p class="u-align-left u-text u-text-3"style="font-size: 14px;">Div: {{$item->branch->name ?? ''}}</p>
+                                <p class="u-align-left u-text u-text-3"style="font-size: 14px;">Dept: {{$item->department->name ?? ''}}</p>
+                                <p class="u-align-left u-text u-text-3"style="font-size: 14px;">Unit: {{$item->unit->name ?? ''}}</p>
+                                <p class="u-align-left u-text u-text-4"style="font-size: 14px;">E-Mail: {{ $item['email'] }}</p>
+                                <p class="u-align-left u-text u-text-6"style="font-size: 14px;">IP Phone: {{ $item['ip_phone'] }}</p>
                             </div>
                         @endforeach
 
@@ -86,8 +104,8 @@
                         @foreach ($filetypes as $item)
                             <li class="u-tab-item" role="presentation">
                                 <a class="{{ $loop->first ? 'active' : '' }} u-active-palette-1-base u-button-style u-grey-10 u-tab-link u-text-active-white u-text-black u-tab-link-{{ $loop->iteration }}"
-                                    id="link-tab-{{ $loop->iteration }}" href="#tab-{{ $loop->iteration }}"
-                                    role="tab" aria-controls="tab-{{ $loop->iteration }}"
+                                    id="link-tab-{{ $loop->iteration }}" href="#tab-{{ $loop->iteration }}" role="tab"
+                                    aria-controls="tab-{{ $loop->iteration }}"
                                     aria-selected="true">{{ $item->filetype }}</a>
                             </li>
                         @endforeach
@@ -126,15 +144,6 @@
             </div>
 
 
-            {{-- <div>
-                @foreach ($data as $array)
-                <p> filetype - {{$loop->iteration}}</p>
-                    @foreach ($array as $item)
-                        <p>{{$item->name}}</p>
-                    @endforeach
-
-                @endforeach
-            </div> --}}
         </section>
     </body>
 @endsection

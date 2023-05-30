@@ -1,8 +1,8 @@
 <header class="u-clearfix u-custom-color-4 u-header u-header" id="sec-513f"><div class="u-clearfix u-sheet u-sheet-1">
     <div class="u-clearfix u-sheet u-sheet-1">
     <div class="u-clearfix u-sheet u-sheet-1" style="color:#9900ff;">
-        <a href="index.php" class="u-image u-logo u-image-1" data-image-width="150" data-image-height="103" title="Home" style="margin-top: 10px;">
-            <img src="{{asset('images/logo.png')}}" class="u-logo-image u-logo-image-1">
+        <a  href="{{ URL::route('general.home')}}" class="u-image u-logo u-image-1" data-image-width="150" data-image-height="103" title="Home" style="margin-top: 10px;">
+            <img src="{{asset('images/logowhite.png')}}" class="u-logo-image u-logo-image-1">
         </a>
         <nav class="u-menu u-menu-dropdown u-offcanvas u-menu-1">
             <div class="menu-collapse" style="font-size: 1rem; letter-spacing: 0px;">
@@ -23,22 +23,22 @@
             <div class="u-custom-menu u-nav-container">
                 <ul class="u-nav u-unstyled u-nav-1">
                     <li class="u-nav-item">
-                        <a class="u-button-style u-nav-link u-text-active-palette-1-base u-text-body-alt-color u-text-hover-palette-2-base" href="{{asset('general')}}" style="padding: 10px 20px;font-weight: bold" >Home</a>
+                        <a class="u-button-style u-nav-link u-text-active-palette-1-base u-text-body-alt-color u-text-hover-palette-2-base" href="{{ URL::route('general.home')}}"  style="padding: 10px 20px;font-weight: bold" >Home</a>
                     </li>
                     <li class="u-nav-item">
-                        <a class="u-button-style u-nav-link u-text-active-palette-1-base u-text-body-alt-color u-text-hover-palette-2-base" href="{{asset('aboutus')}}" target="_blank" style="padding: 10px 20px;font-weight: bold">About US</a>
-                    </li>
-                    {{-- <li class="u-nav-item">
-                        <a class="u-button-style u-nav-link u-text-active-palette-1-base u-text-body-alt-color u-text-hover-palette-2-base" href="{{asset('team')}}" target="_blank" style="padding: 10px 20px;font-weight: bold">Team</a>
-                    </li> --}}
-                    <li class="u-nav-item">
-                        <a class="u-button-style u-nav-link u-text-active-palette-1-base u-text-body-alt-color u-text-hover-palette-2-base" href="{{asset('allbrance')}}" style="padding: 10px 20px;font-weight: bold">All Branches</a>
+                        <a class="u-button-style u-nav-link u-text-active-palette-1-base u-text-body-alt-color u-text-hover-palette-2-base" href="{{ URL::route('general.allbrance')}}"  style="padding: 10px 20px;font-weight: bold">All Branches</a>
                     </li>
                     <li class="u-nav-item">
-                        <a class="u-button-style u-nav-link u-text-active-palette-1-base u-text-body-alt-color u-text-hover-palette-2-base" href="{{asset('alldivision')}}" style="padding: 10px 20px;font-weight: bold">All Divisions</a>
+                        <a class="u-button-style u-nav-link u-text-active-palette-1-base u-text-body-alt-color u-text-hover-palette-2-base" href="{{ URL::route('general.alldivision')}}"  style="padding: 10px 20px;font-weight: bold">All Divisions</a>
+                    </li>
+                    <li class="u-nav-item">
+                        <a class="u-button-style u-nav-link u-text-active-palette-1-base u-text-body-alt-color u-text-hover-palette-2-base" href="{{ URL::route('general.allemployees')}}" style="padding: 10px 20px;font-weight: bold">All Employees</a>
                     </li>
                     <li class="u-nav-item">
                         <a class="u-button-style u-nav-link u-text-active-palette-1-base u-text-body-alt-color u-text-hover-palette-2-base" href="{{ URL::route('general.allfiles')}}" style="padding: 10px 20px;font-weight: bold">All Files</a>
+                    </li>
+                    <li class="u-nav-item">
+                        <a class="u-button-style u-nav-link u-text-active-palette-1-base u-text-body-alt-color u-text-hover-palette-2-base danger" href="{{ URL::route('general.alldivinfo')}}" style="padding: 10px 20px;font-weight: bold">All info</a>
                     </li>
                     <li class="u-nav-item">
                         <a class="u-button-style u-nav-link u-text-active-palette-1-base u-text-body-alt-color u-text-hover-palette-2-base danger" href="{{ URL::route('general.logout')}}" style="padding: 10px 20px;font-weight: bold">Logout</a>

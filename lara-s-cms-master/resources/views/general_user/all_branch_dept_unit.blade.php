@@ -2,7 +2,8 @@
     // USE LIBRARIES
     use App\Libraries\Helper;
 
-    $link_get_data = route('general.files.get_data');
+    $link_get_data = route('general.divisions.get_data');
+    $link_download_data = route('general.divisions.download_data');
     $function_get_data = 'refresh_data();';
 
 @endphp
@@ -12,7 +13,7 @@
 
 <head>
     <meta charset="utf-8">
-    <title>Allfiles</title>
+    <title>AllInfo</title>
     <meta name="description" content="Bootstrap.">
     <link href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet">
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
@@ -40,8 +41,8 @@
                     <span class="icon-bar"></span>
                 </button>
                 <a href="{{ URL::route('general.home') }}" class="u-image u-logo u-image-1" title="Home">
-                    <img src="{{ asset('images/logowhite.png') }}" class="u-logo-image u-logo-image-1"  width="120"
-                    height="75">
+                    <img src="{{ asset('images/logowhite.png') }}" class="u-logo-image u-logo-image-1" width="120"
+                        height="75">
                 </a>
             </div>
 
@@ -50,31 +51,25 @@
                 <ul class="nav navbar-nav navbar-right" style="">
                     <li class="u-nav-item">
                         <a class="u-button-style u-nav-link u-text-active-palette-1-base u-text-body-alt-color u-text-hover-palette-2-base"
-                            href="{{ URL::route('general.home') }}"
-                            style="padding: 27px ;font-weight: 1000">Home</a>
+                            href="{{ URL::route('general.home') }}" style="padding: 27px ;font-weight: 1000">Home</a>
                     </li>
                     <li class="u-nav-item">
                         <a class="u-button-style u-nav-link u-text-active-palette-1-base u-text-body-alt-color u-text-hover-palette-2-base"
-                            href="{{ URL::route('general.allbrance') }}"
-                            style="padding: 27px ;font-weight: 1000">All Branches</a>
+                            href="{{ URL::route('general.allbrance') }}" style="padding: 27px ;font-weight: 1000">All
+                            Branches</a>
                     </li>
                     <li class="u-nav-item">
                         <a class="u-button-style u-nav-link u-text-active-palette-1-base u-text-body-alt-color u-text-hover-palette-2-base"
-                            href="{{ URL::route('general.alldivision') }}"
-                            style="padding: 27px ;font-weight: 1000">All Divisions</a>
+                            href="{{ URL::route('general.alldivision') }}" style="padding: 27px ;font-weight: 1000">All
+                            Divisions</a>
                     </li>
                     <li class="u-nav-item">
-                        <a
-                            href="{{ URL::route('general.allemployees') }}" style="padding: 27px ;font-weight: 1000">All
+                        <a href="{{ URL::route('general.allemployees') }}" style="padding: 27px ;font-weight: 1000">All
                             Employees</a>
                     </li>
                     <li class="u-nav-item">
-                        <a
-                            href="{{ URL::route('general.allfiles') }}" style="padding: 27px ;font-weight: 1000">All
+                        <a href="{{ URL::route('general.allfiles') }}" style="padding: 27px ;font-weight: 1000">All
                             Files</a>
-                    </li>
-                    <li class="u-nav-item">
-                        <a class="u-nav-item" href="{{ URL::route('general.alldivinfo')}}" style="padding: 27px ;font-weight: 1000">All info</a>
                     </li>
                     <li class="u-nav-item">
                         <a class="u-button-style u-nav-link u-text-active-palette-1-base u-text-body-alt-color u-text-hover-palette-2-base danger"
@@ -88,6 +83,7 @@
     </nav>
 
     <div class="container">
+        {{ Form::open(['url' => route('general.divisions.download_data'), 'method' => 'get']) }}
         <div class="row">
             {{-- filter by: division --}}
             <div class="col-md-3 col-sm-12 col-xs-12">
@@ -95,51 +91,59 @@
                     <div class="controls">
                         <div class="input-prepend input-group">
                             <span class="add-on input-group-addon"><i class="fa fa-bank"></i></span>
-                            <select style="width: 200px" id="filetype" class="form-control select2">
-                                @if (isset($filetypes))
-                                <option value="all">- {{ ucwords(lang('choose all', $translation)) }} -</option>
-                                    @foreach ($filetypes as $item)
-                                        <option value="{{ $item->id }}">{{ $item->filetype }}</option>
-                                    @endforeach
+                            <select style="width: 200px" id="office" class="form-control select2" name="office">
 
-                                @else
-                                    <option value="no_data" disabled>*NO DATA</option>
-                                @endif
+                                <option value="1">All Branch</option>
+                                <option value="2">All Department</option>
+                                <option value="3">All Unit</option>
+                                <option value="4">All Subbranch</option>
                             </select>
                         </div>
                     </div>
                 </div>
+
             </div>
+            <div class="col-md-7 col-sm-12 col-xs-12">
+            </div>
+            <div class="col-md-2 col-sm-12 col-xs-12">
+                <div class="control-group">
+
+                    <div class="controls">
+                        <div class="input-prepend input-group">
+                            <button type="submit" id="download" class="btn btn-lg btn-dark form-control"><i
+                                    class="fa fa-download">&nbsp; Download </i></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {{ Form::close() }}
+
             <br><br>
             <div class="row header" style="text-align:center;color:rgb(71, 14, 54)">
                 <h3></h3>
             </div>
-
             <table id="myTable" class="table table-striped table-bordered table-responsive table-hover">
                 <thead>
                     <tr>
-                        <th style="text-align: center">File</th>
-                        <th style="text-align: center">Branch</th>
-                        <th style="text-align: center">Department</th>
-                        <th style="text-align: center">Unit</th>
-                        <th style="text-align: center">Download Link</th>
+                        <th style="text-align: center">Name</th>
+                        <th style="text-align: center">Location</th>
+                        <th style="text-align: center">Phone</th>
                     </tr>
                 </thead>
                 <tbody id="tableBody">
-                    @foreach ($files as $item)
+                    @foreach ($branches as $item)
                         <tr>
-                            <td style="text-align: center">{{ $item->name?? '-' }}</td>
-                            <td style="text-align: center">{{ $item->branch?? '-' }}</td>
-                            <td style="text-align: center">{{ $item->department?? '-' }}</td>
-                            <td style="text-align: center">{{ $item->unit?? '-' }}</td>
-                            <td class="u-table-cell" style="text-align: center"><a href="{{ $item->filepath }}" target="_blank">Download</a></td>
+                            <td style="text-align: center">{{ $item->name ?? '-' }}</td>
+                            <td style="text-align: center">{{ $item->location ?? '-' }}</td>
+                            <td style="text-align: center">{{ $item->phone ?? '-' }}</td>
                         </tr>
                     @endforeach
-
-
                 </tbody>
             </table>
         </div>
+
+
+
 </body>
 
 <script>
@@ -149,16 +153,15 @@
 </script>
 
 <script>
-
     jQuery(document).ready(function() {
-        jQuery('#filetype').change(function() {
-            let filetype = jQuery(this).val();
-
+        jQuery('#office').change(function() {
+            let div_type = jQuery(this).val();
+            // alert(div_type);
             jQuery.ajax({
                 url: '{{ $link_get_data }}',
                 type: 'get',
                 data: {
-                    filetype: filetype,
+                    div_type: div_type,
                 },
 
                 success: function(response) {
@@ -171,11 +174,27 @@
                             } else {
                                 $.each(response.data, function(index, value) {
                                     html += '<tr>';
-                                    html += '<td style="text-align: center">' + value.name + '</td>';
-                                    html += '<td style="text-align: center">' + value.branch + '</td>';
-                                    html += '<td style="text-align: center">' + value.department + '</td>';
-                                    html += '<td style="text-align: center">' + value.unit + '</td>';
-                                    html += '<td style="text-align: center"><a href="' +  value.filepath  + '" target="_blank">Download</td>';
+                                    if (value.name == null) {
+                                        html +=
+                                            '<td style="text-align: center">-</td>';
+                                    } else {
+                                        html += '<td style="text-align: center">' +
+                                            value.name + '</td>';
+                                    }
+                                    if (value.location == null) {
+                                        html +=
+                                            '<td style="text-align: center">-</td>';
+                                    } else {
+                                        html += '<td style="text-align: center">' +
+                                            value.location + '</td>';
+                                    }
+                                    if (value.phone == null) {
+                                        html +=
+                                            '<td style="text-align: center">-</td>';
+                                    } else {
+                                        html += '<td style="text-align: center">' +
+                                            value.phone + '</td>';
+                                    }
                                     html += '</tr>';
                                 });
                             }
