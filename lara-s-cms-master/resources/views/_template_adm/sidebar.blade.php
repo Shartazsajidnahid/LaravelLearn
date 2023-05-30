@@ -31,7 +31,7 @@
         <h3>{{ ucwords(lang('administration', $translation)) }}</h3>
         <ul class="nav side-menu">
 
-            @if (Helper::authorizing('User', 'View List')['status'] == 'true')
+            @if (Helper::authorizing('Employee', 'View List')['status'] == 'true')
                 @php
                     $priv_admin++;
                     $menu_active = '';
@@ -40,7 +40,7 @@
                     }
                 @endphp
                 <li class="{{ $menu_active }}">
-                    <a href="{{ route('employees.index') }}">
+                    <a href="{{ route('admin.employees.list') }}">
                         <i class="fa fa-user"></i> {{ ucwords(lang('employee', $translation)) }}
                     </a>
                 </li>
@@ -153,70 +153,61 @@
 
 
             {{-- Designation dropdown --}}
-            <li><a id="menu-language"><i class="fa fa-server" aria-hidden="true"></i>
-                    {{ ucwords(lang('designation', $translation)) }} <span class="fa fa-chevron-down"></span></a>
-                <ul class="nav child_menu">
-                    @php
-                        $priv_admin++;
-                        $menu_active = '';
-                        // if(Helper::is_menu_active('/system/dictionary/')){
-                        $menu_active = 'current-page';
-                        // }
-                    @endphp
-                    <li class="{{ $menu_active }}">
-                        <a href="{{ route('admin.designation.list') }}">
-                            {{ ucwords(lang('designation', $translation)) }}
-                        </a>
-                    </li>
-                    {{-- @endif --}}
+            @if (Helper::authorizing('Designation', 'View List')['status'] == 'true')
+                <li><a id="menu-language"><i class="fa fa-server" aria-hidden="true"></i>
+                        {{ ucwords(lang('designation', $translation)) }} <span class="fa fa-chevron-down"></span></a>
+                    <ul class="nav child_menu">
+                        @php
+                            $priv_admin++;
+                            $menu_active = '';
+                            // if(Helper::is_menu_active('/system/dictionary/')){
+                            $menu_active = 'current-page';
+                            // }
+                        @endphp
+                        <li><a href="{{ route('admin.designation.list') }}">
+                                {{ ucwords(lang('designation', $translation)) }}</a></li>
+                        @php
+                            $priv_admin++;
+                            $menu_active = '';
+                            $menu_active = 'current-page';
+                        @endphp
+                        <li><a href="{{ route('admin.functional_designation.list') }}">
+                                {{ ucwords(lang('functional designation', $translation)) }}</a></li>
 
-                    {{-- @if (Helper::authorizing('Branch', 'View List')['status'] == 'true') --}}
-                    @php
-                        $priv_admin++;
-                        $menu_active = '';
-                        // if(Helper::is_menu_active('/system/dictionary/')){
-                        $menu_active = 'current-page';
-                        // }
-                    @endphp
-                    <li class="{{ $menu_active }}">
-                        <a href="{{ route('admin.functional_designation.list') }}">
-                            {{ ucwords(lang('functional designation', $translation)) }}
-                        </a>
-                    </li>
-
-                </ul>
-            </li>
+                    </ul>
+                </li>
+            @endif
 
 
             {{-- filesystem --}}
             @if (Helper::authorizing('File', 'View List')['status'] == 'true')
                 <li><a id="menu-language"><i class="fa fa-file" aria-hidden="true"></i>
-                    {{ ucwords(lang('filesystem', $translation)) }} <span class="fa fa-chevron-down"></span></a>
-                <ul class="nav child_menu">
-                    @php
-                        $priv_admin++;
-                        $menu_active = '';
-                        // if(Helper::is_menu_active('/system/dictionary/')){
-                        $menu_active = 'current-page';
-                        // }
-                    @endphp
-                    <li><a href="{{ route('admin.filetype.list') }}">
-                            {{ ucwords(lang('file type', $translation)) }}</a></li>
-                    {{-- @endif --}}
+                        {{ ucwords(lang('filesystem', $translation)) }} <span class="fa fa-chevron-down"></span></a>
+                    <ul class="nav child_menu">
+                        @php
+                            $priv_admin++;
+                            $menu_active = '';
+                            // if(Helper::is_menu_active('/system/dictionary/')){
+                            $menu_active = 'current-page';
+                            // }
+                        @endphp
+                        <li><a href="{{ route('admin.filetype.list') }}">
+                                {{ ucwords(lang('file type', $translation)) }}</a></li>
+                        {{-- @endif --}}
 
-                    {{-- @if (Helper::authorizing('Branch', 'View List')['status'] == 'true') --}}
-                    @php
-                        $priv_admin++;
-                        $menu_active = '';
-                        // if(Helper::is_menu_active('/system/dictionary/')){
-                        $menu_active = 'current-page';
-                        // }
-                    @endphp
-                    <li><a href="{{ route('admin.file.list') }}">
-                            {{ ucwords(lang('files', $translation)) }}</a></li>
+                        {{-- @if (Helper::authorizing('Branch', 'View List')['status'] == 'true') --}}
+                        @php
+                            $priv_admin++;
+                            $menu_active = '';
+                            // if(Helper::is_menu_active('/system/dictionary/')){
+                            $menu_active = 'current-page';
+                            // }
+                        @endphp
+                        <li><a href="{{ route('admin.file.list') }}">
+                                {{ ucwords(lang('files', $translation)) }}</a></li>
 
-                </ul>
-            </li>
+                    </ul>
+                </li>
             @endif
 
 
@@ -249,11 +240,11 @@
                         // }
                     @endphp
 
-                    {{-- News --}}
+                    {{-- News Topic --}}
                     @if (Helper::authorizing('Topic', 'View List')['status'] == 'true')
                         <li><a href="{{ route('admin.topic.list') }}">
-                            {{-- <i class="fa fa-newspaper-o" aria-hidden="true"></i> --}}
-                                    {{ ucwords(lang(' news', $translation)) }}</a>
+                                {{-- <i class="fa fa-newspaper-o" aria-hidden="true"></i> --}}
+                                {{ ucwords(lang(' news topic', $translation)) }}</a>
                         </li>
                     @endif
 
@@ -264,12 +255,26 @@
                         $menu_active = 'current-page';
                         // }
                     @endphp
+                    {{-- News --}}
+                    @if (Helper::authorizing('Article', 'View List')['status'] == 'true')
+                        <li><a href="{{ route('admin.article.list') }}">
+                                {{-- <i class="fa fa-newspaper-o" aria-hidden="true"></i> --}}
+                                {{ ucwords(lang(' news', $translation)) }}</a>
+                        </li>
+                    @endif
 
+                    @php
+                        $priv_admin++;
+                        $menu_active = '';
+                        // if(Helper::is_menu_active('/system/dictionary/')){
+                        $menu_active = 'current-page';
+                        // }
+                    @endphp
                     {{-- Applinks --}}
                     @if (Helper::authorizing('Applink', 'View List')['status'] == 'true')
                         <li><a href="{{ route('admin.applink.list') }}">
-                            {{-- <i class="fa fa-link" aria-hidden="true"></i> --}}
-                            {{ ucwords(lang(' applink', $translation)) }}</a>
+                                {{-- <i class="fa fa-link" aria-hidden="true"></i> --}}
+                                {{ ucwords(lang(' applink', $translation)) }}</a>
                         </li>
                     @endif
 
@@ -283,8 +288,8 @@
                     {{-- Exchange rates --}}
                     @if (Helper::authorizing('ExchangeRate', 'View List')['status'] == 'true')
                         <li><a href="{{ route('admin.exchange_rates.list') }}">
-                            {{-- <i class="fa fa-money"  aria-hidden="true"></i> --}}
-                            {{ ucwords(lang(' exchange rate', $translation)) }}</a>
+                                {{-- <i class="fa fa-money"  aria-hidden="true"></i> --}}
+                                {{ ucwords(lang(' exchange rate', $translation)) }}</a>
                         </li>
                     @endif
 
@@ -299,8 +304,8 @@
                     {{-- Exchange rates --}}
                     @if (Helper::authorizing('TopBranch', 'View List')['status'] == 'true')
                         <li><a href="{{ route('admin.top_branch.list') }}">
-                            {{-- <i class="fa fa-money"  aria-hidden="true"></i> --}}
-                            {{ ucwords(lang(' top 10 branch', $translation)) }}</a>
+                                {{-- <i class="fa fa-money"  aria-hidden="true"></i> --}}
+                                {{ ucwords(lang(' top 10 branch', $translation)) }}</a>
                         </li>
                     @endif
 
@@ -316,8 +321,8 @@
                     {{-- top 10 depositor --}}
                     @if (Helper::authorizing('TopDepositor', 'View List')['status'] == 'true')
                         <li><a href="{{ route('admin.top_depositor.create') }}">
-                            {{-- <i class="fa fa-money"  aria-hidden="true"></i> --}}
-                            {{ ucwords(lang(' top 10 depositor', $translation)) }}</a>
+                                {{-- <i class="fa fa-money"  aria-hidden="true"></i> --}}
+                                {{ ucwords(lang(' top 10 depositor', $translation)) }}</a>
                         </li>
                     @endif
 
@@ -333,8 +338,8 @@
                     {{-- CHO --}}
                     @if (Helper::authorizing('CHO', 'View List')['status'] == 'true')
                         <li><a href="{{ route('admin.cho.list') }}">
-                            {{-- <i class="fa fa-money"  aria-hidden="true"></i> --}}
-                            {{ ucwords(lang(' CHO', $translation)) }}</a>
+                                {{-- <i class="fa fa-money"  aria-hidden="true"></i> --}}
+                                {{ ucwords(lang(' CHO', $translation)) }}</a>
                         </li>
                     @endif
 
