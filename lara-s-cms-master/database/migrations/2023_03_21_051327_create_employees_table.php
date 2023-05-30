@@ -21,22 +21,22 @@ class CreateEmployeesTable extends Migration
 
             $table->bigInteger('division_id')->index('FK_sys_divisions');
             $table->bigInteger('branch_id')->index('FK_sys_branches');
-            $table->bigInteger('department_id')->index('FK_sys_departments')->nullable();
-            $table->bigInteger('unit_id')->index('FK_sys_units')->nullable();
+            $table->bigInteger('department_id')->index('FK_sys_departments')->nullable(true)->change();;
+            $table->bigInteger('unit_id')->index('FK_sys_units')->nullable(true)->change();
 
             $table->bigInteger('designation_id')->index('FK_designations');
-            $table->bigInteger('func_designation_id')->index('FK_functional_designations')->nullable();
+            $table->bigInteger('func_designation_id')->index('FK_functional_designations')->nullable(true)->change();;
 
-            $table->string('gender')->nullable();
-            $table->date('dob')->nullable();
-            $table->integer('mobile')->nullable();
-            $table->integer('pabx_phone')->nullable();
-            $table->string('email')->nullable();
-            $table->integer('office_phone')->nullable();
-            $table->integer('ip_phone')->nullable();
-            $table->string('password');
-            $table->string('profile_image')->nullable();
-            $table->date('joinning_date')->nullable();
+            $table->string('gender')->nullable(true);
+            $table->date('dob')->nullable(true)->change();
+            $table->string('mobile')->nullable(true)->change();
+            $table->integer('pabx_phone')->nullable(true)->change();
+            $table->string('email')->nullable(true)->change();
+            $table->integer('office_phone')->nullable(true)->change();
+            $table->integer('ip_phone')->nullable(true)->change();
+            $table->string('password')->default('12345678');
+            $table->string('profile_image')->nullable(true)->change();
+            $table->date('joinning_date')->nullable(true);
             $table->timestamps();
         });
     }

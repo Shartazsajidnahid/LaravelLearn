@@ -17,7 +17,7 @@ class CreateFunctionalDesignationsTable extends Migration
             $table->bigIncrements('id');
             $table->bigInteger('func_designation_id');
             $table->string('designation');
-            $table->integer('role_status');
+            $table->integer('role_status')->nullable(true)->change();
             $table->softDeletes();
             $table->timestamps();
         });

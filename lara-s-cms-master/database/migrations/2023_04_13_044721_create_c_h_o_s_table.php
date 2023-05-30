@@ -15,11 +15,8 @@ class CreateCHOSTable extends Migration
     {
         Schema::create('cho', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('email')->unique();
-            $table->integer('mobile');
-            $table->string('designation');
-            $table->string('profile_image');
+            $table->string('user_id');
+            $table->string('position');
             $table->json('branches')->nullable();
             $table->timestamps();
         });
